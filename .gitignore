@@ -1,0 +1,16 @@
+node_modules/
+.env
+.DS_Store
+public/uploads/
+sshnet/
+git-installer.exe
+*.b64
+movies.json
+deploy_index_base64.ps1
+deploy_server_chunked.ps1
+patch_frontend.py
+patch_frontend_watchlist.py
+patch_server.py
+patch_security_ui.py
+patch_escape.py
+check_logs.ps1

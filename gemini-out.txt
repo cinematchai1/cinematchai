@@ -1,0 +1,32 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "{\n  \"referenceMovie\": {\n    \"title\": \"Homem-Aranha\",\n    \"originalTitle\": \"Spider-Man\",\n    \"year\": \"2002\"\n  },\n  \"recommendations\": [\n    {\n      \"title\": \"Homem de Ferro\",\n      \"originalTitle\": \"Iron Man\",\n      \"year\": \"2008\",\n      \"imdbRating\": \"7.9/10\",\n      \"duration\": \"2h 6m\",\n      \"category\": \"Ação, Aventura, Ficção Científica\",\n      \"description\": \"Um industrial bilionário e inventor brilhante é sequestrado e forçado a construir uma arma devastadora. Em vez disso, ele constrói uma armadura de alta tecnologia para escapar e decide usá-la para proteger o mundo como Homem de Ferro.\"\n    },\n    {\n      \"title\": \"Batman Begins\",\n      \"originalTitle\": \"Batman Begins\",\n      \"year\": \"2005\",\n      \"imdbRating\": \"8.2/10\",\n      \"duration\": \"2h 20m\",\n      \"category\": \"Ação, Aventura\",\n      \"description\": \"Depois de testemunhar o assassinato dos seus pais, o bilionário Bruce Wayne viaja pelo mundo em busca dos meios para combater a injustiça, regressando a Gotham para se tornar o vigilante mascarado Batman.\"\n    },\n    {\n      \"title\": \"O Incrível Hulk\",\n      \"originalTitle\": \"The Incredible Hulk\",\n      \"year\": \"2008\",\n      \"imdbRating\": \"6.7/10\",\n      \"duration\": \"1h 52m\",\n      \"category\": \"Ação, Ficção Científica\",\n      \"description\": \"Bruce Banner procura uma cura para a sua condição, que o transforma num monstro verde gigante quando irritado. Ele é perseguido por militares que querem usar o seu poder.\"\n    },\n    {\n      \"title\": \"X-Men\",\n      \"originalTitle\": \"X-Men\",\n      \"year\": \"2000\",\n      \"imdbRating\": \"7.3/10\",\n      \"duration\": \"1h 44m\",\n      \"category\": \"Ação, Ficção Científica\",\n      \"description\": \"Navegando numa sociedade que teme e odeia mutantes, um grupo de indivíduos com superpoderes deve lutar para proteger aqueles que os temem, enquanto enfrentam uma ameaça que pode destruir a humanidade.\"\n    },\n    {\n      \"title\": \"Thor\",\n      \"originalTitle\": \"Thor\",\n      \"year\": \"2011\",\n      \"imdbRating\": \"7.0/10\",\n      \"duration\": \"1h 55m\",\n      \"category\": \"Ação, Aventura, Fantasia\",\n      \"description\": \"O poderoso mas arrogante guerreiro Thor é banido para a Terra e forçado a viver entre os humanos. Aqui, ele aprende o que é preciso para ser um verdadeiro herói quando um vilão do seu mundo envia as forças das trevas para invadir a Terra.\"\n    }\n  ]\n}"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 310,
+    "candidatesTokenCount": 718,
+    "totalTokenCount": 2046,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 310
+      }
+    ],
+    "thoughtsTokenCount": 1018,
+    "serviceTier": "standard"
+  },
+  "modelVersion": "gemini-2.5-flash",
+  "responseId": "iw4Faq79DZCIvdIP9reKyAM"
+}
+

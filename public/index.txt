@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+    <title>CineMatch | Premium Movie Recommendations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-rgb: 56, 189, 248; /* default sky-400 */
+            --accent-hex: #38bdf8;
+            --accent-hover: #0ea5e9;
+        }
+
+        body[data-theme="sky"] {
+            --accent-rgb: 56, 189, 248;
+            --accent-hex: #38bdf8;
+            --accent-hover: #0ea5e9;
+        }
+        body[data-theme="purple"] {
+            --accent-rgb: 168, 85, 247;
+            --accent-hex: #a855f7;
+            --accent-hover: #9333ea;
+        }
+        body[data-theme="emerald"] {
+            --accent-rgb: 16, 185, 129;
+            --accent-hex: #10b981;
+            --accent-hover: #059669;
+        }
+        body[data-theme="rose"] {
+            --accent-rgb: 244, 63, 94;
+            --accent-hex: #f43f5e;
+            --accent-hover: #e11d48;
+        }
+        body[data-theme="amber"] {
+            --accent-rgb: 245, 158, 11;
+            --accent-hex: #f59e0b;
+            --accent-hover: #d97706;
+        }
+
+        /* Dynamic theme accent overrides for utility classes */
+        .text-sky-500, .theme-accent-text { color: var(--accent-hex) !important; }
+        .text-sky-400 { color: var(--accent-hex) !important; }
+        .bg-sky-600, .theme-accent-bg { background-color: var(--accent-hex) !important; }
+        .hover\:bg-sky-500:hover, .theme-accent-bg-hover:hover { background-color: var(--accent-hover) !important; }
+        .bg-sky-600\/10 { background-color: rgba(var(--accent-rgb), 0.1) !important; }
+        .hover\:bg-sky-600\/20:hover { background-color: rgba(var(--accent-rgb), 0.2) !important; }
+        .border-sky-500\/20 { border-color: rgba(var(--accent-rgb), 0.2) !important; }
+        .hover\:border-sky-500\/40:hover { border-color: rgba(var(--accent-rgb), 0.4) !important; }
+        .focus\:ring-sky-500:focus { --tw-ring-color: var(--accent-hex) !important; }
+        .focus\:border-sky-500:focus { border-color: var(--accent-hex) !important; }
+        .border-t-sky-500 { border-top-color: var(--accent-hex) !important; }
+        .bg-sky-500\/20 { background-color: rgba(var(--accent-rgb), 0.15) !important; }
+        .border-sky-500\/30 { border-color: rgba(var(--accent-rgb), 0.3) !important; }
+        .bg-sky-400\/10 { background-color: rgba(var(--accent-rgb), 0.12) !important; }
+        .border-sky-400\/20 { border-color: rgba(var(--accent-rgb), 0.25) !important; }
+        .from-sky-600 {
+            --tw-gradient-from: var(--accent-hex) !important;
+            --tw-gradient-to: rgb(79 70 229 / 0) !important;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+        }
+        .hover\:from-sky-500:hover {
+            --tw-gradient-from: var(--accent-hover) !important;
+        }
+        .accent-sky-500 {
+            accent-color: var(--accent-hex) !important;
+        }
+        input[type="range"] {
+            accent-color: var(--accent-hex) !important;
+        }
+        
+        /* Interactive features dynamic indicator and card highlights */
+        .shadow-\[0_0_15px_rgba\(56\,189\,248\,0\.5\)\] {
+            box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.5) !important;
+        }
+        .shadow-\[0_0_15px_rgba\(56\,189\,248\,0\.15\)\] {
+            box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.15) !important;
+        }
+        .shadow-\[0_0_30px_rgba\(56\,189\,248\,0\.2\)\] {
+            box-shadow: 0 0 30px rgba(var(--accent-rgb), 0.2) !important;
+        }
+
+        /* Compact Density layout specifications */
+        .layout-compact .movie-card h3 { font-size: 0.875rem !important; line-height: 1.2 !important; }
+        .layout-compact .movie-card p { display: none !important; }
+        .layout-compact .movie-card .p-4 { padding: 0.75rem !important; }
+        .layout-compact .movie-card .mt-3 { margin-top: 0.5rem !important; }
+        .layout-compact .movie-card .gap-2 { gap: 0.25rem !important; }
+        .layout-compact .movie-card .mb-2\.5 { margin-bottom: 0.35rem !important; }
+        .layout-compact .movie-card .py-2 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+        .layout-compact .movie-card .py-1\.5 { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+        .layout-compact .movie-card .text-xs { font-size: 0.75rem !important; }
+        .layout-compact .movie-card .text-\[10px\] { font-size: 9px !important; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f1115;
+            background-image: radial-gradient(circle at 15% 50%, rgba(20, 30, 48, 0.4), transparent 50%), 
+                              radial-gradient(circle at 85% 30%, rgba(36, 59, 85, 0.4), transparent 50%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .movie-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px 1px rgba(56, 189, 248, 0.15);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #38bdf8;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f1115; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .hidden-section { display: none !important; }
+
+        /* Smooth Section Transitions */
+        .page-transition {
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .page-enter {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        .page-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .page-exit {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .page-exit-active {
+            opacity: 0;
+            transform: translateY(-12px);
+        }
+
+        /* Micro-interactions for buttons */
+        .btn-interactive {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-interactive:hover {
+            transform: translateY(-1px);
+        }
+        .btn-interactive:active {
+            transform: scale(0.96) translateY(0);
+        }
+
+        .watchlist-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .watchlist-btn:hover {
+            transform: scale(1.1);
+        }
+        .watchlist-btn:active {
+            transform: scale(0.92);
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden relative">
+    
+    <!-- Top Nav -->
+    <div id="nav-bar" class="w-full max-w-7xl mx-auto flex justify-between items-center px-4 py-4 sm:p-6 relative z-50">
+        <button onclick="goHome()" class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity focus:outline-none">
+            <svg class="w-6 h-6 text-sky-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.82 2H4.18C2.97 2 2 2.97 2 4.18v15.64C2 21.03 2.97 22 4.18 22h15.64c1.21 0 2.18-.97 2.18-2.18V4.18C22 2.97 21.03 2 19.82 2zM10 16.5v-9l6 4.5-6 4.5z"/></svg>
+            CineMatch
+        </button>
+        <div class="flex items-center gap-2 sm:gap-4">
+            <div class="relative group">
+                <button id="lang-toggle-btn" class="flex items-center gap-1 sm:gap-1.5 text-xs font-semibold px-2 py-1.5 sm:px-3 sm:py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors uppercase">
+                    <img id="current-lang-flag" src="https://flagcdn.com/w20/gb.png" class="w-4 rounded-[1px] opacity-90" alt="Flag">
+                    <span id="current-lang-display">ENG</span>
+                    <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="absolute right-0 top-full pt-3 -mt-2 w-28 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
+                    <div class="bg-slate-800 border border-slate-700 rounded-md shadow-xl overflow-hidden">
+                        <button class="lang-option w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors" data-lang="en">
+                            <img src="https://flagcdn.com/w20/gb.png" class="w-4 rounded-[1px] pointer-events-none" alt="UK Flag"> ENG
+                        </button>
+                        <button class="lang-option w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors" data-lang="pt">
+                            <img src="https://flagcdn.com/w20/pt.png" class="w-4 rounded-[1px] pointer-events-none" alt="PT Flag"> PT
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="nav-actions" class="flex items-center gap-2 sm:gap-3"></div>
+        </div>
+    </div>
+
+    <!-- Main Section -->
+    <div class="container mx-auto px-4 pt-4 pb-12 flex flex-col items-center justify-center min-h-[80vh] relative">
+        
+        <!-- Animated Background Orbs -->
+        <div id="dynamic-bg" class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none flex justify-center items-center z-0">
+            <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-sky-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob"></div>
+            <div class="absolute top-1/3 right-1/4 w-72 h-72 bg-indigo-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-8 left-1/3 w-72 h-72 bg-purple-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <!-- Header Section -->
+        <div id="hero-header" class="text-center mb-8 w-full max-w-4xl animate-fade-in-up transition-all duration-500 relative z-10 flex flex-col items-center">
+            
+            <!-- Poster Fan Showcase -->
+            <div class="relative w-64 h-40 mb-12 mt-4 pointer-events-none">
+                <!-- Left Poster (Interstellar) -->
+                <div class="hidden sm:block absolute top-4 -left-12 w-28 h-40 rounded-lg overflow-hidden border border-slate-700/50 shadow-2xl transform -rotate-12 hover:rotate-0 hover:z-20 hover:scale-110 transition-all duration-500 opacity-60">
+                    <img src="https://images.metahub.space/poster/medium/tt0816692/img" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                </div>
+                <!-- Right Poster (Inception) -->
+                <div class="hidden sm:block absolute top-4 -right-12 w-28 h-40 rounded-lg overflow-hidden border border-slate-700/50 shadow-2xl transform rotate-12 hover:rotate-0 hover:z-20 hover:scale-110 transition-all duration-500 opacity-60">
+                    <img src="https://images.metahub.space/poster/medium/tt1375666/img" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                </div>
+                <!-- Center Poster (The Matrix) -->
+                <div class="absolute top-0 left-16 w-32 h-48 rounded-lg overflow-hidden border border-slate-600/80 shadow-[0_0_30px_rgba(56,189,248,0.2)] transform hover:scale-110 transition-all duration-500 z-10">
+                    <img src="https://images.metahub.space/poster/medium/tt0133093/img" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
+                </div>
+            </div>
+
+            <h1 id="hero-title" class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">
+                Your Personal AI Film Curator
+            </h1>
+            <p id="hero-subtitle" class="text-lg md:text-xl text-slate-400 font-normal max-w-2xl mx-auto leading-relaxed">
+                Enter a film or series you love, and CineMatch will instantly curate a premium selection of hidden gems and cinematic masterpieces tailored to your mood.
+            </p>
+        </div>
+
+        <!-- Search Input Section -->
+        <div id="search-container" class="glass-panel p-3 w-full max-w-2xl mb-8 animate-fade-in-up transition-all duration-500" style="animation-delay: 100ms;">
+            <form id="search-form" class="flex flex-col md:flex-row gap-3">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <input type="text" id="movie-input" autocomplete="off" placeholder="e.g. Inception, The Matrix..." required class="w-full bg-slate-900/40 border border-slate-700/50 rounded-lg pl-11 pr-4 py-3.5 text-base focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all placeholder-slate-500 text-white shadow-inner">
+                </div>
+                <div class="flex gap-2">
+                    <button type="button" id="toggle-settings-btn" class="bg-slate-800/60 hover:bg-slate-700 border border-slate-700/60 text-slate-300 hover:text-white rounded-lg p-3.5 transition-all flex items-center justify-center shadow-md">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </button>
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg px-8 py-3.5 text-base transition-all shadow-lg flex items-center justify-center min-w-[140px] flex-grow md:flex-grow-0">
+                        <span id="btn-text">Discover</span>
+                        <div id="btn-loader" class="loader hidden"></div>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Autocomplete Dropdown (Pushes content down) -->
+            <div id="autocomplete-dropdown" class="mt-3 bg-slate-900/90 border border-slate-700/50 rounded-xl shadow-2xl overflow-hidden hidden max-h-80 overflow-y-auto w-full transition-all duration-300">
+                <ul id="autocomplete-list" class="flex flex-col text-left"></ul>
+            </div>
+
+            <!-- Collapsible Settings Drawer -->
+            <div id="settings-drawer" class="hidden mt-4 p-5 rounded-xl bg-slate-950/45 border border-slate-800/80 shadow-inner backdrop-blur-md animate-fade-in text-left">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Left Section: AI Search Filters -->
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-2 pb-2 border-b border-slate-800/80">
+                            <svg class="w-4 h-4 theme-accent-text" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+                            <h4 id="settings-title" class="text-xs font-bold text-white uppercase tracking-wider text-slate-300">Advanced Filters</h4>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-1.5">
+                                <label id="lbl-min-rating" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Min IMDB Rating</label>
+                                <select id="filter-min-rating" class="bg-slate-900 border border-slate-700/60 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 theme-accent-ring text-white">
+                                    <option value="all" id="opt-rating-all">All Ratings</option>
+                                    <option value=">7.0">> 7.0</option>
+                                    <option value=">8.0">> 8.0</option>
+                                    <option value=">8.5">> 8.5</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label id="lbl-year" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Year Limit (After)</label>
+                                <input type="number" id="filter-year" placeholder="e.g. 2015" class="bg-slate-900 border border-slate-700/60 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 theme-accent-ring text-white">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label id="lbl-exclude-genres" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Exclude Genres</label>
+                                <input type="text" id="filter-exclude-genres" placeholder="e.g. Horror, Documentary" class="bg-slate-900 border border-slate-700/60 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 theme-accent-ring text-white">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Section: Interactive App Customization -->
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-2 pb-2 border-b border-slate-800/80">
+                            <svg class="w-4 h-4 theme-accent-text" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37m0 0l-9.37-9.37M18.9 6.752H3.75"/></svg>
+                            <h4 id="settings-custom-title" class="text-xs font-bold text-white uppercase tracking-wider text-slate-300">App Experience</h4>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Separator below settings (visible only when settings-drawer is open) -->
+            <div id="settings-divider" class="hidden h-[1px] bg-gradient-to-r from-transparent via-slate-800/80 to-transparent my-4"></div>
+            
+            <!-- Trending Searches -->
+            <div class="mt-5 flex flex-wrap justify-center gap-2 items-center text-sm text-slate-400">
+                <span class="mr-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Trending:</span>
+                <div id="trending-container" class="flex flex-wrap justify-center gap-2 items-center">
+                    <!-- Dynamic trending items will be rendered here -->
+                </div>
+            </div>
+
+        </div>
+
+        <div id="error-message" class="hidden -mt-4 mb-6 mx-auto max-w-3xl p-3 bg-red-900/40 border border-red-800/60 rounded-xl text-red-200 text-sm text-center shadow-lg relative z-10 w-full"></div>
+
+        <!-- Feature highlights -->
+        <div id="features-section" class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in-up transition-all duration-500 relative z-10" style="animation-delay: 200ms;">
+            <div class="text-center p-5 group">
+                <div class="mx-auto flex justify-center mb-4 transition-transform duration-300 group-hover:-translate-y-1">
+                    <div class="bg-sky-500/10 p-3 rounded-2xl border border-sky-500/20 group-hover:border-sky-500/40 group-hover:bg-sky-500/20 transition-all duration-300 shadow-[0_0_15px_rgba(56,189,248,0.15)]">
+                        <svg class="w-7 h-7 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    </div>
+                </div>
+                <h3 id="feat1-title" class="text-base font-semibold text-white mb-1.5">Smart Engine</h3>
+                <p id="feat1-desc" class="text-slate-400 text-xs leading-relaxed">Our advanced model analyzes themes, plot, and cinematic styles to find the perfect match.</p>
+            </div>
+            <div class="text-center p-5 group">
+                <div class="mx-auto flex justify-center mb-4 transition-transform duration-300 group-hover:-translate-y-1">
+                    <div class="bg-indigo-500/10 p-3 rounded-2xl border border-indigo-500/20 group-hover:border-indigo-500/40 group-hover:bg-indigo-500/20 transition-all duration-300 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
+                        <svg class="w-7 h-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                </div>
+                <h3 id="feat2-title" class="text-base font-semibold text-white mb-1.5">Premium Assets</h3>
+                <p id="feat2-desc" class="text-slate-400 text-xs leading-relaxed">High-resolution posters, verified IMDB ratings, and accurate metadata directly from the source.</p>
+            </div>
+            <div class="text-center p-5 group">
+                <div class="mx-auto flex justify-center mb-4 transition-transform duration-300 group-hover:-translate-y-1">
+                    <div class="bg-purple-500/10 p-3 rounded-2xl border border-purple-500/20 group-hover:border-purple-500/40 group-hover:bg-purple-500/20 transition-all duration-300 shadow-[0_0_15px_rgba(168,85,247,0.15)]">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                    </div>
+                </div>
+                <h3 id="feat3-title" class="text-base font-semibold text-white mb-1.5">Direct Links</h3>
+                <p id="feat3-desc" class="text-slate-400 text-xs leading-relaxed">Instantly view on IMDB or search directly on Streamings with a single click.</p>
+            </div>
+        </div>
+
+        <!-- Watchlist Header Section -->
+        <div id="watchlist-header-container" class="w-full max-w-6xl mb-6 hidden-section text-left">
+            <h2 class="text-3xl font-extrabold text-white flex items-center gap-2.5">
+                <svg class="w-7 h-7 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                <span id="watchlist-header-title">My Watchlist</span>
+            </h2>
+        </div>
+
+        <!-- Reference Movie Section -->
+        <div id="reference-movie-container" class="w-full max-w-6xl mb-4 opacity-0 transition-opacity duration-700 hidden-section flex flex-col items-center"></div>
+
+        <!-- Results Section -->
+        <div id="results-container" class="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 opacity-0 transition-opacity duration-700 hidden-section"></div>
+        
+        <!-- Load More Section -->
+        <div id="load-more-container" class="w-full max-w-6xl flex justify-center mt-6 mb-12 hidden opacity-0 transition-opacity duration-500 hidden-section">
+            <button id="btn-load-more" class="px-6 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 transition-all font-semibold text-sm flex items-center gap-2 shadow-lg hover:shadow-sky-500/20">
+                <span id="load-more-text">Load 5 more suggestions</span>
+                <svg id="load-more-spinner" class="animate-spin -ml-1 mr-2 h-4 w-4 text-sky-500 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Movie Details Modal -->
+    <div id="details-modal" class="fixed inset-0 z-[60] flex items-center justify-center modal-overlay hidden p-2 md:p-6">
+        <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-md" onclick="closeDetailsModal()"></div>
+        <div class="relative w-full max-w-5xl bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] transform transition-all">
+            
+            <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-20 bg-black/50 p-2 rounded-full text-slate-300 hover:text-white hover:bg-black/80 transition-all backdrop-blur-sm">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <!-- Loading State -->
+            <div id="details-loading" class="flex flex-col items-center justify-center py-32 h-full z-10 bg-slate-900">
+                <div class="loader mb-4 border-t-sky-500 w-12 h-12"></div>
+                <p class="text-slate-400">Loading details...</p>
+            </div>
+
+            <!-- Content State -->
+            <div id="details-content" class="hidden overflow-y-auto flex-grow flex flex-col relative w-full pb-8">
+                <!-- Header with Background -->
+                <div class="relative w-full h-64 md:h-96 flex-shrink-0">
+                    <div id="details-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('');"></div>
+                    <!-- Gradient Overlays -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent w-2/3"></div>
+                    
+                    <!-- Header Info Overlay -->
+                    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex flex-col md:flex-row gap-6 items-end">
+                        <img id="details-poster" src="" class="w-32 md:w-48 rounded-xl shadow-2xl border border-slate-700/50 hidden md:block" onerror="this.style.display='none'">
+                        <div class="flex flex-col gap-2 w-full">
+                            <h2 id="details-title" class="text-3xl md:text-5xl font-bold text-white mb-1 shadow-black drop-shadow-md">Title</h2>
+                            <div class="flex flex-wrap items-center gap-3 text-sm md:text-base font-medium">
+                                <span id="details-year" class="text-sky-400">2024</span>
+                                <span class="text-slate-500">&bull;</span>
+                                <span id="details-rating" class="flex items-center gap-1 text-amber-400"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> <span id="details-rating-val">8.0</span></span>
+                                <span class="text-slate-500">&bull;</span>
+                                <span id="details-duration" class="text-slate-300">120 min</span>
+                                <span class="text-slate-500">&bull;</span>
+                                <span id="details-type" class="px-2 py-0.5 rounded text-xs font-bold bg-slate-800 text-slate-300 uppercase tracking-wider">Movie</span>
+                            </div>
+                            <div id="details-genres" class="flex flex-wrap gap-2 mt-2">
+                                <!-- Genre pills injected here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body Content -->
+                <div class="px-6 md:px-8 py-6 flex flex-col md:flex-row gap-8">
+                    <!-- Left Column (Plot & Buttons) -->
+                    <div class="flex-grow md:w-2/3 flex flex-col gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-2">Synopsis</h3>
+                            <p id="details-plot" class="text-slate-300 leading-relaxed">Plot description goes here...</p>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap gap-3 mt-2" id="details-buttons">
+                            <!-- Buttons injected here dynamically to include Trailer -->
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column (Cast & Crew) -->
+                    <div class="md:w-1/3 flex flex-col gap-6 border-t md:border-t-0 md:border-l border-slate-700/50 pt-6 md:pt-0 md:pl-8">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Director</h3>
+                            <p id="details-director" class="text-white">N/A</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Cast</h3>
+                            <div id="details-cast" class="flex flex-col gap-1 text-slate-300">
+                                <!-- Cast members -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden p-4">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeProfileModal()"></div>
+        <div class="relative w-full max-w-3xl bg-slate-900 border border-slate-700/50 rounded-2xl shadow-2xl p-6 md:p-8 transform transition-all max-h-[95vh] overflow-y-auto">
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="text-center mb-8">
+                <h3 id="modal-profile-title" class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 tracking-tight">AI Recommendation Engine</h3>
+                <p id="modal-profile-desc" class="text-slate-400 text-sm mt-2 font-medium">Tune your algorithm for personalized results</p>
+            </div>
+            
+            <form id="profile-form" class="flex flex-col gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column: Core Settings -->
+                    <div class="flex flex-col gap-5">
+                        <div class="pb-3 border-b border-slate-800">
+                            <h4 class="text-lg font-semibold text-slate-200">System DNA</h4>
+                        </div>
+                        <div>
+                            <label id="lbl-accent-theme" class="block text-sm font-medium text-slate-300 mb-1.5">Visual: Accent Theme</label>
+                            <select id="setting-accent-theme" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all">
+                                <option value="sky" id="opt-theme-sky">Sky Cyan</option>
+                                <option value="purple" id="opt-theme-purple">Neon Purple</option>
+                                <option value="emerald" id="opt-theme-emerald">Emerald Green</option>
+                                <option value="rose" id="opt-theme-rose">Rose Pink</option>
+                                <option value="amber" id="opt-theme-amber">Sunset Amber</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="lbl-prof-lang" class="block text-sm font-medium text-slate-300 mb-1.5">Preferred Language</label>
+                            <select id="prof-lang" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all">
+                                <option value="en">English</option>
+                                <option value="pt">Português</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="lbl-prof-type" class="block text-sm font-medium text-slate-300 mb-1.5">Preferred Media Type</label>
+                            <select id="prof-type" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all">
+                                <option value="any">Any (Movies & Series)</option>
+                                <option value="movie">Movies Only</option>
+                                <option value="series">Series Only</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="lbl-prof-rating" class="block text-sm font-medium text-slate-300 mb-1.5">Minimum IMDB Rating</label>
+                            <select id="prof-rating" class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all">
+                                <option value="">No Minimum</option>
+                                <option value="7.0">> 7.0</option>
+                                <option value="8.0">> 8.0</option>
+                                <option value="8.5">> 8.5</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: Genre Tuning -->
+                    <div class="flex flex-col gap-5">
+                        <div class="pb-3 border-b border-slate-800 flex justify-between items-end">
+                            <h4 id="lbl-prof-fav" class="text-lg font-semibold text-slate-200">Genre Preferences</h4>
+                            <span id="lbl-prof-genres-help" class="text-xs text-slate-500 font-medium">Click to toggle</span>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2" id="genre-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                        
+                        <div class="mt-auto pt-4 flex gap-4 text-xs text-slate-400 font-medium border-t border-slate-800/50">
+                            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-slate-800 border border-slate-700"></div> Neutral</div>
+                            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500"></div> Favorite</div>
+                            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500"></div> Excluded</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="mt-4 w-full bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-4 px-4 rounded-xl transition-all shadow-lg shadow-indigo-900/30 flex justify-center items-center gap-2 text-lg">
+                    <span id="prof-btn-text">Apply Configuration</span>
+                    <div id="prof-loader" class="loader hidden w-5 h-5 border-2"></div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+        <div class="glass-panel p-8 w-full max-w-sm modal-content relative bg-[#0f1115]/95 border-slate-700 shadow-2xl">
+            <button id="close-modal" class="absolute top-4 right-4 text-slate-500 hover:text-white text-2xl leading-none">&times;</button>
+            
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-bold text-white mb-1" id="modal-title">Join CineMatch</h2>
+                <p class="text-sky-400 text-xs font-medium" id="modal-subtitle">You need an account to discover movies.</p>
+            </div>
+
+            <div class="flex justify-center mb-5 border-b border-slate-800 pb-0">
+                <button id="tab-login" class="text-sm font-semibold px-4 py-2 text-sky-500 border-b-2 border-sky-500 transition-colors">Login</button>
+                <button id="tab-register" class="text-sm font-semibold px-4 py-2 text-slate-500 hover:text-slate-300 transition-colors">Register</button>
+            </div>
+            
+            <form id="login-form" class="flex flex-col gap-3">
+                <input type="text" id="login-user" placeholder="Username" required autocomplete="username" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                <input type="password" id="login-pass" placeholder="Password" required autocomplete="current-password" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                <button type="submit" class="mt-2 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition-all shadow-md w-full">
+                    <span id="login-btn-text">Login</span>
+                </button>
+            </form>
+            <form id="register-form" class="flex flex-col gap-3 hidden">
+                <input type="text" id="register-user" placeholder="Username" required autocomplete="username" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                <input type="password" id="register-pass" placeholder="Password" required autocomplete="new-password" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                <button type="submit" class="mt-2 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition-all shadow-md w-full">
+                    <span id="register-btn-text">Register</span>
+                </button>
+            </form>
+            <div id="auth-error" class="hidden mt-3 p-2 bg-red-900/30 border border-red-800/50 rounded text-red-300 text-center text-xs"></div>
+        </div>
+    </div>
+
+    <!-- Trailer Modal -->
+    <div id="trailer-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+        <div class="glass-panel p-2 w-full max-w-4xl modal-content relative bg-[#0f1115]/95 border-slate-700 shadow-2xl overflow-hidden aspect-video">
+            <button id="close-trailer-modal" onclick="closeTrailer()" class="absolute top-3 right-3 text-slate-400 hover:text-white text-3xl leading-none z-50 bg-slate-900/60 hover:bg-slate-800 rounded-full w-8 h-8 flex items-center justify-center transition-colors">&times;</button>
+            <div class="w-full h-full relative z-10" id="trailer-player-container">
+                <div id="yt-player-placeholder" class="w-full h-full rounded-lg bg-slate-950"></div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed bottom-4 right-4 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-lg shadow-xl translate-y-[150%] transition-transform duration-300 z-50 flex items-center gap-3">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span id="toast-message" class="font-medium">Mensagem copiada</span>
+    </div>
+
+    <script>
+        // Translations
+        const AVAILABLE_GENRES = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western"];
+        const dict = {
+            en: {
+                navLogin: "Login",
+                navRegister: "Register",
+                navWelcome: "Welcome,",
+                navLogout: "Logout",
+                heroTitle: "Your Personal AI Film Curator",
+                heroSub: "Enter a film or series you love, and CineMatch will instantly curate a premium selection of hidden gems and cinematic masterpieces tailored to your mood.",
+                inputPlaceholder: "e.g. Inception, Breaking Bad, The Matrix...",
+                btnDiscover: "Discover",
+                feat1Title: "Smart Engine",
+                feat1Desc: "Our advanced model analyzes themes, plot, and cinematic styles to find the perfect match.",
+                feat2Title: "Premium Assets",
+                feat2Desc: "High-resolution posters, verified IMDB ratings, and accurate metadata directly from the source.",
+                feat3Title: "Direct Links",
+                feat3Desc: "Instantly view on IMDB or search directly on Streamings with a single click.",
+                modalJoin: "Join CineMatch",
+                modalSub: "You need an account to discover movies & TV series.",
+                modalTabLogin: "Login",
+                modalTabRegister: "Register",
+                modalUser: "Username",
+                modalPass: "Password",
+                modalBtnLogin: "Login",
+                modalBtnRegister: "Register",
+                refPrefix: "Because you liked",
+                errAuth: "Authentication failed",
+                errServer: "Server error. Try again.",
+                errLoginReq: "You need to login before searching!",
+                errInvalid: "Oops! That doesn't look like a valid movie or TV series.",
+                errNoRecs: "No recommendations found. Try another title.",
+                errUnexpected: "An unexpected error occurred.",
+                errRateLimit: "Too many requests! Please wait a few seconds and try again.",
+                loadingMsg: "Discovering your next great cinematic obsession...",
+                typeMovie: "Movie",
+                typeSeries: "TV Series",
+                filtersTitle: "Advanced Filters",
+                filterMinRating: "Min IMDB Rating",
+                filterMinRatingAll: "All Ratings",
+                filterYear: "Year Limit (After)",
+                filterExcludeGenres: "Exclude Genres",
+                filterExcludeGenresPlaceholder: "e.g. Horror, Documentary",
+                settingsCustomTitle: "App Experience",
+                lblAccentTheme: "Accent Theme",
+                lblDisplayStyle: "Display Sizing",
+                lblMaxResults: "Max Results",
+                optThemeSky: "Sky Cyan",
+                optThemePurple: "Neon Purple",
+                optThemeEmerald: "Emerald Green",
+                optThemeRose: "Rose Pink",
+                optThemeAmber: "Sunset Amber",
+                optDisplayStandard: "Classic Grid",
+                optDisplayCompact: "Compact Grid",
+                shareBtn: "Share Curation (Copy Link)",
+                shareToast: "Link to this curated list copied to clipboard!",
+                shareHeading: "Curated Watchlist",
+                shareCTA: "Create Your Own AI Curation",
+                watchlistEmpty: "Your watchlist is empty. Start discovering and add titles you love!",
+                navWatchlist: "My Watchlist",
+                playBtn: "Watch Now",
+                ytErrorTitle: "Trailer Unavailable",
+                ytErrorMsg: "This specific trailer has geographic restrictions or embedding is disabled in your country.",
+                ytErrorBtn: "Search on YouTube",
+                navProfile: "My Profile",
+                profileTitle: "AI Recommendation Engine",
+                profileLanguage: "Preferred Language",
+                profileDefaultType: "Preferred Media Type",
+                profileFavGenres: "Genre Preferences",
+                profileExcGenres: "Excluded Genres",
+                profileMinRating: "Minimum IMDB Rating",
+                profileSaveBtn: "Apply Configuration",
+                profileSavedToast: "Preferences saved successfully!"
+            },
+            pt: {
+                navLogin: "Entrar",
+                navRegister: "Registar",
+                navWelcome: "Olá,",
+                navLogout: "Sair",
+                heroTitle: "O Teu Curador Pessoal de Cinema por IA",
+                heroSub: "Insere um filme ou série de que gostes e o CineMatch criará instantaneamente uma seleção premium de tesouros escondidos e obras-primas à tua medida.",
+                inputPlaceholder: "ex: O Padrinho, Breaking Bad, A Origem...",
+                btnDiscover: "Descobrir",
+                feat1Title: "Motor Inteligente",
+                feat1Desc: "O nosso modelo avançado analisa os temas, o enredo e o estilo para encontrar a combinação perfeita.",
+                feat2Title: "Design Premium",
+                feat2Desc: "Cartazes originais em alta resolução, avaliações do IMDB e metadados diretos da fonte.",
+                feat3Title: "Links Diretos",
+                feat3Desc: "Vê instantaneamente no IMDB ou pesquisa diretamente no Streamings com um único clique.",
+                modalJoin: "Entrar no CineMatch",
+                modalSub: "Precisas de uma conta para descobrir filmes e séries.",
+                modalTabLogin: "Entrar",
+                modalTabRegister: "Registo",
+                modalUser: "Utilizador",
+                modalPass: "Palavra-passe",
+                modalBtnLogin: "Entrar",
+                modalBtnRegister: "Registar",
+                refPrefix: "Porque gostaste de",
+                errAuth: "Falha na autenticação",
+                errServer: "Erro no servidor. Tenta novamente.",
+                errLoginReq: "Precisas de fazer login para pesquisar!",
+                errInvalid: "Ups! Isso não parece ser um filme ou série válido.",
+                errNoRecs: "Não encontrámos sugestões. Tenta outro título.",
+                errUnexpected: "Ocorreu um erro inesperado.",
+                errRateLimit: "Muitos pedidos seguidos! Por favor, aguarda uns segundos e tenta novamente.",
+                loadingMsg: "A descobrir a tua próxima grande obsessão cinematográfica...",
+                typeMovie: "Filme",
+                typeSeries: "Série",
+                filtersTitle: "Filtros Avançados",
+                filterMinRating: "Nota Mínima IMDB",
+                filterMinRatingAll: "Qualquer Nota",
+                filterYear: "Ano Limite (Após)",
+                filterExcludeGenres: "Excluir Géneros",
+                filterExcludeGenresPlaceholder: "ex: Terror, Documentário",
+                settingsCustomTitle: "Experiência da App",
+                lblAccentTheme: "Tema de Cor",
+                lblDisplayStyle: "Tamanho da Grelha",
+                lblMaxResults: "Máx Sugestões",
+                optThemeSky: "Ciano Celeste",
+                optThemePurple: "Violeta Neon",
+                optThemeEmerald: "Verde Esmeralda",
+                optThemeRose: "Rosa Choque",
+                optThemeAmber: "Âmbar Pôr-do-Sol",
+                optDisplayStandard: "Grelha Clássica",
+                optDisplayCompact: "Grelha Compacta",
+                navWatchlist: "Minha Lista",
+                shareBtn: "Partilhar Lista (Copiar Link)",
+                shareToast: "Link para esta lista curada copiado!",
+                shareHeading: "Lista Curada",
+                shareCTA: "Cria a Tua Própria Lista por IA",
+                watchlistEmpty: "A tua lista de favoritos está vazia. Começa a descobrir e adiciona títulos que adores!",
+                playBtn: "Assistir Agora",
+                ytErrorTitle: "Trailer Indisponível",
+                ytErrorMsg: "Este trailer específico tem restrições geográficas ou a incorporação foi desativada no seu país.",
+                ytErrorBtn: "Pesquisar no YouTube",
+                navProfile: "Meu Perfil",
+                profileTitle: "Motor de Recomendação IA",
+                profileLanguage: "Idioma Preferido",
+                profileDefaultType: "Tipo de Mídia Preferido",
+                profileFavGenres: "Preferências de Género",
+                profileExcGenres: "Géneros Excluídos",
+                profileMinRating: "Classificação Mínima IMDB",
+                profileSaveBtn: "Gravar Preferências",
+                profileSavedToast: "Preferências gravadas com sucesso!"
+            }
+        };
+
+        // State
+        let isLoggedIn = false;
+        let currentUser = '';
+        let isLoginMode = true;
+        let userWatchlist = [];
+        let isPublicShareMode = false;
+        let activeTab = 'home'; // 'home' or 'watchlist'
+        
+        let currentLang = localStorage.getItem('cinematch_lang');
+        if (!currentLang) {
+            currentLang = navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
+        }
+
+        let lastSearchedMovie = '';
+        let lastMovieData = null; // Store data to re-render without re-fetching
+
+        // YouTube Player API State & Dynamic Script Insertion
+        let ytPlayer = null;
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Generic page section transition animation helper
+        function transitionTo(hideIds, showIds, callback) {
+            const hideElems = hideIds.map(id => document.getElementById(id)).filter(Boolean);
+            const showElems = showIds.map(id => document.getElementById(id)).filter(Boolean);
+            
+            // Add page-transition and exit class
+            hideElems.forEach(el => {
+                el.classList.add('page-transition');
+                el.classList.add('page-exit');
+            });
+            
+            // Trigger exit transition
+            setTimeout(() => {
+                hideElems.forEach(el => {
+                    el.classList.add('page-exit-active');
+                });
+            }, 10);
+            
+            // Switch sections after exit animation finishes
+            setTimeout(() => {
+                hideElems.forEach(el => {
+                    el.classList.add('hidden-section');
+                    el.classList.remove('page-transition', 'page-exit', 'page-exit-active');
+                });
+                
+                if (callback) callback();
+                
+                showElems.forEach(el => {
+                    el.classList.remove('hidden-section');
+                    el.classList.add('page-transition', 'page-enter');
+                });
+                
+                // Force layout reflow
+                showElems.forEach(el => el.offsetHeight);
+                
+                // Trigger enter transition
+                showElems.forEach(el => {
+                    el.classList.add('page-enter-active');
+                });
+                
+                // Clean up transition classes
+                setTimeout(() => {
+                    showElems.forEach(el => {
+                        el.classList.remove('page-transition', 'page-enter', 'page-enter-active');
+                    });
+                }, 400);
+                
+            }, 350);
+        }
+
+        // Elements
+        const currentLangDisplay = document.getElementById('current-lang-display');
+        const langOptions = document.querySelectorAll('.lang-option');
+        const navActions = document.getElementById('nav-actions');
+        const heroHeader = document.getElementById('hero-header');
+        const searchContainer = document.getElementById('search-container');
+        const featuresSection = document.getElementById('features-section');
+        const resultsContainer = document.getElementById('results-container');
+        const referenceMovieContainer = document.getElementById('reference-movie-container');
+        
+        const authModal = document.getElementById('auth-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginUser = document.getElementById('login-user');
+        const loginPass = document.getElementById('login-pass');
+        const registerUser = document.getElementById('register-user');
+        const registerPass = document.getElementById('register-pass');
+        const loginBtnText = document.getElementById('login-btn-text');
+        const registerBtnText = document.getElementById('register-btn-text');
+        const authError = document.getElementById('auth-error');
+
+        const searchForm = document.getElementById('search-form');
+        const movieInput = document.getElementById('movie-input');
+        
+        // Autocomplete Logic
+        const autocompleteDropdown = document.getElementById('autocomplete-dropdown');
+        const autocompleteList = document.getElementById('autocomplete-list');
+        let autocompleteTimer;
+
+        movieInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            clearTimeout(autocompleteTimer);
+            
+            if (query.length < 3) {
+                autocompleteDropdown.classList.add('hidden');
+                return;
+            }
+
+            autocompleteTimer = setTimeout(async () => {
+                try {
+                    const res = await fetch(`https://v3-cinemeta.strem.io/catalog/movie/top/search=${encodeURIComponent(query)}.json`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.metas && data.metas.length > 0) {
+                            autocompleteList.innerHTML = '';
+                            data.metas.slice(0, 5).forEach(meta => {
+                                const li = document.createElement('li');
+                                li.className = 'px-4 py-3 hover:bg-slate-800 cursor-pointer flex items-center gap-3 transition-colors border-b border-slate-800/50 last:border-0';
+                                
+                                const imgHtml = meta.poster 
+                                    ? `<img src="${meta.poster}" class="w-10 h-14 object-cover rounded shadow-sm flex-shrink-0" onerror="this.src='https://via.placeholder.com/40x56/0f1115/ffffff?text=?'">` 
+                                    : `<div class="w-10 h-14 bg-slate-800 rounded flex items-center justify-center text-slate-500 flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg></div>`;
+                                    
+                                const typeLabel = meta.type === 'series' ? (currentLang === 'pt' ? 'Série' : 'Series') : (currentLang === 'pt' ? 'Filme' : 'Movie');
+                                
+                                li.innerHTML = `
+                                    ${imgHtml}
+                                    <div class="flex flex-col overflow-hidden">
+                                        <span class="text-white font-medium truncate">${meta.name}</span>
+                                        <span class="text-xs text-slate-400">${meta.releaseInfo || ''} &bull; ${typeLabel}</span>
+                                    </div>
+                                `;
+                                
+                                li.addEventListener('click', () => {
+                                    movieInput.value = meta.name;
+                                    autocompleteDropdown.classList.add('hidden');
+                                    searchForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                                });
+                                
+                                autocompleteList.appendChild(li);
+                            });
+                            autocompleteDropdown.classList.remove('hidden');
+                        } else {
+                            autocompleteDropdown.classList.add('hidden');
+                        }
+                    }
+                } catch (err) {
+                    console.error('Autocomplete error:', err);
+                }
+            }, 300);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!movieInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
+                autocompleteDropdown.classList.add('hidden');
+            }
+        });
+
+        const btnText = document.getElementById('btn-text');
+        const btnLoader = document.getElementById('btn-loader');
+        const errorMsg = document.getElementById('error-message');
+        const searchBtn = searchForm.querySelector('button[type="submit"]');
+
+        // Apply Translations
+        function updateUI() {
+            const t = dict[currentLang];
+            currentLangDisplay.textContent = currentLang === 'en' ? 'ENG' : 'PT';
+            document.getElementById('current-lang-flag').src = currentLang === 'en' ? 'https://flagcdn.com/w20/gb.png' : 'https://flagcdn.com/w20/pt.png';
+            
+            document.getElementById('hero-title').textContent = t.heroTitle;
+            document.getElementById('hero-subtitle').textContent = t.heroSub;
+            movieInput.placeholder = t.inputPlaceholder;
+            btnText.textContent = t.btnDiscover;
+            
+            document.getElementById('feat1-title').textContent = t.feat1Title;
+            document.getElementById('feat1-desc').textContent = t.feat1Desc;
+            document.getElementById('feat2-title').textContent = t.feat2Title;
+            document.getElementById('feat2-desc').textContent = t.feat2Desc;
+            document.getElementById('feat3-title').textContent = t.feat3Title;
+            document.getElementById('feat3-desc').textContent = t.feat3Desc;
+            
+            if (window.navProfileLink) window.navProfileLink.textContent = t.navProfile;
+            document.getElementById('modal-title').textContent = t.modalJoin;
+            document.getElementById('modal-subtitle').textContent = t.modalSub;
+            tabLogin.textContent = t.modalTabLogin;
+            tabRegister.textContent = t.modalTabRegister;
+            loginUser.placeholder = t.modalUser;
+            loginPass.placeholder = t.modalPass;
+            registerUser.placeholder = t.modalUser;
+            registerPass.placeholder = t.modalPass;
+            loginBtnText.textContent = t.modalBtnLogin;
+            registerBtnText.textContent = t.modalBtnRegister;
+
+            // Advanced Filters Drawer elements localization
+            const settingsTitle = document.getElementById('settings-title');
+            if (settingsTitle) settingsTitle.textContent = t.filtersTitle;
+            const lblMinRating = document.getElementById('lbl-min-rating');
+            if (lblMinRating) lblMinRating.textContent = t.filterMinRating;
+            const optRatingAll = document.getElementById('opt-rating-all');
+            if (optRatingAll) optRatingAll.textContent = t.filterMinRatingAll;
+            const lblYear = document.getElementById('lbl-year');
+            if (lblYear) lblYear.textContent = t.filterYear;
+            const lblExcludeGenres = document.getElementById('lbl-exclude-genres');
+            if (lblExcludeGenres) lblExcludeGenres.textContent = t.filterExcludeGenres;
+            const filterExcludeInput = document.getElementById('filter-exclude-genres');
+            if (filterExcludeInput) filterExcludeInput.placeholder = t.filterExcludeGenresPlaceholder;
+
+            // App Customization elements localization
+            const settingsCustomTitle = document.getElementById('settings-custom-title');
+            if (settingsCustomTitle) settingsCustomTitle.textContent = t.settingsCustomTitle;
+            const lblAccentTheme = document.getElementById('lbl-accent-theme');
+            if (lblAccentTheme) lblAccentTheme.textContent = t.lblAccentTheme;
+            const lblDisplayStyle = document.getElementById('lbl-display-style');
+            if (lblDisplayStyle) lblDisplayStyle.textContent = t.lblDisplayStyle;
+            const lblMaxResults = document.getElementById('lbl-max-results');
+            if (lblMaxResults) lblMaxResults.textContent = t.lblMaxResults;
+
+            // Select Option localizations
+            const optThemeSky = document.getElementById('opt-theme-sky');
+            if (optThemeSky) optThemeSky.textContent = t.optThemeSky;
+            const optThemePurple = document.getElementById('opt-theme-purple');
+            if (optThemePurple) optThemePurple.textContent = t.optThemePurple;
+            const optThemeEmerald = document.getElementById('opt-theme-emerald');
+            if (optThemeEmerald) optThemeEmerald.textContent = t.optThemeEmerald;
+            const optThemeRose = document.getElementById('opt-theme-rose');
+            if (optThemeRose) optThemeRose.textContent = t.optThemeRose;
+            const optThemeAmber = document.getElementById('opt-theme-amber');
+            if (optThemeAmber) optThemeAmber.textContent = t.optThemeAmber;
+
+            const optDisplayStandard = document.getElementById('opt-display-standard');
+            if (optDisplayStandard) optDisplayStandard.textContent = t.optDisplayStandard;
+            const optDisplayCompact = document.getElementById('opt-display-compact');
+            if (optDisplayCompact) optDisplayCompact.textContent = t.optDisplayCompact;
+            
+            setLoginState(isLoggedIn, currentUser); // refresh nav
+        }
+
+        langOptions.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const selectedLang = btn.getAttribute('data-lang');
+                if (currentLang !== selectedLang) {
+                    currentLang = selectedLang;
+                    localStorage.setItem('cinematch_lang', currentLang);
+                    updateUI();
+                    
+                    // Re-render UI with existing data
+                    if (lastMovieData && !resultsContainer.classList.contains('hidden-section')) {
+                        renderMovies(lastMovieData.referenceMovie, lastMovieData.recommendations, lastMovieData.cacheId);
+                    }
+                    if (activeTab === 'watchlist') {
+                        showWatchlistTab();
+                    }
+                }
+                // Unfocus the dropdown to close it
+                document.activeElement.blur();
+            });
+        });
+
+        // Toggle Advanced Settings Drawer
+        const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
+        const settingsDrawer = document.getElementById('settings-drawer');
+        const settingsDivider = document.getElementById('settings-divider');
+        if (toggleSettingsBtn && settingsDrawer) {
+            toggleSettingsBtn.addEventListener('click', () => {
+                settingsDrawer.classList.toggle('hidden');
+                if (settingsDivider) {
+                    settingsDivider.classList.toggle('hidden');
+                }
+            });
+        }
+
+
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('translate-y-[150%]');
+            setTimeout(() => {
+                toast.classList.add('translate-y-[150%]');
+            }, 3000);
+        }
+
+        // --- Dynamic Trending Loading ---
+        async function loadTrending() {
+            const container = document.getElementById('trending-container');
+            if (!container) return;
+            container.innerHTML = `<span class="text-xs text-slate-500 animate-pulse">...</span>`;
+            try {
+                const res = await fetch('/api/trending');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.trending) && data.trending.length > 0) {
+                    container.innerHTML = data.trending.map(title => {
+                        const escapedTitle = title.replace(/'/g, "\\'");
+                        return `<button onclick="document.getElementById('movie-input').value='${escapedTitle}'; document.getElementById('search-form').dispatchEvent(new Event('submit'))" class="px-3 py-1 rounded-full bg-slate-800/40 hover:bg-slate-700/80 text-slate-300 transition-colors border border-slate-700/50 text-xs">${title}</button>`;
+                    }).join('');
+                } else {
+                    throw new Error("Invalid trending data");
+                }
+            } catch (e) {
+                console.warn("Failed to load trending, using default fallback:", e);
+                const fallbacks = currentLang === 'pt'
+                    ? ["A Origem", "Breaking Bad", "Interstellar", "A Guerra dos Tronos", "Matrix", "Stranger Things"]
+                    : ["Inception", "Breaking Bad", "Interstellar", "Game of Thrones", "The Matrix", "Stranger Things"];
+                container.innerHTML = fallbacks.map(title => {
+                    const escapedTitle = title.replace(/'/g, "\\'");
+                    return `<button onclick="document.getElementById('movie-input').value='${escapedTitle}'; document.getElementById('search-form').dispatchEvent(new Event('submit'))" class="px-3 py-1 rounded-full bg-slate-800/40 hover:bg-slate-700/80 text-slate-300 transition-colors border border-slate-700/50 text-xs">${title}</button>`;
+                }).join('');
+            }
+        }
+
+        // --- Experience Settings Management ---
+        function applyDisplayStyle(styleVal) {
+            const resultsContainer = document.getElementById('results-container');
+            if (!resultsContainer) return;
+            
+            if (styleVal === 'compact') {
+                document.body.classList.add('layout-compact');
+                resultsContainer.classList.remove('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-5', 'gap-5');
+                resultsContainer.classList.add('grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-3.5');
+            } else {
+                document.body.classList.remove('layout-compact');
+                resultsContainer.classList.remove('grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-3.5');
+                resultsContainer.classList.add('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-5', 'gap-5');
+            }
+        }
+
+        function loadSettings() {
+            // Theme setting
+            const savedTheme = localStorage.getItem('cinematch_theme') || 'sky';
+            const themeSelect = document.getElementById('setting-accent-theme');
+            if (themeSelect) {
+                themeSelect.value = savedTheme;
+            }
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            // Max Results setting
+            const savedMaxResults = localStorage.getItem('cinematch_max_results') || '10';
+            const maxResultsSelect = document.getElementById('setting-max-results');
+            const maxResultsVal = document.getElementById('max-results-val');
+            if (maxResultsSelect) {
+                maxResultsSelect.value = savedMaxResults;
+            }
+            if (maxResultsVal) {
+                maxResultsVal.textContent = savedMaxResults;
+            }
+        }
+
+        function registerSettingsListeners() {
+            const themeSelect = document.getElementById('setting-accent-theme');
+            if (themeSelect) {
+                themeSelect.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    document.body.setAttribute('data-theme', val);
+                    localStorage.setItem('cinematch_theme', val);
+                });
+            }
+
+            const maxResultsVal = document.getElementById('max-results-val');
+            const maxResultsSetting = document.getElementById('setting-max-results');
+            if (maxResultsSetting) {
+                maxResultsSetting.addEventListener('input', (e) => {
+                    const val = e.target.value;
+                    if (maxResultsVal) maxResultsVal.textContent = val;
+                    localStorage.setItem('cinematch_max_results', val);
+                    
+                    // If recommendations are active, re-render immediately
+                    if (lastMovieData && !resultsContainer.classList.contains('hidden-section') && activeTab === 'home') {
+                        renderMovies(lastMovieData.referenceMovie, lastMovieData.recommendations, lastMovieData.cacheId);
+                    }
+                });
+            }
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            updateUI();
+            loadTrending();
+            registerSettingsListeners();
+        });
+        
+        let isPopStateAction = false;
+        window.addEventListener('popstate', (e) => {
+            const state = e.state;
+            if (!state || !state.view || state.view === 'home') {
+                goHome(false);
+                return;
+            }
+            if (state.view === 'search') {
+                movieInput.value = state.query;
+                isPopStateAction = true;
+                searchForm.dispatchEvent(new Event('submit'));
+            } else if (state.view === 'watchlist') {
+                showWatchlistTab(false);
+            } else if (state.view === 'share') {
+                window.location.search = `?share=${state.id}`;
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('q') && !window.history.state) {
+                window.history.replaceState({ view: 'home' }, '', '/');
+                window.history.pushState({ view: 'search', query: params.get('q') }, '', window.location.href);
+                movieInput.value = params.get('q');
+                setTimeout(() => { searchForm.dispatchEvent(new Event('submit')); }, 500);
+            } else if (!window.history.state && !params.has('share')) {
+                window.history.replaceState({ view: 'home' }, '', '/');
+            }
+            checkSession();
+        });
+
+        async function checkSession() {
+            const isShared = await handleSharedList();
+            try {
+                const res = await fetch('/api/me', { credentials: 'include' });
+                const data = await res.json();
+                if (data.loggedIn) {
+                    isLoggedIn = true;
+                    await loadUserWatchlist();
+                    setLoginState(true, data.username);
+                    if (!isShared && activeTab === 'watchlist') {
+                        showWatchlistTab();
+                    }
+                } else {
+                    setLoginState(false);
+                }
+            } catch (e) {
+                setLoginState(false);
+            }
+        }
+
+        function setLoginState(loggedIn, username = '') {
+            isLoggedIn = loggedIn;
+            currentUser = username;
+            const t = dict[currentLang];
+            
+            if (loggedIn) {
+                navActions.innerHTML = `
+                    <button id="nav-watchlist-btn" onclick="toggleWatchlistTab()" class="text-xs font-bold px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-sky-600/10 hover:bg-sky-600/20 text-sky-400 hover:text-sky-300 border border-sky-500/20 hover:border-sky-500/40 transition-all duration-300 uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 shadow-sm">
+                        <svg class="w-3.5 h-3.5" fill="${activeTab === 'watchlist' ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                        <span><span class="hidden sm:inline">${t.navWatchlist}</span></span>
+                    </button>
+                    <div class="relative group">
+                        <button class="flex items-center gap-1.5 sm:gap-2 bg-slate-900/60 border border-slate-700/50 rounded-lg px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs font-sans shadow-sm backdrop-blur-md hover:bg-slate-800 transition-colors">
+                            <span class="text-slate-300 font-medium"><span class="hidden sm:inline">${t.navWelcome} </span><span class="text-white font-bold">${username}</span></span>
+                            <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="absolute right-0 top-full pt-3 -mt-2 w-40 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
+                            <div class="bg-slate-800 border border-slate-700 rounded-md shadow-xl overflow-hidden flex flex-col">
+                                <button onclick="openProfileModal()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors border-b border-slate-700">${t.navProfile}</button>
+                                <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-red-400 hover:bg-slate-700 hover:text-red-300 transition-colors uppercase tracking-wider">${t.navLogout}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                navActions.innerHTML = `
+                    <button onclick="openModal('login')" class="text-xs sm:text-sm text-slate-300 hover:text-white font-medium px-1.5 sm:px-2 transition-colors">${t.navLogin}</button>
+                    <button onclick="openModal('register')" class="text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium px-2.5 py-1.5 sm:px-4 sm:py-1.5 rounded-md transition-colors shadow-sm">${t.navRegister}</button>
+                `;
+            }
+        }
+
+        function goHome(pushState = true) {
+            activeTab = 'home';
+            const hideIds = ['watchlist-header-container', 'reference-movie-container', 'results-container'];
+            const showIds = ['hero-header', 'features-section', 'dynamic-bg', 'search-container'];
+            
+            transitionTo(hideIds, showIds, () => {
+                const shareHeader = document.getElementById('share-header');
+                if (shareHeader) shareHeader.remove();
+                isPublicShareMode = false;
+                
+                searchContainer.classList.replace('mb-4', 'mb-8');
+                movieInput.value = '';
+                lastSearchedMovie = '';
+                lastMovieData = null;
+                
+                if (pushState) {
+                    if (!window.history.state || window.history.state.view !== 'home') {
+                        window.history.pushState({ view: 'home' }, '', '/');
+                    }
+                }
+                setLoginState(isLoggedIn, currentUser);
+            });
+        }
+
+        async function logout() {
+            await fetch('/api/logout', { method: 'POST' });
+            setLoginState(false);
+            userWatchlist = [];
+            goHome();
+        }
+
+        // Modal Logic
+        const profileModal = document.getElementById('profile-modal');
+        
+        async function openProfileModal() {
+            try {
+                const res = await fetch('/api/profile', { credentials: 'include' });
+                if (res.ok) {
+                    const prefs = await res.json();
+                    document.getElementById('prof-lang').value = prefs.language || 'en';
+                    document.getElementById('prof-type').value = prefs.defaultType || 'any';
+                    document.getElementById('prof-rating').value = prefs.minRating || '';
+                    
+                    const favs = prefs.favoriteGenres || [];
+                    const excs = prefs.excludedGenres || [];
+                    
+                    const genreGrid = document.getElementById('genre-grid');
+                    genreGrid.innerHTML = '';
+                    
+                    AVAILABLE_GENRES.forEach(g => {
+                        const pill = document.createElement('button');
+                        pill.type = 'button';
+                        pill.dataset.genre = g;
+                        
+                        const updatePillVisuals = (state) => {
+                            if (state === 'fav') {
+                                pill.className = 'px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 select-none bg-emerald-950/40 text-emerald-300 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.1)]';
+                                pill.innerHTML = `<span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg> ${g}</span>`;
+                                pill.dataset.state = 'fav';
+                            } else if (state === 'exc') {
+                                pill.className = 'px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 select-none bg-red-950/40 text-red-300 border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.1)]';
+                                pill.innerHTML = `<span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg> ${g}</span>`;
+                                pill.dataset.state = 'exc';
+                            } else {
+                                pill.className = 'px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 select-none bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white';
+                                pill.innerHTML = `<span>${g}</span>`;
+                                pill.dataset.state = 'neutral';
+                            }
+                        };
+                        
+                        let initialState = 'neutral';
+                        if (favs.includes(g)) initialState = 'fav';
+                        else if (excs.includes(g)) initialState = 'exc';
+                        
+                        updatePillVisuals(initialState);
+                        
+                        pill.addEventListener('click', () => {
+                            if (pill.dataset.state === 'neutral') updatePillVisuals('fav');
+                            else if (pill.dataset.state === 'fav') updatePillVisuals('exc');
+                            else updatePillVisuals('neutral');
+                        });
+                        
+                        genreGrid.appendChild(pill);
+                    });
+                }
+            } catch (e) {
+                console.error("Could not fetch profile", e);
+            }
+            
+            // Apply translations to modal
+            const t = dict[currentLang];
+            document.getElementById('modal-profile-title').textContent = t.profileTitle;
+            const titleDesc = document.getElementById('modal-profile-desc');
+            if (titleDesc) titleDesc.textContent = currentLang === 'pt' ? 'Afina o teu algoritmo para resultados personalizados' : 'Tune your algorithm for personalized results';
+            document.getElementById('lbl-prof-lang').textContent = t.profileLanguage;
+            document.getElementById('lbl-prof-type').textContent = t.profileDefaultType;
+            document.getElementById('lbl-prof-fav').textContent = t.profileFavGenres;
+            
+            const helpTxt = document.getElementById('lbl-prof-genres-help');
+            if (helpTxt) helpTxt.textContent = currentLang === 'pt' ? 'Clica para alternar' : 'Click to toggle';
+            
+            document.getElementById('lbl-prof-rating').textContent = t.profileMinRating;
+            document.getElementById('prof-btn-text').textContent = t.profileSaveBtn;
+            
+            profileModal.classList.remove('hidden');
+            setTimeout(() => profileModal.classList.add('active'), 10);
+        }
+
+        function closeProfileModal() {
+            profileModal.classList.remove('active');
+            setTimeout(() => profileModal.classList.add('hidden'), 300);
+        }
+
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('prof-btn-text');
+            const loader = document.getElementById('prof-loader');
+            btn.classList.add('hidden');
+            loader.classList.remove('hidden');
+
+            const favStr = Array.from(document.querySelectorAll('#genre-grid button[data-state="fav"]')).map(b => b.dataset.genre);
+            const excStr = Array.from(document.querySelectorAll('#genre-grid button[data-state="exc"]')).map(b => b.dataset.genre);
+
+            const prefs = {
+                language: document.getElementById('prof-lang').value,
+                defaultType: document.getElementById('prof-type').value,
+                favoriteGenres: favStr,
+                excludedGenres: excStr,
+                minRating: document.getElementById('prof-rating').value
+            };
+
+            try {
+                await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ preferences: prefs })
+                });
+                
+                // If language changed, update site globally
+                if (prefs.language !== currentLang) {
+                    currentLang = prefs.language;
+                    localStorage.setItem('cinematch_lang', currentLang);
+                    updateUI();
+                    setLoginState(true, currentUser); // Refresh nav text
+                }
+                
+                showToast(dict[currentLang].profileSavedToast || 'Saved!');
+                closeProfileModal();
+            } catch (err) {
+                console.error("Save profile error", err);
+            } finally {
+                loader.classList.add('hidden');
+                btn.classList.remove('hidden');
+            }
+        });
+
+        function openModal(mode = 'login') {
+            authModal.classList.add('active');
+            if (mode === 'login') {
+                tabLogin.click();
+            } else {
+                tabRegister.click();
+            }
+        }
+
+        closeModalBtn.addEventListener('click', () => {
+            authModal.classList.remove('active');
+        });
+
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) authModal.classList.remove('active');
+        });
+
+        // Close trailer modal on backdrop click
+        const trailerModal = document.getElementById('trailer-modal');
+        if (trailerModal) {
+            trailerModal.addEventListener('click', (e) => {
+                if (e.target === trailerModal) closeTrailer();
+            });
+        }
+
+        tabLogin.addEventListener('click', () => {
+            isLoginMode = true;
+            tabLogin.classList.replace('text-slate-500', 'text-sky-500');
+            tabLogin.classList.add('border-b-2', 'border-sky-500');
+            tabRegister.classList.replace('text-sky-500', 'text-slate-500');
+            tabRegister.classList.remove('border-b-2', 'border-sky-500');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            loginForm.reset();
+            registerForm.reset();
+            authError.classList.add('hidden');
+        });
+
+        tabRegister.addEventListener('click', () => {
+            isLoginMode = false;
+            tabRegister.classList.replace('text-slate-500', 'text-sky-500');
+            tabRegister.classList.add('border-b-2', 'border-sky-500');
+            tabLogin.classList.replace('text-sky-500', 'text-slate-500');
+            tabLogin.classList.remove('border-b-2', 'border-sky-500');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            loginForm.reset();
+            registerForm.reset();
+            authError.classList.add('hidden');
+        });
+
+        async function handleAuthSubmit(e, isLogin) {
+            e.preventDefault();
+            authError.classList.add('hidden');
+            const username = isLogin ? loginUser.value.trim() : registerUser.value.trim();
+            const password = isLogin ? loginPass.value : registerPass.value;
+            const endpoint = isLogin ? '/api/login' : '/api/register';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    if (isLogin) loginForm.reset(); else registerForm.reset();
+                    authModal.classList.remove('active');
+                    isLoggedIn = true;
+                    await new Promise(r => setTimeout(r, 300));
+                    await loadUserWatchlist();
+                    setLoginState(true, data.user.username);
+                    
+                    if (movieInput.value.trim() !== '') {
+                        searchForm.dispatchEvent(new Event('submit'));
+                    }
+                } else {
+                    authError.textContent = data.error || dict[currentLang].errAuth;
+                    authError.classList.remove('hidden');
+                }
+            } catch (err) {
+                authError.textContent = dict[currentLang].errServer;
+                authError.classList.remove('hidden');
+            }
+        }
+
+        loginForm.addEventListener('submit', (e) => handleAuthSubmit(e, true));
+        registerForm.addEventListener('submit', (e) => handleAuthSubmit(e, false));
+
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const t = dict[currentLang];
+            
+            if (!isLoggedIn) {
+                document.getElementById('modal-subtitle').textContent = t.errLoginReq;
+                document.getElementById('modal-subtitle').classList.replace('text-sky-400', 'text-amber-400');
+                openModal('login');
+                return;
+            }
+
+            const movie = movieInput.value.trim() || lastSearchedMovie;
+            if(!movie) return;
+            
+            if (!isPopStateAction) {
+                if (!window.history.state || window.history.state.view !== 'search') {
+                    window.history.pushState({ view: 'search', query: movie }, '', `?q=${encodeURIComponent(movie)}`);
+                } else {
+                    window.history.replaceState({ view: 'search', query: movie }, '', `?q=${encodeURIComponent(movie)}`);
+                }
+            }
+            isPopStateAction = false;
+            
+            lastSearchedMovie = movie;
+
+            // Extract Filters
+            const afterYear = document.getElementById('filter-year').value || '';
+            const minRating = document.getElementById('filter-min-rating').value || '';
+            const excludeGenres = document.getElementById('filter-exclude-genres').value || '';
+
+            const hideIds = ['hero-header', 'features-section', 'dynamic-bg', 'watchlist-header-container'];
+            const showIds = ['results-container', 'reference-movie-container'];
+
+            transitionTo(hideIds, showIds, () => {
+                searchContainer.classList.replace('mb-8', 'mb-4');
+                errorMsg.classList.add('hidden');
+                resultsContainer.style.opacity = '0';
+                resultsContainer.innerHTML = '';
+                referenceMovieContainer.style.opacity = '0';
+                referenceMovieContainer.innerHTML = '';
+                
+                // Show Premium Loading State
+                resultsContainer.innerHTML = `
+                    <div class="col-span-full flex flex-col items-center justify-center py-20 animate-fade-in-up">
+                        <div class="relative flex items-center justify-center mb-6">
+                            <div class="absolute inset-0 bg-sky-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+                            <div class="w-16 h-16 border-4 border-slate-800 border-t-sky-500 rounded-full animate-spin relative z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
+                            <svg class="w-6 h-6 text-sky-400 absolute z-20 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 tracking-wide">${t.loadingMsg}</h3>
+                        <p class="text-sm text-slate-400">Powered by CineMatch AI</p>
+                        
+                        <!-- Background ghost skeleton hint -->
+                        <div class="w-full hidden sm:flex justify-center gap-4 mt-16 opacity-30 pointer-events-none scale-95 origin-top">
+                            ${Array(5).fill('').map((_, i) => `
+                                <div class="w-48 h-72 rounded-xl bg-slate-800/50 border border-slate-700/50 animate-pulse" style="animation-delay: ${i * 150}ms"></div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                resultsContainer.style.opacity = '1';
+            });
+            
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+            searchBtn.disabled = true;
+
+            // Local cache key using query filters to prevent collisions
+            const cacheKey = `cinematch_cache_${movie.toLowerCase()}_${currentLang}_y:${afterYear}_r:${minRating}_e:${excludeGenres.toLowerCase().trim()}`;
+            const localCache = localStorage.getItem(cacheKey);
+            
+            if (localCache) {
+                try {
+                    const data = JSON.parse(localCache);
+                    // Ensure the cache is not legacy (must contain the trailerYtId property check)
+                    if (data && data.referenceMovie && data.referenceMovie.hasOwnProperty('trailerYtId')) {
+                        setTimeout(() => {
+                            resultsContainer.style.opacity = '0';
+                            setTimeout(() => {
+                                lastMovieData = data;
+                                currentCacheId = data.cacheId;
+                                currentOffset = data.recommendations.length;
+                                hasMoreResults = data.hasMore || false;
+                                renderMovies(data.referenceMovie, data.recommendations, data.cacheId);
+                                btnText.classList.remove('hidden');
+                                btnLoader.classList.add('hidden');
+                                searchBtn.disabled = false;
+                            }, 300);
+                        }, 500);
+                        return;
+                    }
+                } catch(e) {
+                    // Ignore broken cache
+                }
+            }
+
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        movie, 
+                        language: currentLang,
+                        afterYear,
+                        minRating,
+                        excludeGenres
+                    })
+                });
+
+                if (response.status === 401) {
+                    setLoginState(false);
+                    openModal('login');
+                    return;
+                }
+
+                const data = await response.json();
+                
+                resultsContainer.style.opacity = '0'; // fade out skeleton
+                setTimeout(() => {
+                    if (!response.ok) {
+                        if (response.status === 429 || (data.error && data.error.includes('Rate limit'))) {
+                            showError(t.errRateLimit);
+                        } else if (data.error) {
+                            showError(data.error);
+                        } else {
+                            showError(t.errServer);
+                        }
+                    } else if (data.recommendations && data.recommendations.length > 0) {
+                        lastMovieData = data;
+                        currentCacheId = data.cacheId;
+                        currentOffset = data.recommendations.length;
+                        hasMoreResults = data.hasMore || false;
+                        
+                        try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e){}
+                        renderMovies(data.referenceMovie, data.recommendations, data.cacheId);
+                    } else {
+                        showError(t.errNoRecs);
+                    }
+                }, 300);
+
+            } catch (err) {
+                showError(t.errUnexpected);
+            } finally {
+                btnText.classList.remove('hidden');
+                btnLoader.classList.add('hidden');
+                searchBtn.disabled = false;
+            }
+        });
+
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.classList.remove('hidden');
+        }
+
+        const loadMoreContainer = document.getElementById('load-more-container');
+        const btnLoadMore = document.getElementById('btn-load-more');
+        const loadMoreText = document.getElementById('load-more-text');
+        const loadMoreSpinner = document.getElementById('load-more-spinner');
+        
+        let currentCacheId = null;
+        let currentOffset = 0;
+        let hasMoreResults = false;
+
+        btnLoadMore.addEventListener('click', async () => {
+            if (!currentCacheId || !hasMoreResults) return;
+            
+            loadMoreText.classList.add('hidden');
+            loadMoreSpinner.classList.remove('hidden');
+            btnLoadMore.disabled = true;
+            
+            try {
+                const response = await fetch('/api/recommend/more', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cacheId: currentCacheId, offset: currentOffset })
+                });
+                
+                if (response.status === 401) {
+                    setLoginState(false);
+                    openModal('login');
+                    return;
+                }
+                
+                const data = await response.json();
+                if (data.recommendations && data.recommendations.length > 0) {
+                    renderMovies(null, data.recommendations, currentCacheId, true);
+                    hasMoreResults = data.hasMore;
+                    currentOffset += data.recommendations.length;
+                    
+                    if (!hasMoreResults) {
+                        loadMoreContainer.classList.add('hidden');
+                    }
+                }
+            } catch (e) {
+                console.error("Load more failed:", e);
+            } finally {
+                loadMoreText.classList.remove('hidden');
+                loadMoreSpinner.classList.add('hidden');
+                btnLoadMore.disabled = false;
+            }
+        });
+
+        function renderMovies(refMovie, movies, cacheId = null, isAppend = false) {
+            const t = dict[currentLang];
+            
+            if (!isAppend) {
+                resultsContainer.innerHTML = '';
+                resultsContainer.style.opacity = '0';
+                loadMoreContainer.classList.add('hidden');
+                loadMoreContainer.style.opacity = '0';
+            }
+
+            if (refMovie && !isAppend) {
+                const refArtwork = refMovie.imdbId ? `https://images.metahub.space/poster/medium/${refMovie.imdbId}/img` : `https://ui-avatars.com/api/?name=${encodeURIComponent(refMovie.title)}&background=1e293b&color=fff&size=500`;
+                const refImgId = `ref-poster-${Date.now()}`;
+                const refImdbLinkId = `ref-imdb-link-${Date.now()}`;
+                
+                const isRefSeries = (refMovie.type === 'series' || refMovie.type === 'tv');
+                const refTypeLabel = isRefSeries ? t.typeSeries : t.typeMovie;
+                const refTypeBadgeClass = isRefSeries
+                    ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
+                    : 'bg-sky-500/20 text-sky-400 border-sky-500/30';
+
+                referenceMovieContainer.innerHTML = `
+                    <div class="flex flex-col sm:flex-row items-center gap-4 bg-slate-800/60 border border-slate-700/50 px-5 py-3 rounded-xl mb-4 animate-fade-in-up w-full md:w-auto glass-panel">
+                        <div class="flex items-center gap-4 flex-1">
+                            <img id="${refImgId}" src="${refArtwork}" alt="${refMovie.title}" class="w-8 h-12 object-cover rounded shadow-md border border-slate-600/50 transition-all duration-300">
+                            <div class="flex flex-col text-left font-sans">
+                                <div class="flex items-center gap-2 mb-0.5">
+                                    <span class="text-[10px] text-sky-400 font-bold tracking-wider uppercase">${t.refPrefix}</span>
+                                    <span class="text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.2 rounded border ${refTypeBadgeClass}">${refTypeLabel}</span>
+                                </div>
+                                <span class="text-base text-white font-extrabold leading-tight">${refMovie.title} <span class="text-slate-400 font-normal text-xs">(${refMovie.year || 'Unknown'})</span></span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2.5 w-full sm:w-auto justify-end mt-2 sm:mt-0 items-center">
+                            ${cacheId ? `
+                            <button onclick="shareWatchlist(${cacheId}, this)" title="${t.shareBtn}" class="flex-1 sm:flex-initial text-slate-400 hover:text-emerald-400 bg-slate-900/60 hover:bg-slate-800/80 border border-slate-700/50 hover:border-emerald-500/30 p-2 rounded-lg text-center transition-all duration-300 flex items-center justify-center shadow-sm" aria-label="${t.shareBtn}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742l4.628-2.571m0 0a3.001 3.001 0 110 5.658L8.684 13.8a3 3 0 110-3.058z"/></svg>
+                            </button>
+                            ` : ''}
+                            ${refMovie.trailerYtId ? `
+                            <button onclick="openTrailer('${refMovie.trailerYtId}', ${JSON.stringify(refMovie.title).replace(/"/g, '&quot;')})" class="flex-1 sm:flex-initial text-[11px] bg-slate-900/60 hover:bg-slate-700/80 text-amber-400 font-bold py-1.5 px-4 rounded-lg text-center transition-all duration-300 border border-amber-500/20 hover:border-amber-500/40 flex items-center justify-center gap-1.5 shadow-sm">
+                                <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <span>Trailer</span>
+                            </button>
+                            ` : ''}
+                            <a id="${refImdbLinkId}" href="${refMovie.imdbId ? `https://www.imdb.com/title/${refMovie.imdbId}/` : `https://www.imdb.com/find?q=${encodeURIComponent(refMovie.title)}`}" target="_blank" class="flex-1 sm:flex-initial text-[11px] bg-slate-900/60 hover:bg-slate-700/80 text-sky-400 font-bold py-1.5 px-4 rounded-lg text-center transition-all duration-300 border border-sky-500/20 hover:border-sky-500/40 flex items-center justify-center gap-1.5 shadow-sm">
+                                <svg class="w-3.5 h-3.5 text-sky-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
+                                IMDB
+                            </a>
+                            <button onclick="event.stopPropagation(); window.playMovieDirectly('${btoa(encodeURIComponent(JSON.stringify(refMovie)))}', this);" class="flex-1 sm:flex-initial text-[11px] bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-1.5 px-4 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/30 hover:shadow-indigo-500/10">
+                                <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                <span>${t.playBtn}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Render Recommendations
+            const slicedMovies = movies;
+            
+            // Auto-detect Display Sizing
+            if (slicedMovies.length >= 8) {
+                applyDisplayStyle('compact');
+            } else {
+                applyDisplayStyle('standard');
+            }
+
+            slicedMovies.forEach((m, index) => {
+                const fallbackArtwork = `https://ui-avatars.com/api/?name=${encodeURIComponent(m.title)}&background=1e293b&color=fff&size=500`;
+                const safeFallback = fallbackArtwork.replace(/'/g, "%27");
+                const artwork = m.imdbId ? `https://images.metahub.space/poster/medium/${m.imdbId}/img` : fallbackArtwork;
+                
+                const imgId = `poster-${index}-${Date.now()}`;
+                const imdbLinkId = `imdb-link-${index}-${Date.now()}`;
+                
+                const isSeries = (m.type === 'series' || m.type === 'tv');
+                const typeLabel = isSeries ? t.typeSeries : t.typeMovie;
+                const typeBadgeClass = isSeries 
+                    ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' 
+                    : 'bg-sky-500/20 text-sky-400 border-sky-500/30';
+
+                const delay = index * 60;
+                const safeTitle = (m.title || '').replace(/"/g, '&quot;');
+                
+                let safeObjectStr = "";
+                let b64Obj = "";
+                try { 
+                    safeObjectStr = JSON.stringify(m).replace(/"/g, '&quot;'); 
+                    b64Obj = btoa(encodeURIComponent(JSON.stringify(m)));
+                } catch(e) {}
+                
+                const card = document.createElement('div');
+                card.className = 'glass-panel movie-card overflow-hidden flex flex-col group h-full bg-slate-900/40 w-full max-w-sm mx-auto';
+                card.style.animation = `fadeInUp 0.5s ease forwards ${delay}ms`;
+                card.style.opacity = '0';
+                
+                card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[2/3] bg-slate-800 flex items-center justify-center cursor-pointer" onclick="window.openDetailsModal('${b64Obj}')">
+                        <img id="${imgId}" src="${artwork}" alt="${(m.title || '').replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-all duration-700 opacity-0 group-hover:scale-105" loading="lazy" onload="this.classList.remove('opacity-0')" onerror="this.onerror=null; this.src='${safeFallback}'; this.classList.remove('opacity-0')">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-90"></div>
+                        <div class="absolute top-2 left-2 backdrop-blur-md text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${typeBadgeClass}">
+                            ${typeLabel}
+                        </div>
+                        <div class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${m.imdbRating || 'N/A'}
+                        </div>
+                        <h3 class="absolute bottom-3 left-4 right-4 text-lg font-bold leading-tight text-white drop-shadow-md">
+                            ${m.title} <span class="text-slate-300 font-normal text-xs">(${m.year || 'N/A'})</span>
+                        </h3>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col">
+                        <div class="flex flex-wrap gap-1.5 mb-2.5">
+                            <span class="text-[9px] uppercase tracking-wider font-semibold text-sky-400 bg-sky-400/10 px-1.5 py-0.5 rounded border border-sky-400/20">${m.duration || 'N/A'}</span>
+                            <span class="text-[9px] uppercase tracking-wider font-semibold text-indigo-400 bg-indigo-400/10 px-1.5 py-0.5 rounded border border-indigo-400/20 line-clamp-1">${m.category || 'N/A'}</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed flex-1 line-clamp-4">${m.description}</p>
+                        <div class="mt-auto pt-3 flex flex-col gap-2">
+                            <button onclick="event.stopPropagation(); window.playMovieDirectly('${b64Obj}', this);" class="w-full text-xs bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/10">
+                                <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                <span>${t.playBtn}</span>
+                            </button>
+                            <div class="flex gap-2">
+                                <a id="${imdbLinkId}" href="${m.imdbId ? `https://www.imdb.com/title/${m.imdbId}/` : `https://www.imdb.com/find?q=${encodeURIComponent(m.originalTitle || m.title)}`}" target="_blank" class="flex-1 text-[10px] bg-slate-800/80 hover:bg-slate-700 text-sky-400 font-semibold py-1.5 px-1.5 rounded-lg text-center transition-colors border border-slate-700/60 flex items-center justify-center gap-1">IMDB</a>
+                                ${m.trailerYtId ? `
+                                <button onclick="openTrailer('${m.trailerYtId}', ${JSON.stringify(m.title).replace(/"/g, '&quot;')})" class="flex-1 text-[10px] bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-semibold py-1.5 px-1.5 rounded-lg text-center transition-colors border border-slate-700/60 flex items-center justify-center gap-1">
+                                    <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    Trailer
+                                </button>
+                                ` : ''}
+                                ${isLoggedIn && !isPublicShareMode ? `
+                                <button onclick="toggleWatchlist(this, ${JSON.stringify(m).replace(/"/g, '&quot;')})" class="watchlist-btn px-3 rounded-lg transition-colors border flex items-center justify-center ${inWatchlist(m.title, m.year) ? 'text-emerald-400 bg-emerald-950/40 border-emerald-500/40' : 'text-slate-400 bg-slate-800/80 hover:bg-slate-700 border-slate-700/60 hover:text-white'}">
+                                    <svg class="w-3.5 h-3.5" fill="${inWatchlist(m.title, m.year) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                                </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+            
+            setTimeout(() => {
+                referenceMovieContainer.style.opacity = '1';
+                resultsContainer.style.opacity = '1';
+            }, 50);
+        }
+
+        // Persistent Watchlist Functions
+        function inWatchlist(title, year) {
+            return userWatchlist.some(m => m.title === title && parseInt(m.year) === parseInt(year));
+        }
+
+        async function toggleWatchlist(btn, m) {
+            const isFav = inWatchlist(m.title, m.year);
+            const url = isFav ? '/api/watchlist/remove' : '/api/watchlist/add';
+            
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        imdb_id: m.imdbId || m.imdb_id,
+                        title: m.title,
+                        original_title: m.originalTitle || m.original_title || m.title,
+                        year: m.year,
+                        type: m.type || 'movie',
+                        rating: m.imdbRating || m.rating,
+                        duration: m.duration,
+                        category: m.category,
+                        description: m.description,
+                        trailer_yt_id: m.trailerYtId || m.trailer_yt_id || null
+                    })
+                });
+                
+                if (res.status === 401) {
+                    openModal('login');
+                    return;
+                }
+                
+                const data = await res.json();
+                if (data.success) {
+                    if (isFav) {
+                        userWatchlist = userWatchlist.filter(item => !(item.title === m.title && parseInt(item.year) === parseInt(m.year)));
+                    } else {
+                        userWatchlist.push(m);
+                    }
+                    
+                    updateWatchlistButton(btn, !isFav);
+                    
+                    if (activeTab === 'watchlist') {
+                        renderWatchlistGrid();
+                    }
+                }
+            } catch(e) {
+                console.error("Failed to toggle watchlist:", e);
+            }
+        }
+
+        function updateWatchlistButton(btn, isSaved) {
+            if (isSaved) {
+                btn.className = 'watchlist-btn px-3 rounded transition-colors border flex items-center justify-center text-emerald-400 bg-emerald-950/40 border-emerald-500/40';
+                btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="currentColor" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>`;
+            } else {
+                btn.className = 'watchlist-btn px-3 rounded transition-colors border flex items-center justify-center text-slate-400 bg-slate-800/80 hover:bg-slate-700 border-slate-700 hover:text-white';
+                btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>`;
+            }
+        }
+
+        async function loadUserWatchlist() {
+            if (!isLoggedIn) return;
+            try {
+                const res = await fetch('/api/watchlist', { credentials: 'include' });
+                const data = await res.json();
+                if (data.success && Array.isArray(data.watchlist)) {
+                    userWatchlist = data.watchlist;
+                }
+            } catch (e) {
+                console.error("Failed to load watchlist", e);
+            }
+        }
+
+        async function forceRefreshWatchlist() {
+            if (!isLoggedIn) return;
+            const btn = document.querySelector('button[onclick="forceRefreshWatchlist()"]');
+            if (btn) btn.innerHTML = '<div class="loader mr-2"></div> A Atualizar...';
+            await loadUserWatchlist();
+            renderWatchlistGrid();
+        }
+
+        function toggleWatchlistTab() {
+            if (!isLoggedIn) {
+                openModal('login');
+                return;
+            }
+            
+            if (activeTab === 'home') {
+                activeTab = 'watchlist';
+                showWatchlistTab();
+            } else {
+                activeTab = 'home';
+                goHome();
+            }
+        }
+
+        function showWatchlistTab(pushState = true) {
+            activeTab = 'watchlist';
+            if (pushState) {
+                if (!window.history.state) {
+                    window.history.replaceState({ view: 'home' }, '', '/');
+                }
+                window.history.pushState({ view: 'watchlist' }, '', '/?tab=watchlist');
+            }
+            const hideIds = ['hero-header', 'features-section', 'dynamic-bg', 'search-container', 'reference-movie-container'];
+            const showIds = ['watchlist-header-container', 'results-container'];
+            
+            transitionTo(hideIds, showIds, async () => {
+                document.getElementById('watchlist-header-title').textContent = dict[currentLang].navWatchlist;
+                if (isLoggedIn && (!userWatchlist || userWatchlist.length === 0)) {
+                    await loadUserWatchlist();
+                }
+                renderWatchlistGrid();
+                setLoginState(isLoggedIn, currentUser);
+            });
+        }
+
+        function renderWatchlistGrid() {
+            console.log("Entering renderWatchlistGrid");
+            resultsContainer.style.opacity = '1';
+            resultsContainer.innerHTML = '';
+            const t = dict[currentLang];
+            console.log("Dict for currentLang:", !!t);
+            
+            console.log("Checking if empty:", userWatchlist.length);
+            if (userWatchlist.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'col-span-full flex flex-col items-center justify-center py-20 animate-fade-in-up';
+                        emptyState.innerHTML = `
+                        <div class="bg-slate-800/40 p-4 rounded-full mb-4 border border-slate-700/50">
+                            <svg class="w-10 h-10 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                        </div>
+                        <p class="text-slate-400 text-sm text-center max-w-sm mb-6">${t.watchlistEmpty}</p>
+                        <button onclick="forceRefreshWatchlist()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-sky-400 font-semibold rounded-lg border border-slate-700/60 transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Atualizar Lista
+                        </button>
+                `;
+                resultsContainer.appendChild(emptyState);
+                return;
+            }
+            
+            console.log("Starting loop over userWatchlist");
+            userWatchlist.forEach((m, index) => {
+                console.log("Loop iteration", index, m.title);
+                try {
+                    const fallbackArtwork = `https://ui-avatars.com/api/?name=${encodeURIComponent(m.title)}&background=1e293b&color=fff&size=500`;
+                    const safeFallback = fallbackArtwork.replace(/'/g, "%27");
+                    const imdbId = m.imdb_id || m.imdbId;
+                    const rating = m.rating || m.imdbRating || m.imdb_rating || 'N/A';
+                    const originalTitle = m.original_title || m.originalTitle || m.title;
+                    const trailerYtId = m.trailer_yt_id || m.trailerYtId;
+                    const artwork = imdbId ? `https://images.metahub.space/poster/medium/${imdbId}/img` : fallbackArtwork;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'glass-panel movie-card overflow-hidden flex flex-col group h-full bg-slate-900/40 w-full max-w-sm mx-auto';
+                    card.style.animation = `fadeInUp 0.5s ease forwards ${index * 60}ms`;
+                    card.style.opacity = '0';
+                    
+                    const isSeries = (m.type === 'series' || m.type === 'tv');
+                    const typeLabel = isSeries ? t.typeSeries : t.typeMovie;
+                    const typeBadgeClass = isSeries 
+                        ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' 
+                        : 'bg-sky-500/20 text-sky-400 border-sky-500/30';
+                    
+                    const safeDescription = (m.description || '').replace(/"/g, '&quot;');
+                    
+                    let safeObjectStr = "";
+                    let b64Obj = "";
+                    try { 
+                        safeObjectStr = JSON.stringify(m).replace(/"/g, '&quot;'); 
+                        b64Obj = btoa(encodeURIComponent(JSON.stringify(m)));
+                    } catch(e) {}
+                    let safeTitleStr = "";
+                    try { safeTitleStr = JSON.stringify(m.title).replace(/"/g, '&quot;'); } catch(e) {}
+
+                    card.innerHTML = `
+                        <div class="relative overflow-hidden aspect-[2/3] bg-slate-800 flex items-center justify-center cursor-pointer" onclick="window.openDetailsModal('${b64Obj}')">
+                            <img src="${artwork}" alt="${(m.title || '').replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-all duration-700 opacity-0 group-hover:scale-105" loading="lazy" onload="this.classList.remove('opacity-0')" onerror="this.onerror=null; this.src='${safeFallback}'; this.classList.remove('opacity-0')">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-90"></div>
+                            <div class="absolute top-2 left-2 backdrop-blur-md text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${typeBadgeClass}">
+                                ${typeLabel}
+                            </div>
+                            <div class="absolute top-2 right-2 bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${rating}
+                            </div>
+                            <h3 class="absolute bottom-3 left-4 right-4 text-lg font-bold leading-tight text-white drop-shadow-md">
+                                ${m.title} <span class="text-slate-300 font-normal text-xs">(${m.year || 'N/A'})</span>
+                            </h3>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col">
+                            <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                <span class="text-[9px] uppercase tracking-wider font-semibold text-sky-400 bg-sky-400/10 px-1.5 py-0.5 rounded border border-sky-400/20">${m.duration || 'N/A'}</span>
+                                <span class="text-[9px] uppercase tracking-wider font-semibold text-indigo-400 bg-indigo-400/10 px-1.5 py-0.5 rounded border border-indigo-400/20 line-clamp-1">${m.category || 'N/A'}</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed flex-1 line-clamp-4">${safeDescription}</p>
+                            <div class="mt-auto pt-3 flex flex-col gap-2">
+                                <button onclick="event.stopPropagation(); window.playMovieDirectly('${b64Obj}', this);" class="w-full text-xs bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/10">
+                                    <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                    <span>${t.playBtn}</span>
+                                </button>
+                                <div class="flex gap-2">
+                                    <a href="${imdbId ? `https://www.imdb.com/title/${imdbId}/` : `https://www.imdb.com/find?q=${encodeURIComponent(originalTitle)}`}" target="_blank" class="flex-1 text-[10px] bg-slate-800/80 hover:bg-slate-700 text-sky-400 font-semibold py-1.5 px-1.5 rounded-lg text-center transition-colors border border-slate-700/60 flex items-center justify-center gap-1">IMDB</a>
+                                    ${trailerYtId ? `
+                                    <button onclick="openTrailer('${trailerYtId}', ${safeTitleStr})" class="flex-1 text-[10px] bg-slate-800/80 hover:bg-slate-700 text-amber-400 font-semibold py-1.5 px-1.5 rounded-lg text-center transition-colors border border-slate-700/60 flex items-center justify-center gap-1">
+                                        <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                        Trailer
+                                    </button>
+                                    ` : ''}
+                                    <button onclick="toggleWatchlist(this, ${safeObjectStr})" class="watchlist-btn px-3 rounded-lg transition-colors border flex items-center justify-center text-emerald-400 bg-emerald-950/40 border-emerald-500/40">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                } catch(e) {
+                    fetch('/api/log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event: 'WATCHLIST_RENDER_ERROR', name: e.name, message: e.message, stack: e.stack }) });
+                    console.error("Failed to render movie card", m, e);
+                    const errCard = document.createElement('div');
+                    errCard.className = 'glass-panel p-4 bg-red-900/40 text-red-200 border-red-500/50';
+                    errCard.textContent = `Error rendering ${m.title}: ${e.message}`;
+                    resultsContainer.appendChild(errCard);
+                }
+            });
+        }
+
+        // Movie Details Modal Functions
+        window.playMovieDirectly = async function(b64, btnElement) {
+            if (!b64) return;
+            if (btnElement) {
+                btnElement.dataset.originalHtml = btnElement.innerHTML;
+                btnElement.innerHTML = `<svg class="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>Loading...</span>`;
+                btnElement.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+            
+            const m = JSON.parse(decodeURIComponent(atob(b64)));
+            const title = m.title || '';
+            const originalTitle = m.originalTitle || m.original_title || title;
+            const year = m.year || '';
+            const type = m.type || 'movie';
+            let imdbId = m.imdbId || m.imdb_id;
+            let tmdbId = m.tmdbId || null;
+            
+            if (!imdbId) {
+                try {
+                    const searchRes = await fetch(`https://v3-cinemeta.strem.io/catalog/${type === 'series' || type === 'tv' ? 'series' : 'movie'}/top/search=${encodeURIComponent(originalTitle || title)}.json`);
+                    if (searchRes.ok) {
+                        const searchData = await searchRes.json();
+                        if (searchData.metas && searchData.metas.length > 0) {
+                            const match = searchData.metas.find(meta => meta.year == year) || searchData.metas[0];
+                            imdbId = match.imdb_id || match.id;
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error finding imdbId for play:", e);
+                }
+            }
+            
+            if (!tmdbId && imdbId) {
+                try {
+                    const metaRes = await fetch(`https://v3-cinemeta.strem.io/meta/${type === 'series' || type === 'tv' ? 'series' : 'movie'}/${imdbId}.json`);
+                    if (metaRes.ok) {
+                        const metaData = await metaRes.json();
+                        if (metaData && metaData.meta && metaData.meta.moviedb_id) {
+                            tmdbId = metaData.meta.moviedb_id;
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error fetching tmdbid:", e);
+                }
+            }
+            
+            if (btnElement && btnElement.dataset.originalHtml) {
+                btnElement.innerHTML = btnElement.dataset.originalHtml;
+                btnElement.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+            
+            const urlType = (type === 'series' || type === 'tv') ? 'tv' : 'movie';
+            const slug = (originalTitle || title).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            const watchUrl = tmdbId 
+                ? `https://flixmomo.app/${urlType}/${tmdbId}/${slug}` 
+                : `https://flixmomo.app/search?q=${encodeURIComponent(originalTitle || title)}`;
+            
+            window.open(watchUrl, '_blank');
+        };
+
+        window.openDetailsModal = async function(b64) {
+            if (!b64) return;
+            const m = JSON.parse(decodeURIComponent(atob(b64)));
+            const title = m.title || '';
+            const originalTitle = m.originalTitle || m.original_title || title;
+            const type = m.type || 'movie';
+            const year = m.year || '';
+            const fallbackPlot = m.description || '';
+            const fallbackRating = m.rating || m.imdbRating || m.imdb_rating || '';
+            const fallbackDuration = m.duration || '';
+            const fallbackGenres = m.category || m.genre || '';
+            
+            const modal = document.getElementById('details-modal');
+            const loading = document.getElementById('details-loading');
+            const content = document.getElementById('details-content');
+            
+            modal.classList.remove('hidden');
+            loading.classList.remove('hidden');
+            content.classList.add('hidden');
+
+            try {
+                // Step 1: Find IMDB ID
+                let imdbId = null;
+                const searchRes = await fetch(`https://v3-cinemeta.strem.io/catalog/${type || 'movie'}/top/search=${encodeURIComponent(originalTitle || title)}.json`);
+                if (searchRes.ok) {
+                    const searchData = await searchRes.json();
+                    if (searchData.metas && searchData.metas.length > 0) {
+                        const match = searchData.metas.find(m => m.year == year) || searchData.metas[0];
+                        imdbId = match.imdb_id || match.id;
+                    }
+                }
+
+                // Step 2: Fetch Details
+                let meta = null;
+                if (imdbId) {
+                    const metaRes = await fetch(`https://v3-cinemeta.strem.io/meta/${type || 'movie'}/${imdbId}.json`);
+                    if (metaRes.ok) {
+                        const metaData = await metaRes.json();
+                        meta = metaData.meta;
+                    }
+                }
+
+                // Populate UI
+                document.getElementById('details-title').textContent = title;
+                document.getElementById('details-year').textContent = year || (meta ? meta.year : 'N/A');
+                document.getElementById('details-rating-val').textContent = (meta && meta.imdbRating) ? meta.imdbRating : (fallbackRating || 'N/A');
+                document.getElementById('details-duration').textContent = (meta && meta.runtime) ? meta.runtime : (fallbackDuration || 'N/A');
+                document.getElementById('details-type').textContent = (type === 'series' || type === 'tv') ? (currentLang === 'pt' ? 'Série' : 'Series') : (currentLang === 'pt' ? 'Filme' : 'Movie');
+                document.getElementById('details-plot').textContent = (meta && meta.description) ? meta.description : (fallbackPlot || 'No synopsis available.');
+                
+                // Poster & Background
+                const posterEl = document.getElementById('details-poster');
+                const bgEl = document.getElementById('details-bg');
+                
+                const posterUrl = meta && meta.poster ? meta.poster : (imdbId ? `https://images.metahub.space/poster/medium/${imdbId}/img` : '');
+                posterEl.src = posterUrl;
+                
+                const bgUrl = meta && meta.background ? meta.background : posterUrl;
+                bgEl.style.backgroundImage = `url('${bgUrl}')`;
+
+                // Cast & Director
+                document.getElementById('details-director').textContent = meta && meta.director ? meta.director.join(', ') : 'N/A';
+                const castContainer = document.getElementById('details-cast');
+                castContainer.innerHTML = '';
+                if (meta && meta.cast && meta.cast.length > 0) {
+                    meta.cast.slice(0, 5).forEach(c => {
+                        const p = document.createElement('p');
+                        p.textContent = c;
+                        castContainer.appendChild(p);
+                    });
+                } else {
+                    castContainer.textContent = 'N/A';
+                }
+
+                // Genres
+                const genresContainer = document.getElementById('details-genres');
+                genresContainer.innerHTML = '';
+                const genresList = (meta && meta.genre) ? meta.genre : (fallbackGenres ? fallbackGenres.split(',') : []);
+                genresList.forEach(g => {
+                    const span = document.createElement('span');
+                    span.className = 'px-2 py-0.5 rounded text-xs font-medium bg-slate-800/80 border border-slate-700/50 text-slate-300';
+                    span.textContent = g.trim();
+                    genresContainer.appendChild(span);
+                });
+
+                // Buttons
+                const btnsContainer = document.getElementById('details-buttons');
+                btnsContainer.innerHTML = '';
+                
+                const ytTrailer = meta && meta.trailerStreams && meta.trailerStreams.length > 0 ? meta.trailerStreams[0].ytId : (meta && meta.trailers && meta.trailers.length > 0 ? meta.trailers[0].source : null);
+                
+                if (ytTrailer) {
+                    btnsContainer.innerHTML += `
+                        <button onclick="openTrailer('${ytTrailer}', '${title.replace(/'/g, "\\'")}')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-amber-500/20">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Trailer
+                        </button>
+                    `;
+                }
+                
+                const resolvedTmdbId = (meta && meta.moviedb_id) ? meta.moviedb_id : m.tmdbId;
+                const urlType = (type === 'series' || type === 'tv') ? 'tv' : 'movie';
+                const slug = (originalTitle || title).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                const watchUrl = resolvedTmdbId 
+                    ? `https://flixmomo.app/${urlType}/${resolvedTmdbId}/${slug}` 
+                    : `https://flixmomo.app/search?q=${encodeURIComponent(originalTitle || title)}`;
+                
+                btnsContainer.innerHTML += `
+                    <a href="${watchUrl}" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-sky-600/20">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg> Watch Now
+                    </a>
+                `;
+
+            } catch (err) {
+                console.error("Details Modal Error:", err);
+            } finally {
+                loading.classList.add('hidden');
+                content.classList.remove('hidden');
+            }
+        }
+
+        window.closeDetailsModal = function() {
+            document.getElementById('details-modal').classList.add('hidden');
+            document.getElementById('details-bg').style.backgroundImage = "url('')";
+        }
+
+        // YouTube Trailer Modal Functions
+        function openTrailer(ytId, title = '') {
+            const trailerModal = document.getElementById('trailer-modal');
+            const container = document.getElementById('trailer-player-container');
+            if (!trailerModal || !container || !ytId) return;
+
+            trailerModal.classList.add('active');
+            
+            // Clean player container and set placeholder loading state
+            container.innerHTML = `<div id="yt-player-placeholder" class="w-full h-full rounded-lg bg-slate-950 flex items-center justify-center"><div class="loader"></div></div>`;
+
+            function initPlayer() {
+                try {
+                    ytPlayer = new YT.Player('yt-player-placeholder', {
+                        height: '100%',
+                        width: '100%',
+                        videoId: ytId,
+                        playerVars: {
+                            'autoplay': 1,
+                            'playsinline': 1,
+                            'rel': 0,
+                            'modestbranding': 1
+                        },
+                        events: {
+                            'onError': function(e) {
+                                console.warn("YouTube Player API Error:", e.data);
+                                // Error codes: 2 (invalid parameters), 5 (HTML5 error), 100 (private/removed), 101/150 (restricted/not embeddable)
+                                showTrailerFallback(container, title);
+                            }
+                        }
+                    });
+                } catch (err) {
+                    console.error("Failed to initialize YouTube Player:", err);
+                    fallbackIframe(container, ytId);
+                }
+            }
+
+            if (typeof YT !== 'undefined' && YT.Player) {
+                initPlayer();
+            } else {
+                // If the YouTube API is not loaded yet, poll for up to 3 seconds before falling back
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    attempts++;
+                    if (typeof YT !== 'undefined' && YT.Player) {
+                        clearInterval(interval);
+                        initPlayer();
+                    } else if (attempts > 30) {
+                        clearInterval(interval);
+                        fallbackIframe(container, ytId);
+                    }
+                }, 100);
+            }
+        }
+        
+        function fallbackIframe(container, ytId) {
+            container.innerHTML = `<iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }
+
+        function showTrailerFallback(container, title) {
+            const t = dict[currentLang];
+            container.innerHTML = `
+                <div class="w-full h-full rounded-lg bg-slate-950 flex flex-col items-center justify-center p-6 text-center font-sans">
+                    <div class="bg-red-500/10 p-3 rounded-full mb-4 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
+                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-2">${t.ytErrorTitle}</h4>
+                    <p class="text-sm text-slate-400 max-w-md mb-6">${t.ytErrorMsg}</p>
+                    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(title + ' trailer')}" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 px-6 rounded-lg transition-all shadow-md flex items-center gap-2">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 00-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.508a3.003 3.003 0 00-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 002.11 2.11c1.87.508 9.388.508 9.388.508s7.518 0 9.388-.508a3.003 3.003 0 002.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        <span>${t.ytErrorBtn}</span>
+                    </a>
+                </div>
+            `;
+        }
+        
+        function closeTrailer() {
+            const trailerModal = document.getElementById('trailer-modal');
+            const container = document.getElementById('trailer-player-container');
+            if (trailerModal) {
+                if (ytPlayer) {
+                    try { ytPlayer.destroy(); } catch(e){}
+                    ytPlayer = null;
+                }
+                if (container) {
+                    container.innerHTML = '';
+                }
+                trailerModal.classList.remove('active');
+            }
+        }
+
+        // Social Watchlist Sharing Functions
+        async function shareWatchlist(cacheId, btn) {
+            const t = dict[currentLang];
+            const shareUrl = `${window.location.origin}/?share=${cacheId}`;
+            
+            let copied = false;
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(shareUrl);
+                    copied = true;
+                }
+            } catch (err) {
+                console.warn("navigator.clipboard failed, attempting fallback...", err);
+            }
+
+            if (!copied) {
+                try {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = shareUrl;
+                    textArea.style.top = "0";
+                    textArea.style.left = "0";
+                    textArea.style.position = "fixed";
+                    textArea.style.opacity = "0";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    if (successful) {
+                        copied = true;
+                    }
+                } catch (err) {
+                    console.error("Fallback copy failed:", err);
+                }
+            }
+
+            if (copied) {
+                showToast(t.shareToast);
+            } else {
+                showToast(currentLang === 'pt' ? "Não foi possível copiar o link automaticamente." : "Could not copy link automatically.");
+            }
+        }
+        
+        function showToast(message) {
+            let toast = document.getElementById('share-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'share-toast';
+                toast.className = 'fixed bottom-5 right-5 z-50 glass-panel bg-emerald-950/90 border-emerald-500/40 text-emerald-300 text-xs font-semibold px-4 py-3 rounded-lg shadow-xl pointer-events-none transition-all duration-300 opacity-0 transform translate-y-2';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+            }, 3000);
+        }
+
+        async function handleSharedList() {
+            const params = new URLSearchParams(window.location.search);
+            const shareId = params.get('share');
+            if (!shareId) return false;
+            
+            if (!window.history.state) {
+                window.history.replaceState({ view: 'home' }, '', '/');
+                window.history.pushState({ view: 'share', id: shareId }, '', '?share=' + shareId);
+            }
+            
+            isPublicShareMode = true;
+            
+            heroHeader.classList.add('hidden-section');
+            featuresSection.classList.add('hidden-section');
+            document.getElementById('dynamic-bg').classList.add('hidden-section');
+            searchContainer.classList.add('hidden-section');
+            referenceMovieContainer.classList.remove('hidden-section');
+            resultsContainer.classList.remove('hidden-section');
+            document.getElementById('watchlist-header-container').classList.add('hidden-section');
+            
+            const t = dict[currentLang];
+            let shareHeader = document.getElementById('share-header');
+            if (!shareHeader) {
+                shareHeader = document.createElement('div');
+                shareHeader.id = 'share-header';
+                shareHeader.className = 'w-full max-w-6xl mb-6 text-left flex justify-between items-center flex-wrap gap-4 animate-fade-in-up';
+                resultsContainer.parentNode.insertBefore(shareHeader, referenceMovieContainer);
+            }
+            
+            shareHeader.innerHTML = `
+                <h2 class="text-3xl font-extrabold text-white flex items-center gap-2.5">
+                    <svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                    <span>${t.shareHeading}</span>
+                </h2>
+                <a href="/" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all shadow-md">
+                    ${t.shareCTA}
+                </a>
+            `;
+            
+            resultsContainer.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-20">
+                    <div class="w-12 h-12 border-4 border-slate-800 border-t-sky-500 rounded-full animate-spin"></div>
+                </div>
+            `;
+            resultsContainer.style.opacity = '1';
+            
+            try {
+                const res = await fetch(`/api/share/${shareId}`);
+                const data = await res.json();
+                if (data.success) {
+                    renderMovies(data.referenceMovie, data.recommendations, shareId);
+                } else {
+                    showError("Watchlist not found or expired.");
+                }
+            } catch (e) {
+                showError("Failed to fetch shared curation.");
+            }
+            
+            return true;
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(15px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in-up {
+                animation: fadeInUp 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+
+

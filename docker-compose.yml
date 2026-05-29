@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  cinematch-app:
+    build: .
+    container_name: cinematch_app
+    ports:
+      - "80:80"
+    environment:
+      - DB_USER=cinematch_user
+      - DB_HOST=cinematch-db
+      - DB_NAME=cinematch_db
+      - DB_PASSWORD=cinematch_pass
+      - DB_PORT=5432
+      - NODE_ENV=development
+    depends_on:
+      - cinematch-db
+    restart: unless-stopped
+    volumes:
+      - ./public/uploads:/app/public/uploads
+
+  cinematch-db:
+    image: postgres:15-alpine
+    container_name: cinematch_db
+    environment:
+      - POSTGRES_USER=cinematch_user
+      - POSTGRES_PASSWORD=cinematch_pass
+      - POSTGRES_DB=cinematch_db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
