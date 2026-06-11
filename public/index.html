@@ -458,77 +458,7 @@
                 <ul id="autocomplete-list" class="flex flex-col text-left"></ul>
             </div>
 
-            <!-- Collapsible Settings Drawer -->
-            <div id="settings-drawer" class="hidden mt-4 p-5 rounded-xl bg-slate-900/40 border border-slate-700/50  backdrop-blur-lg animate-fade-in text-left">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
-                    <!-- Left Section: AI Search Filters -->
-                    <div class="flex flex-col gap-4">
-                        <div class="flex items-center gap-2 pb-2 border-b border-slate-800/80">
-                            <svg class="w-4 h-4 theme-accent-text" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
-                            <h4 id="settings-title" class="text-xs font-bold text-white uppercase tracking-wider text-slate-300">Advanced Filters</h4>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="flex flex-col gap-1.5">
-                                <label id="lbl-min-rating" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Min IMDB Rating</label>
-                                <select id="filter-min-rating" class="bg-slate-900 border border-slate-700/60 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 theme-accent-ring text-white">
-                                    <option value="all" id="opt-rating-all">All Ratings</option>
-                                    <option value=">7.0">> 7.0</option>
-                                    <option value=">8.0">> 8.0</option>
-                                    <option value=">8.5">> 8.5</option>
-                                </select>
-                            </div>
-                            <div class="flex flex-col gap-1.5">
-                                <label id="lbl-year" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Released After</label>
-                                <input type="number" id="filter-year" placeholder="e.g. 2019" class="bg-slate-900 border border-slate-700/60 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 theme-accent-ring text-white">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right Section: Discovery Focus Preferences -->
-                    <div class="flex flex-col gap-4">
-                        <div class="flex items-center gap-2 pb-2 border-b border-slate-800/80">
-                            <svg class="w-4 h-4 theme-accent-text" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37m0 0l-9.37-9.37M18.9 6.752H3.75"/></svg>
-                            <h4 id="settings-custom-title" class="text-xs font-bold text-white uppercase tracking-wider text-slate-300">Discovery Focus</h4>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="flex flex-col gap-1.5">
-                                <label id="lbl-content-type" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Content Focus</label>
-                                <select id="filter-content-type" class="bg-slate-900 border border-slate-700/60 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-sky-500 theme-accent-ring text-white">
-                                    <option value="any" id="opt-content-any">Mixed Content</option>
-                                    <option value="movie" id="opt-content-movie">Movies Only</option>
-                                    <option value="series" id="opt-content-series">TV Series Only</option>
-                                </select>
-                            </div>
-                            <div class="flex flex-col gap-1.5 justify-center h-full pt-1">
-                                <div class="flex items-center gap-1.5">
-                                    <span id="lbl-surprise-me" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Surprise Me Mode</span>
-                                    <div class="relative group flex items-center justify-center">
-                                        <svg class="w-3.5 h-3.5 text-slate-500 hover:text-sky-400 transition-colors cursor-help" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
-                                        </svg>
-                                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded bg-slate-900 border border-slate-700/80  text-[10px] text-slate-300 font-normal leading-relaxed pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 text-center">
-                                            <span id="tooltip-surprise-me">Mixes in 2-3 highly-rated, critically acclaimed hidden indie gems or cult classics related to your search that still boast outstanding reviews.</span>
-                                            <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-3 mt-1.5">
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" id="filter-surprise-me" class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
-                                    </label>
-                                    <span id="desc-surprise-me" class="text-[10px] text-slate-500 leading-none">Mix in obscure hidden gems</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <!-- Separator below settings (visible only when settings-drawer is open) -->
-            <div id="settings-divider" class="hidden h-[1px] bg-gradient-to-r from-transparent via-slate-800/80 to-transparent my-4"></div>
+
             
             <!-- Trending Searches -->
             <div class="mt-5 flex flex-wrap justify-center gap-2 items-center text-sm text-slate-400">
@@ -858,19 +788,98 @@
         </div>
     </div>
 
-    <!-- Profile Modal -->
+    <!-- Unified Settings & Profile Modal -->
     <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-950/95" onclick="closeProfileModal()"></div>
-        <div class="relative w-full h-full md:h-auto md:max-h-[95vh] max-w-3xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 transform transition-all overflow-y-auto">
-            <button onclick="closeProfileModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors bg-black/40 md:bg-transparent rounded-full md:rounded-none">
+        <div class="relative w-full h-full md:h-auto md:max-h-[95vh] max-w-3xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 transform transition-all flex flex-col">
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors bg-black/40 md:bg-transparent rounded-full md:rounded-none z-10">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
-            <div class="text-center mb-8">
-                <h3 id="modal-profile-title" class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 tracking-tight">AI Recommendation Engine</h3>
-                <p id="modal-profile-desc" class="text-slate-400 text-sm mt-2 font-medium">Tune your algorithm for personalized results</p>
+            <div class="text-center mb-6 flex-shrink-0">
+                <h3 id="modal-profile-title" class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 tracking-tight">CineMatch Settings</h3>
+                <p id="modal-profile-desc" class="text-slate-400 text-sm mt-2 font-medium">Configure your profile and tune the AI recommendations</p>
             </div>
             
-            <form id="profile-form" class="flex flex-col gap-6">
+            <!-- Tabs Navigation -->
+            <div class="flex border-b border-slate-800 mb-6 flex-shrink-0">
+                <button id="tab-btn-filters" type="button" onclick="openUnifiedSettings('filters')" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-slate-500 hover:text-slate-300 border-b-2 border-transparent transition-colors">🤖 AI Discovery</button>
+                <button id="tab-btn-app" type="button" onclick="openUnifiedSettings('app')" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-sky-400 border-b-2 border-sky-400 transition-colors">⚙️ Profile & App</button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
+                <!-- Tab Content: AI Filters -->
+                <div id="tab-content-filters" class="hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left Section: AI Search Filters -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
+                                <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+                                <h4 id="settings-title" class="text-base font-semibold text-slate-200">Current Search Filters</h4>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label id="lbl-min-rating" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Min IMDB Rating</label>
+                                    <select id="filter-min-rating" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
+                                        <option value="all" id="opt-rating-all">All Ratings</option>
+                                        <option value=">7.0">> 7.0</option>
+                                        <option value=">8.0">> 8.0</option>
+                                        <option value=">8.5">> 8.5</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label id="lbl-year" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Released After</label>
+                                    <input type="number" id="filter-year" placeholder="e.g. 2019" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Section: Discovery Focus Preferences -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
+                                <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37m0 0l-9.37-9.37M18.9 6.752H3.75"/></svg>
+                                <h4 id="settings-custom-title" class="text-base font-semibold text-slate-200">Discovery Focus</h4>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label id="lbl-content-type" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Content Focus</label>
+                                    <select id="filter-content-type" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
+                                        <option value="any" id="opt-content-any">Mixed Content</option>
+                                        <option value="movie" id="opt-content-movie">Movies Only</option>
+                                        <option value="series" id="opt-content-series">TV Series Only</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2 justify-center h-full pt-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="lbl-surprise-me" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Surprise Me Mode</span>
+                                        <div class="relative group flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-slate-500 hover:text-sky-400 transition-colors cursor-help" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                                            </svg>
+                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 rounded-lg bg-slate-900 border border-slate-700/80 text-xs text-slate-300 font-normal leading-relaxed pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 text-center shadow-xl">
+                                                <span id="tooltip-surprise-me">Mixes in 2-3 highly-rated, critically acclaimed hidden indie gems or cult classics related to your search that still boast outstanding reviews.</span>
+                                                <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="filter-surprise-me" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+                                        </label>
+                                        <span id="desc-surprise-me" class="text-xs text-slate-500 font-medium leading-none">Mix in obscure hidden gems</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                         <button type="button" onclick="closeProfileModal()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-xl transition-all border border-slate-600">Apply Filters & Close</button>
+                    </div>
+                </div>
+                
+                <!-- Tab Content: Profile & App -->
+                <div id="tab-content-app">
+                    <form id="profile-form" class="flex flex-col gap-6">
                 
                 <!-- Appearance Section -->
                 <div class="flex flex-col gap-5 mb-2">
@@ -969,6 +978,8 @@
                     <div id="prof-loader" class="loader hidden w-5 h-5 border-2"></div>
                 </button>
             </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2013,7 +2024,7 @@
                 dmcaContent: "<h4>Copyright and Intellectual Property Policy</h4><p class='mb-4'>CineMatch AI operates strictly as a <strong>search engine, recommendation tool, and indexer</strong>. <strong>NO video files, movies, TV shows, or copyrighted media are hosted, stored, or uploaded on our servers.</strong></p><h4>Third-Party Content</h4><p class='mb-4'>Any video playback functionality on this site is provided via embedded iframes linking to third-party file hosts and streaming providers. CineMatch AI does not control, endorse, or affiliate with these external sources. All visual metadata (posters, synopses) is fetched via public APIs (e.g., TMDB) and displayed under the <em>Fair Use</em> doctrine for informational purposes.</p><h4>DMCA Takedown Procedure</h4><p>CineMatch AI complies with the Digital Millennium Copyright Act (DMCA). However, because we do not host the infringing content, we can only remove the link/embed from our index. To completely remove a video from the internet, you must contact the third-party server hosting the actual file.<br><br>If you are a copyright owner and believe a link on our platform infringes your rights, please send a formal DMCA notice to <strong>info@cinematchai.com</strong> including the exact URL on our site. We will promptly remove the reference from our catalog within 48-72 hours.</p>",
                 
                 faqTitle: "Frequently Asked Questions (FAQ)",
-                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Is CineMatch AI free?</summary><p class='mt-2 text-slate-400 text-sm'>Yes! Basic platform usage is 100% free. We rely on donations to keep our servers running.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Can I watch movies here?</summary><p class='mt-2 text-slate-400 text-sm'>No. CineMatch AI is an engine to discover new movies. We are not a streaming platform.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>How does the AI work?</summary><p class='mt-2 text-slate-400 text-sm'>We use Google Gemini. Our system analyzes your prompt and history to instruct the AI to find the perfect movies for your taste.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>What is the IMDb rating?</summary><p class='mt-2 text-slate-400 text-sm'>IMDb (Internet Movie Database) is one of the most popular and authoritative sources for movie and TV content. The rating is based on votes from millions of users worldwide on a scale of 1 to 10.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>What is the Rotten Tomatoes rating?</summary><p class='mt-2 text-slate-400 text-sm'>Rotten Tomatoes aggregates reviews from professional critics. A percentage (the Tomatometer) represents the proportion of positive reviews. A score of 60% or higher means the movie is 'Fresh' (🍅), while a score below 60% means it's 'Rotten' (🟢).</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Do I need an account to use the site?</summary><p class='mt-2 text-slate-400 text-sm'>No, you can search and discover movies without an account. However, creating an account allows you to save movies to your personal watchlist.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Can I share my watchlist?</summary><p class='mt-2 text-slate-400 text-sm'>Yes! Once you create an account and add movies to your watchlist, you can generate a public link to share your favorites with friends.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>How do I save a movie?</summary><p class='mt-2 text-slate-400 text-sm'>Simply click on any movie card to open its details, then click the 'Add to Watchlist' button.</p></details>",
+                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>What is CineMatch AI?</summary><p class='mt-2 text-slate-400 text-sm'>CineMatch AI is your ultimate, premium movie and TV show discovery engine. Instead of endlessly scrolling through streaming platforms, you can simply describe the mood, plot, or vibe you are looking for, and our advanced AI will instantly curate a highly personalized list of recommendations. We index metadata from vast databases to help you find hidden gems and blockbuster hits alike.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>How do the AI recommendations actually work?</summary><p class='mt-2 text-slate-400 text-sm'>We leverage cutting-edge Large Language Models (like Google Gemini) to analyze your search prompts. Whether you ask for 'a mind-bending sci-fi thriller set in space' or 'a cozy rom-com for a rainy Sunday', the AI decodes your intent, cross-references it with extensive cinematic metadata, and selects titles that perfectly match your criteria. It even learns from your preferences to refine future suggestions!</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Does CineMatch AI host the movies I watch?</summary><p class='mt-2 text-slate-400 text-sm'>No, we do not host, store, or distribute any copyrighted video content. CineMatch AI acts purely as a search and discovery index. Any video playback you experience on the site is provided through embedded third-party streams (iframes) that are hosted on external servers. We do not control these third-party providers, so availability and stream quality may vary.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>What features do I get with an account?</summary><p class='mt-2 text-slate-400 text-sm'>While you can use our AI search completely free without an account, signing up unlocks a premium experience! With a free account, you can build your personal Watchlist to save movies for later, track what you have already seen, and generate a public shareable link to show off your curated collection to friends. Your preferences will also be saved across all your devices.</p></details>",
                 
                 cookieText: "CineMatch AI uses local storage to save your preferences and keep your session active. By continuing to use the site, you agree to our Privacy Policy.",
                 cookieBtn: "I Understand"
@@ -2140,7 +2151,7 @@
                 dmcaContent: "<h4>Pol&iacute;tica de Direitos de Autor e Propriedade Intelectual</h4><p class='mb-4'>O CineMatch AI opera estritamente como um <strong>motor de busca, ferramenta de recomenda&ccedil;&atilde;o e indexador</strong>. <strong>NENHUM ficheiro de v&iacute;deo, filme, s&eacute;rie ou material protegido por direitos de autor &eacute; alojado, armazenado ou feito upload nos nossos servidores.</strong></p><h4>Conte&uacute;do de Terceiros</h4><p class='mb-4'>Qualquer funcionalidade de reprodu&ccedil;&atilde;o de v&iacute;deo neste site &eacute; fornecida atrav&eacute;s de iframes incorporados que ligam a servidores e fornecedores de streaming de terceiros. O CineMatch AI n&atilde;o controla nem tem afilia&ccedil;&atilde;o com essas fontes externas. Todos os metadados visuais (posters, sinopses) s&atilde;o obtidos atrav&eacute;s de APIs p&uacute;blicas (ex: TMDB) e exibidos ao abrigo da doutrina de <em>Fair Use</em> para fins informativos.</p><h4>Procedimento de Remo&ccedil;&atilde;o (DMCA)</h4><p>O CineMatch AI cumpre a legisla&ccedil;&atilde;o de direitos de autor (DMCA). No entanto, como n&atilde;o alojamos o conte&uacute;do infrator, s&oacute; podemos remover o link/iframe do nosso index. Para remover completamente um v&iacute;deo da internet, deve contactar o servidor de terceiros que aloja o ficheiro real.<br><br>Se &eacute; propriet&aacute;rio de direitos de autor e acredita que um link na nossa plataforma infringe os seus direitos, envie um aviso DMCA formal para <strong>info@cinematchai.com</strong> incluindo o URL exato no nosso site. Removeremos prontamente a refer&ecirc;ncia do nosso cat&aacute;logo num prazo de 48-72 horas.</p>",
                 
                 faqTitle: "Perguntas Frequentes (FAQ)",
-                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O CineMatch AI é gratuito?</summary><p class='mt-2 text-slate-400 text-sm'>Sim! O uso básico da plataforma é 100% gratuito. Dependemos de doações para manter os servidores online.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Posso ver filmes aqui?</summary><p class='mt-2 text-slate-400 text-sm'>Não. O CineMatch AI é uma ferramenta para descobrir filmes novos. Não somos uma plataforma de streaming.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Como funciona a IA?</summary><p class='mt-2 text-slate-400 text-sm'>Usamos o Google Gemini. O nosso sistema analisa o teu pedido e o teu histórico para instruir a IA a encontrar os filmes perfeitos para o teu gosto.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O que é a classificação IMDb?</summary><p class='mt-2 text-slate-400 text-sm'>IMDb (Internet Movie Database) é uma das fontes mais populares e autorizadas sobre filmes e séries. A classificação é baseada nos votos de milhões de utilizadores em todo o mundo numa escala de 1 a 10.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O que é a classificação Rotten Tomatoes?</summary><p class='mt-2 text-slate-400 text-sm'>O Rotten Tomatoes agrega as críticas de profissionais especializados. A percentagem (Tomatometer) representa a proporção de críticas positivas. Uma pontuação de 60% ou superior significa que o filme é 'Fresco' (🍅), enquanto uma pontuação abaixo de 60% significa que é 'Podre' (🟢).</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Preciso de uma conta para usar o site?</summary><p class='mt-2 text-slate-400 text-sm'>Não, podes pesquisar e descobrir filmes sem uma conta. No entanto, criar uma conta permite-te guardar filmes na tua watchlist pessoal.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Posso partilhar a minha watchlist?</summary><p class='mt-2 text-slate-400 text-sm'>Sim! Assim que criares uma conta e adicionares filmes à tua watchlist, podes gerar um link público para partilhar os teus favoritos com amigos.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Como guardo um filme?</summary><p class='mt-2 text-slate-400 text-sm'>Basta clicares em qualquer cartão de filme para abrir os seus detalhes e, de seguida, clicar no botão 'Adicionar à Watchlist'.</p></details>",
+                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O que é o CineMatch AI?</summary><p class='mt-2 text-slate-400 text-sm'>O CineMatch AI é o teu motor premium e definitivo para a descoberta de filmes e séries. Em vez de fazeres scroll interminável nas plataformas de streaming, podes simplesmente descrever o ambiente, o enredo ou a vibração que procuras, e a nossa Inteligência Artificial avançada irá curar instantaneamente uma lista de recomendações altamente personalizadas. Indexamos metadados de vastas bases de dados para te ajudar a encontrar autênticas pérolas escondidas, bem como os grandes êxitos de bilheteira.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Como funcionam as recomendações da IA?</summary><p class='mt-2 text-slate-400 text-sm'>Utilizamos Modelos de Linguagem de grande escala (como o Google Gemini) de última geração para analisar os teus pedidos. Quer peças 'um thriller de ficção científica alucinante no espaço' ou 'uma comédia romântica acolhedora para um domingo de chuva', a IA descodifica a tua intenção, cruza-a com extensos metadados cinematográficos e seleciona títulos que combinam perfeitamente com os teus critérios. A IA até aprende com as tuas preferências para refinar as futuras sugestões!</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O CineMatch AI aloja os filmes que vejo?</summary><p class='mt-2 text-slate-400 text-sm'>Não, nós não alojamos, guardamos nem distribuímos qualquer conteúdo de vídeo protegido por direitos de autor. O CineMatch AI atua puramente como um indexador de pesquisa e descoberta. Qualquer reprodução de vídeo no site é fornecida através de streams de terceiros incorporados (iframes) alojados em servidores externos. Não controlamos esses fornecedores, pelo que a disponibilidade e a qualidade do stream podem variar.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Que funcionalidades ganho com uma conta?</summary><p class='mt-2 text-slate-400 text-sm'>Embora possas usar a nossa pesquisa por IA de forma totalmente gratuita sem uma conta, registar-te desbloqueia uma experiência premium! Com uma conta gratuita, podes criar a tua Watchlist pessoal para guardares filmes, acompanhares o que já viste e gerares um link público partilhável para mostrares a tua coleção aos amigos. Além disso, as tuas preferências ficam guardadas em todos os teus dispositivos.</p></details>",
                 
                 cookieText: "O CineMatch AI utiliza armazenamento local para guardar as tuas preferências e manter a tua sessão ativa. Ao continuares a utilizar o site, concordas com a nossa Política de Privacidade.",
                 cookieBtn: "Compreendi"
@@ -2558,14 +2569,9 @@
 
         // Toggle Advanced Settings Drawer
         const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
-        const settingsDrawer = document.getElementById('settings-drawer');
-        const settingsDivider = document.getElementById('settings-divider');
-        if (toggleSettingsBtn && settingsDrawer) {
+        if (toggleSettingsBtn) {
             toggleSettingsBtn.addEventListener('click', () => {
-                settingsDrawer.classList.toggle('hidden');
-                if (settingsDivider) {
-                    settingsDivider.classList.toggle('hidden');
-                }
+                window.openUnifiedSettings('filters');
             });
         }
 
@@ -2886,7 +2892,7 @@
                         </button>
                         <div class="absolute right-0 top-full pt-3 -mt-2 w-40 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
                             <div class="bg-slate-800 border border-slate-700 rounded-md shadow-xl overflow-hidden flex flex-col">
-                                <button onclick="openProfileModal()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors border-b border-slate-700">${t.navProfile}</button>
+                                <button onclick="openUnifiedSettings('app')" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors border-b border-slate-700">${t.navProfile}</button>
                                 <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-red-400 hover:bg-slate-700 hover:text-red-300 transition-colors uppercase tracking-wider">${t.navLogout}</button>
                             </div>
                         </div>
@@ -2950,6 +2956,38 @@
 
         // Modal Logic
         const profileModal = document.getElementById('profile-modal');
+        
+        window.openUnifiedSettings = function(tabName = 'filters') {
+            const btnFilters = document.getElementById('tab-btn-filters');
+            const btnApp = document.getElementById('tab-btn-app');
+            const contentFilters = document.getElementById('tab-content-filters');
+            const contentApp = document.getElementById('tab-content-app');
+            
+            // Reset styles
+            btnFilters.classList.remove('text-sky-400', 'border-sky-400');
+            btnFilters.classList.add('text-slate-500', 'border-transparent');
+            btnApp.classList.remove('text-sky-400', 'border-sky-400');
+            btnApp.classList.add('text-slate-500', 'border-transparent');
+            
+            contentFilters.classList.add('hidden');
+            contentApp.classList.add('hidden');
+            
+            // Activate requested tab
+            if (tabName === 'filters') {
+                btnFilters.classList.remove('text-slate-500', 'border-transparent');
+                btnFilters.classList.add('text-sky-400', 'border-sky-400');
+                contentFilters.classList.remove('hidden');
+            } else {
+                btnApp.classList.remove('text-slate-500', 'border-transparent');
+                btnApp.classList.add('text-sky-400', 'border-sky-400');
+                contentApp.classList.remove('hidden');
+            }
+            
+            // Open modal if not open
+            if (profileModal.classList.contains('hidden')) {
+                openProfileModal();
+            }
+        };
         
         async function openProfileModal() {
             document.body.style.overflow = 'hidden';
@@ -3814,7 +3852,7 @@
                         rtIcon = rNum >= 60 ? freshSvg : rottenSvg;
                     }
                     rtBadgeHTML = `
-                    <div class="relative group/tooltip pointer-events-auto cursor-help">
+                    <div class="relative group/tooltip pointer-events-auto cursor-help" onclick="event.stopPropagation();">
                         <div class="bg-rose-900/80 backdrop-blur-md text-rose-400 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center justify-end gap-1 border border-rose-500/50 shadow-md">${rtIcon} ${rtRating}</div>
                         <div class="absolute right-0 top-full mt-1 bg-slate-950/95 border border-slate-800 text-[10px] text-slate-200 px-2 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none hidden group-hover/tooltip:block backdrop-blur-md animate-fade-in">
                             ${rtStatus}
@@ -3855,7 +3893,7 @@
                             ${typeLabel}
                         </div>
                         <div class="absolute top-2 right-2 flex flex-col items-end gap-1.5 z-20">
-                            <div class="relative group/tooltip pointer-events-auto cursor-help">
+                            <div class="relative group/tooltip pointer-events-auto cursor-help" onclick="event.stopPropagation();">
                                 <div class="bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
                                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${m.rating || m.imdbRating || 'N/A'}
                                 </div>
@@ -3937,6 +3975,13 @@
             const url = isFav ? '/api/watchlist/remove' : '/api/watchlist/add';
             
             try {
+                let rtRating = m.rt_rating || null;
+                if (!rtRating && m.rt_score) rtRating = m.rt_score + '%';
+                if (!rtRating && m.omdb && m.omdb.Ratings) {
+                    let rt = m.omdb.Ratings.find(r => r.Source === 'Rotten Tomatoes');
+                    if (rt) rtRating = rt.Value;
+                }
+
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -3947,6 +3992,7 @@
                         year: m.year,
                         type: m.type || 'movie',
                         rating: m.imdbRating || m.rating,
+                        rt_rating: rtRating,
                         duration: m.duration,
                         category: m.category,
                         description: m.description,
@@ -4076,11 +4122,7 @@
                                     ${m.rating || m.imdbRating || 'N/A'}
                                 </div>
                                 ${(() => {
-                                    let rt = 'N/A';
-                                    if(m.omdb && m.omdb.Ratings) {
-                                        let f = m.omdb.Ratings.find(r => r.Source === 'Rotten Tomatoes');
-                                        if(f) rt = f.Value;
-                                    }
+                                    let rt = m.rt_rating || 'N/A';
                                     return rt !== 'N/A' ? `<div class="flex items-center gap-0.5 text-[9px] text-rose-400 font-semibold"><span class="text-[8px]">🍅</span> ${rt}</div>` : '';
                                 })()}
                             </div>
@@ -4132,9 +4174,7 @@
             resultsContainer.style.opacity = '1';
             resultsContainer.innerHTML = '';
             const t = dict[currentLang];
-            console.log("Dict for currentLang:", !!t);
             
-            console.log("Checking if empty:", userWatchlist.length);
             if (userWatchlist.length === 0) {
                 const emptyState = document.createElement('div');
                 emptyState.className = 'col-span-full flex flex-col items-center justify-center py-20 animate-fade-in-up';
@@ -4143,18 +4183,16 @@
                             <svg class="w-10 h-10 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
                         </div>
                         <p class="text-slate-400 text-sm text-center max-w-sm mb-6">${t.watchlistEmpty}</p>
-                        <button onclick="forceRefreshWatchlist()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-sky-400 font-semibold rounded-lg border border-slate-700/60 transition-colors flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            Atualizar Lista
+                        <button onclick="goHome()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-sky-400 font-semibold rounded-lg border border-slate-700/60 transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            Discover More
                         </button>
                 `;
                 resultsContainer.appendChild(emptyState);
                 return;
             }
             
-            console.log("Starting loop over userWatchlist");
             userWatchlist.forEach((m, index) => {
-                console.log("Loop iteration", index, m.title);
                 try {
                     const fallbackArtwork = `https://ui-avatars.com/api/?name=${encodeURIComponent(m.title)}&background=1e293b&color=fff&size=500`;
                     const safeFallback = fallbackArtwork.replace(/'/g, "%27");
@@ -4165,10 +4203,15 @@
                     const artwork = m.poster ? m.poster : (imdbId ? `https://images.metahub.space/poster/medium/${imdbId}/img` : fallbackArtwork);
                     
                     let rtRating = 'N/A';
-                    if (m.omdb && m.omdb.Ratings) {
+                    if (m.rt_rating && m.rt_rating !== 'N/A' && m.rt_rating !== 'null') {
+                        rtRating = String(m.rt_rating);
+                    } else if (m.rt_score && m.rt_score !== 'null') {
+                        rtRating = m.rt_score + '%';
+                    } else if (m.omdb && m.omdb.Ratings) {
                         let rt = m.omdb.Ratings.find(r => r.Source === 'Rotten Tomatoes');
                         if (rt) rtRating = rt.Value;
                     }
+
                     let rtBadgeHTML = '';
                     if (rtRating !== 'N/A') {
                         const freshSvg = `<svg viewBox="0 0 32 32" class="w-3 h-3 inline-block drop-shadow-md"><path fill="#FA320A" d="M16,29 C6,29 2,23 2,16 C2,9 6,5 16,5 C26,5 30,9 30,16 C30,23 26,29 16,29 Z" /><path fill="#00A05A" d="M16,5 C15,2 13,0 11,0 C12,1 14,3 15,5 C12,5 9,4 7,6 C11,5 14,6 15,6 C14,8 13,10 14,11 C15,9 16,7 17,6 C19,7 22,9 23,7 C20,7 18,6 17,5 C20,5 23,3 22,1 C20,2 18,4 16,5 Z" /></svg>`;
@@ -4181,7 +4224,7 @@
                             rtIcon = rNum >= 60 ? freshSvg : rottenSvg;
                         }
                         rtBadgeHTML = `
-                        <div class="relative group/tooltip pointer-events-auto cursor-help">
+                        <div class="relative group/tooltip pointer-events-auto cursor-help" onclick="event.stopPropagation();">
                             <div class="bg-rose-900/80 backdrop-blur-md text-rose-400 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center justify-end gap-1 border border-rose-500/50 shadow-md">${rtIcon} ${rtRating}</div>
                             <div class="absolute right-0 top-full mt-1 bg-slate-950/95 border border-slate-800 text-[10px] text-slate-200 px-2 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none hidden group-hover/tooltip:block backdrop-blur-md animate-fade-in">
                                 ${rtStatus}
@@ -4219,7 +4262,7 @@
                                 ${typeLabel}
                             </div>
                             <div class="absolute top-2 right-2 flex flex-col items-end gap-1.5 z-20">
-                                <div class="relative group/tooltip pointer-events-auto cursor-help">
+                                <div class="relative group/tooltip pointer-events-auto cursor-help" onclick="event.stopPropagation();">
                                     <div class="bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
                                         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${rating}
                                     </div>
@@ -4407,7 +4450,7 @@
             document.body.style.overflow = 'hidden';
             let m;
             try { m = JSON.parse(decodeURIComponent(escape(atob(b64)))); } catch(e) { 
-                try { m = JSON.parse(decodeURIComponent(atob(b64))); } catch(e2) { return; }
+                try { m = JSON.parse(decodeURIComponent(atob(b64))); } catch(e2) { document.body.style.overflow = ''; return; }
             }
             
             const title = m.name || m.title || '';

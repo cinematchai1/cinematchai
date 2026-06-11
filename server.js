@@ -114,7 +114,7 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 async function fetchFromGroq(promptText, limit, surpriseMe) {
     return new Promise((resolve, reject) => {
-        const sysMsg = `You are a movie recommendation API. Analyze the user's reference title based on emotional tone, aesthetic style, thematic subtext, and pacing. STRICT RULES: 1) NO short films (min duration 70 mins) unless explicitly requested. 2) HIGH-QUALITY only (min 10,000 IMDb votes). 3) HIGHLY ACCURATE IMDb ratings. Ensure all provided 'imdb_id' fields are absolutely correct and start with 'tt'. You MUST return BOTH 'imdb_id' and 'tmdb_id' (numeric) for every recommendation. If an IMDB ID does not exist, return an empty string "" for 'imdb_id', but the key must still exist. Output ONLY valid JSON matching this schema exactly: {"ref": {"imdb_id": "tt...", "tmdb_id": 12345, "type": "movie"}, "recs": [{"imdb_id": "tt...", "tmdb_id": 12345, "type": "movie"}]}. Do not hallucinate IDs. Do not include markdown formatting.`;
+        const sysMsg = `You are a movie recommendation API. Analyze the user's reference title based on emotional tone, aesthetic style, thematic subtext, and pacing. STRICT RULES: 1) NO short films (min duration 70 mins) unless explicitly requested. 2) HIGH-QUALITY only (min 10,000 IMDb votes). 3) HIGHLY ACCURATE IMDb ratings. 4) NEVER return dummy data, placeholder examples, or hallucinated titles like 'ABC (2022)'. You must return ONLY REAL, EXISTING movies or series. If no real items perfectly match strict filters (like year/rating), slightly relax the constraints to find the best real matches instead of hallucinating. Ensure all provided 'imdb_id' fields are absolutely correct and start with 'tt'. You MUST return BOTH 'imdb_id' and 'tmdb_id' (numeric) for every recommendation. If an IMDB ID does not exist, return an empty string "" for 'imdb_id', but the key must still exist. Output ONLY valid JSON matching this schema exactly: {"ref": {"imdb_id": "tt...", "tmdb_id": 12345, "type": "movie"}, "recs": [{"imdb_id": "tt...", "tmdb_id": 12345, "type": "movie"}]}. Do not hallucinate IDs. Do not include markdown formatting.`;
         
         const payload = JSON.stringify({
             model: "llama-3.1-8b-instant",
@@ -1060,6 +1060,18 @@ app.post('/api/recommend', async (req, res) => {
                 }
             }
 
+            const fetchFromOmdb = fetchOMDB;
+            for (const rec of mappedRecs) {
+                const recId = rec.imdbId || rec.imdb_id;
+                if (recId) {
+                    const omdbData = await fetchFromOmdb(recId);
+                    if (omdbData && omdbData.imdbRating && omdbData.imdbRating !== 'N/A') {
+                        rec.imdbRating = omdbData.imdbRating;
+                        rec.rating = omdbData.imdbRating;
+                    }
+                }
+            }
+
             // Also map ref if available
             let mappedRef = null;
             if (cacheResult.rows[0].reference_movie && cacheResult.rows[0].reference_movie.imdb_id) {
@@ -1132,7 +1144,10 @@ app.post('/api/recommend', async (req, res) => {
 
     const promptText = `User requested recommendations based on the following prompt/context: "${movie}".
 ${filterConstraints ? `Additional filter constraints for the recommended items:${filterConstraints}` : ''}
-Provide exactly 15 recommendations that perfectly match the user's intent (e.g., similar to the reference movie, or directed by the requested director, or featuring the requested actor, etc). Output BOTH the exact IMDB ID (e.g. 'tt1375666') and the numeric TMDB ID for the reference item (if applicable) and each recommendation. If an item lacks an IMDB ID, return an empty string "" for imdb_id, but the tmdb_id must always be correct.`;
+Provide exactly 15 recommendations that perfectly match the user's intent (e.g., similar to the reference movie, or directed by the requested director, or featuring the requested actor, etc). 
+CRITICAL RULE: NEVER return dummy data, placeholder examples, or hallucinated titles like "ABC (2022)". You must return ONLY REAL, EXISTING movies or series.
+CRITICAL RULE: If no real items perfectly match the strict filters (such as year or rating), you MUST slightly relax the year/rating constraints to find the best possible real matches instead of hallucinating. NEVER HALLUCINATE under any circumstances.
+Output BOTH the exact IMDB ID (e.g. 'tt1375666') and the numeric TMDB ID for the reference item (if applicable) and each recommendation. If an item lacks an IMDB ID, return an empty string "" for imdb_id, but the tmdb_id must always be correct.`;
 
     const responseSchema = {
         type: "OBJECT",
@@ -1165,7 +1180,7 @@ Provide exactly 15 recommendations that perfectly match the user's intent (e.g.,
 
     const postData = JSON.stringify({
         systemInstruction: {
-            parts: [{ text: "You are a highly sophisticated movie recommendation engine. Analyze the user's prompt (which might be a reference title, an actor, a director, or a general vibe/mood) and return a list of recommended movies or series that perfectly match the intent. STRICT RULES TO ENFORCE: 1) NO short films (minimum duration 70 mins) unless explicitly requested. 2) HIGH-QUALITY only: Items must be well known with a minimum of 10,000 IMDb votes. 3) HIGHLY ACCURATE IMDb ratings: Double check the real rating before suggesting. Ensure all provided 'imdb_id' (must start with 'tt' or be empty) and 'tmdb_id' (numeric) fields are absolutely correct by searching your knowledge base. You MUST return both keys for every single recommendation to avoid ID logic breaking. Do not hallucinate IDs." }]
+            parts: [{ text: "You are a highly sophisticated movie recommendation engine. Analyze the user's prompt (which might be a reference title, an actor, a director, or a general vibe/mood) and return a list of recommended movies or series that perfectly match the intent. STRICT RULES TO ENFORCE: 1) NO short films (minimum duration 70 mins) unless explicitly requested. 2) HIGH-QUALITY only: Items must be well known with a minimum of 10,000 IMDb votes. 3) HIGHLY ACCURATE IMDb ratings: Double check the real rating before suggesting. 4) NEVER return dummy data, placeholder examples, or hallucinated titles like 'ABC (2022)'. You must return ONLY REAL, EXISTING movies or series. If no real items perfectly match strict filters (like year/rating), slightly relax the constraints to find the best real matches instead of hallucinating. Ensure all provided 'imdb_id' (must start with 'tt' or be empty) and 'tmdb_id' (numeric) fields are absolutely correct by searching your knowledge base. You MUST return both keys for every single recommendation to avoid ID logic breaking. Do not hallucinate IDs." }]
         },
         contents: [{ parts: [{ text: promptText }] }],
         generationConfig: { 
@@ -1267,6 +1282,8 @@ Provide exactly 15 recommendations that perfectly match the user's intent (e.g.,
                 if (Array.isArray(parsed)) {
                     // Fallback repair
                     parsed = { ref: { imdb_id: verifiedImdbId, type: verifiedType }, recs: parsed };
+                } else if (parsed && !parsed.recs && parsed.recommendations) {
+                    parsed.recs = parsed.recommendations;
                 }
 
                 // Override ref with the verified metadata to prevent AI hallucinations
@@ -1311,6 +1328,18 @@ Provide exactly 15 recommendations that perfectly match the user's intent (e.g.,
                                     imdb_id: idToUse
                                 });
                             }
+                        }
+                    }
+                }
+
+                const fetchFromOmdb = fetchOMDB;
+                for (const rec of updatedRecommendations) {
+                    const recId = rec.imdbId || rec.imdb_id;
+                    if (recId) {
+                        const omdbData = await fetchFromOmdb(recId);
+                        if (omdbData && omdbData.imdbRating && omdbData.imdbRating !== 'N/A') {
+                            rec.imdbRating = omdbData.imdbRating;
+                            rec.rating = omdbData.imdbRating;
                         }
                     }
                 }
@@ -1409,16 +1438,16 @@ app.post('/api/recommend/more', async (req, res) => {
 // WATCHLIST ENDPOINTS
 app.post('/api/watchlist/add', async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
-    const { imdb_id, title, original_title, year, type, rating, duration, category, description, trailer_yt_id, poster } = req.body;
+    const { imdb_id, title, original_title, year, type, rating, rt_rating, duration, category, description, trailer_yt_id, poster } = req.body;
     if (!title) return res.status(400).json({ error: 'Title is required' });
     
     try {
         const result = await pool.query(
-            `INSERT INTO user_watchlist (user_id, imdb_id, title, original_title, year, type, rating, duration, category, description, trailer_yt_id, poster)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            `INSERT INTO user_watchlist (user_id, imdb_id, title, original_title, year, type, rating, rt_rating, duration, category, description, trailer_yt_id, poster)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
              ON CONFLICT (user_id, title, year) DO NOTHING
              RETURNING id`,
-            [req.session.userId, imdb_id, title, original_title, year, type || 'movie', rating, duration, category, description, trailer_yt_id || null, poster || null]
+            [req.session.userId, imdb_id, title, original_title, year, type || 'movie', rating, rt_rating || null, duration, category, description, trailer_yt_id || null, poster || null]
         );
         res.json({ success: true, added: result.rows.length > 0 });
     } catch (err) {
@@ -1450,7 +1479,7 @@ app.get('/api/watchlist', async (req, res) => {
     
     try {
         const result = await pool.query(
-            `SELECT id, imdb_id, title, original_title, year, type, rating, duration, category, trailer_yt_id, poster, created_at FROM user_watchlist WHERE user_id = $1 ORDER BY created_at DESC LIMIT 50`,
+            `SELECT id, imdb_id, title, original_title, year, type, rating, rt_rating, duration, category, trailer_yt_id, poster, created_at FROM user_watchlist WHERE user_id = $1 ORDER BY created_at DESC LIMIT 50`,
             [req.session.userId]
         );
         console.log('[WATCHLIST API] Returning rows:', result.rows.length);
