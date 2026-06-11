@@ -822,20 +822,14 @@
     <!-- Unified Settings & Profile Modal -->
     </div>
     <div id="settings-view" class="fixed inset-0 z-50 bg-[#0f1115] hidden overflow-y-auto custom-scrollbar">
-        <div class="absolute inset-0 bg-slate-950/95" onclick="closeProfileModal()"></div>
-        <div class="relative w-full h-full md:h-auto md:max-h-[95vh] max-w-3xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 transform transition-all flex flex-col">
+        <div class="absolute inset-0 bg-slate-950/95" onclick="window.location.hash='#/discover'"></div>
+        <div class="relative w-full mx-auto my-0 md:my-10 h-full md:h-auto md:max-h-[95vh] max-w-4xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 transform transition-all flex flex-col">
             <button onclick="window.location.hash='#/discover'" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors bg-black/40 md:bg-transparent rounded-full md:rounded-none z-10">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <div class="text-center mb-6 flex-shrink-0">
                 <h3 id="modal-profile-title" class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 tracking-tight">CineMatch Settings</h3>
                 <p id="modal-profile-desc" class="text-slate-400 text-sm mt-2 font-medium">Configure your profile and tune the AI recommendations</p>
-            </div>
-            
-            <!-- Tabs Navigation -->
-            <div class="flex border-b border-slate-800 mb-6 flex-shrink-0">
-                <button id="tab-btn-filters" type="button" onclick="openUnifiedSettings('filters')" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-slate-500 hover:text-slate-300 border-b-2 border-transparent transition-colors">🤖 AI Discovery</button>
-                <button id="tab-btn-app" type="button" onclick="window.location.hash='#/settings'" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-sky-400 border-b-2 border-sky-400 transition-colors">⚙️ Profile & App</button>
             </div>
             
             <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
