@@ -366,9 +366,40 @@
             mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
             -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
+    
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-height: 85vh;
+            background: rgba(15, 17, 21, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px 24px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            z-index: 1000;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            overflow-y: auto;
+        }
+        .bottom-sheet.open {
+            transform: translateY(0);
+        }
+        .bottom-sheet::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 12px auto;
+        }
+
     </style>
 </head>
 <body class="antialiased overflow-x-hidden relative">
+    <div id="home-view">
     
     <!-- Top Nav -->
     <div id="nav-bar" class="w-full max-w-7xl mx-auto flex justify-between items-center px-4 py-4 sm:p-6 relative z-50">
@@ -443,7 +474,7 @@
                     <input type="text" id="movie-input" autocomplete="new-password" data-lpignore="true" name="search_query_new" placeholder="e.g. Inception, Christopher Nolan, Space Movies..." required class="w-full bg-slate-900/40 border border-slate-700/50 rounded-lg pl-11 pr-4 py-3.5 text-base focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all placeholder-slate-500 text-white shadow-inner">
                 </div>
                 <div class="flex gap-2">
-                    <button type="button" id="toggle-settings-btn" class="bg-slate-800/60 hover:bg-slate-700 border border-slate-700/60 text-slate-300 hover:text-white rounded-lg p-3.5 transition-all flex items-center justify-center shadow-md">
+                    <button type="button" id="toggle-settings-btn" onclick="window.location.hash='#/discover?filters=true'" class="bg-slate-800/60 hover:bg-slate-700 border border-slate-700/60 text-slate-300 hover:text-white rounded-lg p-3.5 transition-all flex items-center justify-center shadow-md">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     </button>
                     <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg px-8 py-3.5 text-base transition-all shadow-lg flex items-center justify-center min-w-[140px] flex-grow md:flex-grow-0">
@@ -789,10 +820,11 @@
     </div>
 
     <!-- Unified Settings & Profile Modal -->
-    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden p-0 md:p-4">
+    </div>
+    <div id="settings-view" class="fixed inset-0 z-50 bg-[#0f1115] hidden overflow-y-auto custom-scrollbar">
         <div class="absolute inset-0 bg-slate-950/95" onclick="closeProfileModal()"></div>
         <div class="relative w-full h-full md:h-auto md:max-h-[95vh] max-w-3xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 transform transition-all flex flex-col">
-            <button onclick="closeProfileModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors bg-black/40 md:bg-transparent rounded-full md:rounded-none z-10">
+            <button onclick="window.location.hash='#/discover'" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors bg-black/40 md:bg-transparent rounded-full md:rounded-none z-10">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <div class="text-center mb-6 flex-shrink-0">
@@ -803,80 +835,11 @@
             <!-- Tabs Navigation -->
             <div class="flex border-b border-slate-800 mb-6 flex-shrink-0">
                 <button id="tab-btn-filters" type="button" onclick="openUnifiedSettings('filters')" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-slate-500 hover:text-slate-300 border-b-2 border-transparent transition-colors">🤖 AI Discovery</button>
-                <button id="tab-btn-app" type="button" onclick="openUnifiedSettings('app')" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-sky-400 border-b-2 border-sky-400 transition-colors">⚙️ Profile & App</button>
+                <button id="tab-btn-app" type="button" onclick="window.location.hash='#/settings'" class="flex-1 pb-3 text-sm font-bold uppercase tracking-wider text-sky-400 border-b-2 border-sky-400 transition-colors">⚙️ Profile & App</button>
             </div>
             
             <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 pb-4">
                 <!-- Tab Content: AI Filters -->
-                <div id="tab-content-filters" class="hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Left Section: AI Search Filters -->
-                        <div class="flex flex-col gap-5">
-                            <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
-                                <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
-                                <h4 id="settings-title" class="text-base font-semibold text-slate-200">Current Search Filters</h4>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <div class="flex flex-col gap-2">
-                                    <label id="lbl-min-rating" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Min IMDB Rating</label>
-                                    <select id="filter-min-rating" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
-                                        <option value="all" id="opt-rating-all">All Ratings</option>
-                                        <option value=">7.0">> 7.0</option>
-                                        <option value=">8.0">> 8.0</option>
-                                        <option value=">8.5">> 8.5</option>
-                                    </select>
-                                </div>
-                                <div class="flex flex-col gap-2">
-                                    <label id="lbl-year" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Released After</label>
-                                    <input type="number" id="filter-year" placeholder="e.g. 2019" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Right Section: Discovery Focus Preferences -->
-                        <div class="flex flex-col gap-5">
-                            <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
-                                <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37m0 0l-9.37-9.37M18.9 6.752H3.75"/></svg>
-                                <h4 id="settings-custom-title" class="text-base font-semibold text-slate-200">Discovery Focus</h4>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <div class="flex flex-col gap-2">
-                                    <label id="lbl-content-type" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Content Focus</label>
-                                    <select id="filter-content-type" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
-                                        <option value="any" id="opt-content-any">Mixed Content</option>
-                                        <option value="movie" id="opt-content-movie">Movies Only</option>
-                                        <option value="series" id="opt-content-series">TV Series Only</option>
-                                    </select>
-                                </div>
-                                <div class="flex flex-col gap-2 justify-center h-full pt-1">
-                                    <div class="flex items-center gap-1.5">
-                                        <span id="lbl-surprise-me" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Surprise Me Mode</span>
-                                        <div class="relative group flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-slate-500 hover:text-sky-400 transition-colors cursor-help" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
-                                            </svg>
-                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 rounded-lg bg-slate-900 border border-slate-700/80 text-xs text-slate-300 font-normal leading-relaxed pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 text-center shadow-xl">
-                                                <span id="tooltip-surprise-me">Mixes in 2-3 highly-rated, critically acclaimed hidden indie gems or cult classics related to your search that still boast outstanding reviews.</span>
-                                                <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-center gap-3 mt-1">
-                                        <label class="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" id="filter-surprise-me" class="sr-only peer">
-                                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
-                                        </label>
-                                        <span id="desc-surprise-me" class="text-xs text-slate-500 font-medium leading-none">Mix in obscure hidden gems</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-8 text-center">
-                         <button type="button" onclick="closeProfileModal()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-xl transition-all border border-slate-600">Apply Filters & Close</button>
-                    </div>
-                </div>
-                
                 <!-- Tab Content: Profile & App -->
                 <div id="tab-content-app">
                     <form id="profile-form" class="flex flex-col gap-6">
@@ -2567,16 +2530,48 @@
             });
         });
 
-        // Toggle Advanced Settings Drawer
-        const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
-        if (toggleSettingsBtn) {
-            toggleSettingsBtn.addEventListener('click', () => {
-                window.openUnifiedSettings('filters');
-            });
+        );
         }
 
 
         
+        
+        // --- SPA Router ---
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash || '#/discover';
+            
+            // Bottom Sheet
+            const sheet = document.getElementById('ai-filters-sheet');
+            if (hash.includes('filters=true')) {
+                if(sheet) sheet.classList.add('open');
+            } else {
+                if(sheet) sheet.classList.remove('open');
+            }
+
+            // Settings Page vs Home
+            const settingsView = document.getElementById('settings-view');
+            const homeView = document.getElementById('home-view');
+            
+            if (hash.startsWith('#/settings')) {
+                if(homeView) homeView.classList.add('hidden');
+                if(settingsView) settingsView.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                if(homeView) homeView.classList.remove('hidden');
+                if(settingsView) settingsView.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Trigger hash routing on load
+        window.addEventListener('DOMContentLoaded', () => {
+            if(!window.location.hash) {
+                window.location.hash = '#/discover';
+            } else {
+                window.dispatchEvent(new Event('hashchange'));
+            }
+        });
+
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast-notification');
@@ -2892,7 +2887,7 @@
                         </button>
                         <div class="absolute right-0 top-full pt-3 -mt-2 w-40 z-50 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200">
                             <div class="bg-slate-800 border border-slate-700 rounded-md shadow-xl overflow-hidden flex flex-col">
-                                <button onclick="openUnifiedSettings('app')" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors border-b border-slate-700">${t.navProfile}</button>
+                                <button onclick="window.location.hash='#/settings'" class="w-full text-left px-4 py-2.5 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors border-b border-slate-700">${t.navProfile}</button>
                                 <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-xs font-medium text-red-400 hover:bg-slate-700 hover:text-red-300 transition-colors uppercase tracking-wider">${t.navLogout}</button>
                             </div>
                         </div>
@@ -2956,38 +2951,6 @@
 
         // Modal Logic
         const profileModal = document.getElementById('profile-modal');
-        
-        window.openUnifiedSettings = function(tabName = 'filters') {
-            const btnFilters = document.getElementById('tab-btn-filters');
-            const btnApp = document.getElementById('tab-btn-app');
-            const contentFilters = document.getElementById('tab-content-filters');
-            const contentApp = document.getElementById('tab-content-app');
-            
-            // Reset styles
-            btnFilters.classList.remove('text-sky-400', 'border-sky-400');
-            btnFilters.classList.add('text-slate-500', 'border-transparent');
-            btnApp.classList.remove('text-sky-400', 'border-sky-400');
-            btnApp.classList.add('text-slate-500', 'border-transparent');
-            
-            contentFilters.classList.add('hidden');
-            contentApp.classList.add('hidden');
-            
-            // Activate requested tab
-            if (tabName === 'filters') {
-                btnFilters.classList.remove('text-slate-500', 'border-transparent');
-                btnFilters.classList.add('text-sky-400', 'border-sky-400');
-                contentFilters.classList.remove('hidden');
-            } else {
-                btnApp.classList.remove('text-slate-500', 'border-transparent');
-                btnApp.classList.add('text-sky-400', 'border-sky-400');
-                contentApp.classList.remove('hidden');
-            }
-            
-            // Open modal if not open
-            if (profileModal.classList.contains('hidden')) {
-                openProfileModal();
-            }
-        };
         
         async function openProfileModal() {
             document.body.style.overflow = 'hidden';
@@ -5076,6 +5039,85 @@
             btn.innerHTML = `<span>Atualizar Password</span>`;
         }
     </script>
+    
+
+    <!-- Bottom Sheet AI Filters -->
+    <div id="ai-filters-sheet" class="bottom-sheet p-4 md:p-8 custom-scrollbar">
+        <button onclick="window.location.hash='#/discover'" class="absolute top-4 right-4 p-2 text-slate-500 hover:text-white text-2xl">&times;</button>
+        <div class="max-w-3xl mx-auto mt-4">
+            <div id="tab-content-filters" >
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left Section: AI Search Filters -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
+                                <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+                                <h4 id="settings-title" class="text-base font-semibold text-slate-200">Current Search Filters</h4>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label id="lbl-min-rating" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Min IMDB Rating</label>
+                                    <select id="filter-min-rating" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
+                                        <option value="all" id="opt-rating-all">All Ratings</option>
+                                        <option value=">7.0">> 7.0</option>
+                                        <option value=">8.0">> 8.0</option>
+                                        <option value=">8.5">> 8.5</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label id="lbl-year" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Released After</label>
+                                    <input type="number" id="filter-year" placeholder="e.g. 2019" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Section: Discovery Focus Preferences -->
+                        <div class="flex flex-col gap-5">
+                            <div class="flex items-center gap-2 pb-3 border-b border-slate-800">
+                                <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122l9.37-9.37m0 0l-9.37-9.37M18.9 6.752H3.75"/></svg>
+                                <h4 id="settings-custom-title" class="text-base font-semibold text-slate-200">Discovery Focus</h4>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <label id="lbl-content-type" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Content Focus</label>
+                                    <select id="filter-content-type" class="bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all text-white">
+                                        <option value="any" id="opt-content-any">Mixed Content</option>
+                                        <option value="movie" id="opt-content-movie">Movies Only</option>
+                                        <option value="series" id="opt-content-series">TV Series Only</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2 justify-center h-full pt-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="lbl-surprise-me" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Surprise Me Mode</span>
+                                        <div class="relative group flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-slate-500 hover:text-sky-400 transition-colors cursor-help" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                                            </svg>
+                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 p-3 rounded-lg bg-slate-900 border border-slate-700/80 text-xs text-slate-300 font-normal leading-relaxed pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 text-center shadow-xl">
+                                                <span id="tooltip-surprise-me">Mixes in 2-3 highly-rated, critically acclaimed hidden indie gems or cult classics related to your search that still boast outstanding reviews.</span>
+                                                <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="filter-surprise-me" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 peer-checked:after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+                                        </label>
+                                        <span id="desc-surprise-me" class="text-xs text-slate-500 font-medium leading-none">Mix in obscure hidden gems</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+            <div class="mt-8 text-center">
+                 <button type="button" onclick="window.location.hash='#/discover'" class="w-full sm:w-auto bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg shadow-indigo-900/30">Apply Filters</button>
+            </div>
+        </div>
+    </div>
     
 </body>
 </html>
