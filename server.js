@@ -8,31 +8,77 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const { Pool } = require('pg');
-const multer = require('multer');
-const sharp = require('sharp');
 const fs = require('fs');
 const crypto = require('crypto');
 
-// Removed resend SDK because Node v12 on server doesn't support it
+// --- NATIVE .ENV PARSER ---
+if (fs.existsSync(path.join(__dirname, '.env'))) {
+    const envConfig = fs.readFileSync(path.join(__dirname, '.env'), 'utf8');
+    envConfig.split('\n').forEach(line => {
+        const match = line.match(/^([^=]+)=(.*)$/);
+        if (match) {
+            const key = match[1].trim();
+            let value = match[2].trim();
+            // Remove optional quotes
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.slice(1, -1);
+            }
+            process.env[key] = value;
+        }
+    });
+}
+
+// --- STARTUP VALIDATION ---
+const REQUIRED_ENV_VARS = ['SESSION_SECRET', 'TMDB_API_KEY', 'OMDB_API_KEY', 'RESEND_API_KEY', 'STREAM_HMAC_KEY'];
+const missingVars = REQUIRED_ENV_VARS.filter(key => !process.env[key]);
+if (missingVars.length > 0) {
+    console.warn(`[WARNING] Missing required environment variables: ${missingVars.join(', ')}. Please configure .env for production.`);
+}
+
 // We will use native https module which is already required as 'https'
 
 const app = express();
 
 app.use(compression());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: '1d',
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+        }
+    }
+}));
 
 
-// Security: Native Memory Rate Limiting to prevent DDoS
+// Security: Sliding Window Memory Rate Limiting to prevent DDoS
 const requestCounts = new Map();
-setInterval(() => requestCounts.clear(), 15 * 60 * 1000); // Clear every 15 minutes
+setInterval(() => {
+    const now = Date.now();
+    for (const [ip, data] of requestCounts.entries()) {
+        if (now > data.resetTime) {
+            requestCounts.delete(ip);
+        }
+    }
+}, 5 * 60 * 1000);
 
 const apiLimiter = (req, res, next) => {
     const ip = req.ip || req.connection.remoteAddress;
-    const count = (requestCounts.get(ip) || 0) + 1;
-    requestCounts.set(ip, count);
-    
-    if (count > 60) {
+    const now = Date.now();
+    const windowMs = 15 * 60 * 1000;
+    const maxRequests = 60;
+
+    let data = requestCounts.get(ip);
+    if (!data || now > data.resetTime) {
+        data = { count: 1, resetTime: now + windowMs };
+        requestCounts.set(ip, data);
+        return next();
+    }
+
+    data.count += 1;
+    if (data.count > maxRequests) {
         return res.status(429).json({ error: 'Too many requests from this IP, please try again later.' });
     }
     next();
@@ -41,25 +87,7 @@ const apiLimiter = (req, res, next) => {
 app.use('/api/recommend', apiLimiter);
 
 
-// Ensure upload directory exists
-const avatarDir = path.join(__dirname, 'public', 'uploads', 'avatars');
-if (!fs.existsSync(avatarDir)) {
-    fs.mkdirSync(avatarDir, { recursive: true });
-}
 
-// Multer config
-const storage = multer.memoryStorage(); // Process with sharp before saving
-const upload = multer({ 
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only images are allowed'));
-        }
-    }
-});
 
 
 const pool = new Pool({
@@ -69,6 +97,71 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD || 'cinematch_pass',
     port: process.env.DB_PORT || 5432,
 });
+
+app.use(session({
+    store: new pgSession({
+        pool: pool,
+        tableName: 'session'
+    }),
+    secret: process.env.SESSION_SECRET || 'super_secret_cinematch_key_2026',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 } // 30 days
+}));
+
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+
+async function fetchFromGroq(promptText, limit, surpriseMe) {
+    return new Promise((resolve, reject) => {
+        const sysMsg = `You are a movie recommendation API. Analyze the user's reference title based on emotional tone, aesthetic style, thematic subtext, and pacing. STRICT RULES: 1) NO short films (min duration 70 mins) unless explicitly requested. 2) HIGH-QUALITY only (min 10,000 IMDb votes). 3) HIGHLY ACCURATE IMDb ratings. Ensure all provided 'imdb_id' fields are absolutely correct and start with 'tt'. You MUST return BOTH 'imdb_id' and 'tmdb_id' (numeric) for every recommendation. If an IMDB ID does not exist, return an empty string "" for 'imdb_id', but the key must still exist. Output ONLY valid JSON matching this schema exactly: {"ref": {"imdb_id": "tt...", "tmdb_id": 12345, "type": "movie"}, "recs": [{"imdb_id": "tt...", "tmdb_id": 12345, "type": "movie"}]}. Do not hallucinate IDs. Do not include markdown formatting.`;
+        
+        const payload = JSON.stringify({
+            model: "llama-3.1-8b-instant",
+            messages: [
+                { role: "system", content: sysMsg },
+                { role: "user", content: promptText + `\nLimit recommendations to ${limit}. Provide raw JSON only.` }
+            ],
+            temperature: surpriseMe ? 0.8 : 0.4,
+            response_format: { type: "json_object" }
+        });
+
+        const options = {
+            hostname: 'api.groq.com',
+            port: 443,
+            path: '/openai/v1/chat/completions',
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${GROQ_API_KEY}`,
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(payload)
+            }
+        };
+
+        const req = https.request(options, (res) => {
+            res.setEncoding('utf8');
+            let body = '';
+            res.on('data', (chunk) => body += chunk);
+            res.on('end', () => {
+                try {
+                    const data = JSON.parse(body);
+                    if (data.choices && data.choices[0] && data.choices[0].message) {
+                        resolve(data.choices[0].message.content);
+                    } else {
+                        reject(new Error("Groq API error: " + body));
+                    }
+                } catch(e) {
+                    reject(e);
+                }
+            });
+        });
+
+        req.on('error', (e) => reject(e));
+        req.write(payload);
+        req.end();
+    });
+}
+
 async function initDatabase() {
     try {
         await pool.query(`
@@ -94,68 +187,6 @@ async function initDatabase() {
             )
         `);
 
-app.use(session({
-    store: new pgSession({
-        pool: pool,
-        tableName: 'session'
-    }),
-    secret: 'super_secret_cinematch_key_2026',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 } // 30 days
-}));
-
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-
-async function fetchFromGroq(promptText, limit, surpriseMe) {
-    return new Promise((resolve, reject) => {
-        const sysMsg = `You are a movie recommendation API. Analyze the user's reference title based on emotional tone, aesthetic style, thematic subtext, and pacing. Ensure all provided 'imdb_id' fields are absolutely correct. Output ONLY valid JSON matching this schema exactly: {"ref": {"imdb_id": "tt...", "type": "movie"}, "recs": [{"imdb_id": "tt...", "type": "movie"}]}. Do not hallucinate IDs. Do not include markdown formatting.`;
-        
-        const payload = JSON.stringify({
-            model: "llama-3.1-8b-instant",
-            messages: [
-                { role: "system", content: sysMsg },
-                { role: "user", content: promptText + `\nLimit recommendations to ${limit}. Provide raw JSON only.` }
-            ],
-            temperature: surpriseMe ? 0.8 : 0.4,
-            response_format: { type: "json_object" }
-        });
-
-        const options = {
-            hostname: 'api.groq.com',
-            port: 443,
-            path: '/openai/v1/chat/completions',
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${GROQ_API_KEY}`,
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(payload)
-            }
-        };
-
-        const req = https.request(options, (res) => {
-            let body = '';
-            res.on('data', (chunk) => body += chunk);
-            res.on('end', () => {
-                try {
-                    const data = JSON.parse(body);
-                    if (data.choices && data.choices[0] && data.choices[0].message) {
-                        resolve(data.choices[0].message.content);
-                    } else {
-                        reject(new Error("Groq API error: " + body));
-                    }
-                } catch(e) {
-                    reject(e);
-                }
-            });
-        });
-
-        req.on('error', (e) => reject(e));
-        req.write(payload);
-        req.end();
-    });
-}
         await pool.query(`
             CREATE TABLE IF NOT EXISTS recommendation_cache (
                 id SERIAL PRIMARY KEY,
@@ -311,7 +342,7 @@ app.post('/api/register', async (req, res) => {
         const { username, password } = req.body;
         if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
         
-        const existing = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const existing = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
         if (existing.rows.length > 0) return res.status(400).json({ error: 'Username already exists' });
 
         const hash = await bcrypt.hash(password, 10);
@@ -357,7 +388,7 @@ app.post('/api/register', async (req, res) => {
             path: '/emails',
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + (process.env.RESEND_API_KEY || 're_C3yX7GPy_FBPjBPAEnBzQo1v8GjEQGf48'),
+                'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(emailData)
             }
@@ -365,7 +396,13 @@ app.post('/api/register', async (req, res) => {
         
         const https = require('https');
         const resendReq = https.request(options, (resendRes) => {
-            resendRes.on('data', () => {});
+            let body = '';
+            resendRes.on('data', chunk => body += chunk);
+            resendRes.on('end', () => {
+                if (resendRes.statusCode >= 400) {
+                    console.error('Failed to send welcome email:', resendRes.statusCode, body);
+                }
+            });
         });
         resendReq.on('error', (e) => console.error('Failed to send welcome email:', e));
         resendReq.write(emailData);
@@ -384,7 +421,7 @@ app.post('/api/login', async (req, res) => {
         const { username, password } = req.body;
         if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
         
-        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const result = await pool.query('SELECT id, username, password_hash, display_name FROM users WHERE username = $1', [username]);
         if (result.rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
 
         const user = result.rows[0];
@@ -415,7 +452,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     if (!username) return res.status(400).json({ error: lang === 'en' ? 'Email required' : 'Email obrigatório' });
 
     try {
-        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        const result = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
         if (result.rows.length === 0) {
             return res.json({ success: true, message: lang === 'en' ? 'If the email exists, we sent a recovery link.' : 'Se o email existir, enviámos um link de recuperação.' });
         }
@@ -486,7 +523,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
             path: '/emails',
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + (process.env.RESEND_API_KEY || 're_C3yX7GPy_FBPjBPAEnBzQo1v8GjEQGf48'),
+                'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(emailData)
             }
@@ -494,6 +531,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         
         await new Promise((resolve, reject) => {
             const resendReq = https.request(options, (resendRes) => {
+                resendRes.setEncoding('utf8');
                 let body = '';
                 resendRes.on('data', chunk => body += chunk);
                 resendRes.on('end', () => {
@@ -539,13 +577,39 @@ app.post('/api/logout', (req, res) => {
     res.json({ success: true });
 });
 
+async function checkAndUpdateVipStatus(userId) {
+    try {
+        const result = await pool.query('SELECT is_vip, vip_until FROM users WHERE id = $1', [userId]);
+        if (result.rows.length > 0) {
+            const u = result.rows[0];
+            let activeVip = u.is_vip || false;
+            if (activeVip && u.vip_until && new Date(u.vip_until) < new Date()) {
+                activeVip = false;
+                await pool.query('UPDATE users SET is_vip = FALSE, vip_until = NULL WHERE id = $1', [userId]);
+            }
+            return { is_vip: activeVip, vip_until: activeVip ? u.vip_until : null };
+        }
+    } catch(e) {
+        console.error('Error checking VIP status:', e);
+    }
+    return { is_vip: false, vip_until: null };
+}
+
 app.get('/api/me', async (req, res) => {
     if (req.session.userId) {
         try {
+            const vipStatus = await checkAndUpdateVipStatus(req.session.userId);
             const result = await pool.query('SELECT username, display_name, avatar_url FROM users WHERE id = $1', [req.session.userId]);
             if (result.rows.length > 0) {
                 const u = result.rows[0];
-                res.json({ loggedIn: true, username: u.username, display_name: u.display_name, avatar_url: u.avatar_url });
+                res.json({ 
+                    loggedIn: true, 
+                    username: u.username, 
+                    display_name: u.display_name, 
+                    avatar_url: u.avatar_url,
+                    is_vip: vipStatus.is_vip,
+                    vip_until: vipStatus.vip_until
+                });
             } else {
                 res.json({ loggedIn: false });
             }
@@ -556,6 +620,7 @@ app.get('/api/me', async (req, res) => {
         res.json({ loggedIn: false });
     }
 });
+
 
 app.get('/api/profile', async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
@@ -584,30 +649,6 @@ app.put('/api/profile', async (req, res) => {
     }
 });
 
-app.post('/api/profile/upload-avatar', upload.single('avatar'), async (req, res) => {
-    if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
-    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-
-    try {
-        const filename = `avatar_${req.session.userId}_${Date.now()}.webp`;
-        const filepath = path.join(avatarDir, filename);
-
-        // Process image with sharp: resize, strip EXIF, convert to WebP
-        await sharp(req.file.buffer)
-            .resize(256, 256, { fit: 'cover' })
-            .webp({ quality: 80 })
-            .toFile(filepath);
-
-        const avatarUrl = `/uploads/avatars/${filename}`;
-
-        await pool.query('UPDATE users SET avatar_url = $1 WHERE id = $2', [avatarUrl, req.session.userId]);
-
-        res.json({ success: true, avatar_url: avatarUrl });
-    } catch (err) {
-        console.error("Error processing avatar:", err);
-        res.status(500).json({ error: 'Error processing image' });
-    }
-});
 
 app.post('/api/profile/update-display', async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
@@ -659,6 +700,7 @@ function fetchCinemetaData(title, type = 'movie') {
         const url = `https://v3-cinemeta.strem.io/catalog/${cleanType}/top/search=${encodeURIComponent(title)}.json`;
         
         const req = https.get(url, (res) => {
+            res.setEncoding('utf8');
             let body = '';
             res.on('data', chunk => body += chunk);
             res.on('end', () => {
@@ -679,7 +721,7 @@ function fetchCinemetaData(title, type = 'movie') {
         
         // Prevent hanging
         req.setTimeout(3000, () => {
-            req.abort();
+            req.destroy(new Error('Timeout'));
             resolve(null);
         });
     });
@@ -693,6 +735,7 @@ function fetchCinemetaMeta(imdbId, type) {
         const url = `https://v3-cinemeta.strem.io/meta/${cleanType}/${imdbId}.json`;
         
         const req = https.get(url, (res) => {
+            res.setEncoding('utf8');
             let body = '';
             res.on('data', chunk => body += chunk);
             res.on('end', () => {
@@ -709,7 +752,7 @@ function fetchCinemetaMeta(imdbId, type) {
         
         // Prevent hanging
         req.setTimeout(3000, () => {
-            req.abort();
+            req.destroy(new Error('Timeout'));
             resolve(null);
         });
     });
@@ -718,9 +761,10 @@ function fetchCinemetaMeta(imdbId, type) {
 function fetchOMDB(imdbId) {
     return new Promise((resolve) => {
         if (!imdbId) return resolve(null);
-        const apiKey = '25c26a4';
+        const apiKey = process.env.OMDB_API_KEY || '25c26a4';
         const url = `https://www.omdbapi.com/?i=${imdbId}&apikey=${apiKey}`;
         const req = https.get(url, (res) => {
+            res.setEncoding('utf8');
             let body = '';
             res.on('data', chunk => body += chunk);
             res.on('end', () => {
@@ -728,7 +772,7 @@ function fetchOMDB(imdbId) {
             });
         });
         req.on('error', () => resolve(null));
-        req.setTimeout(3000, () => { req.abort(); resolve(null); });
+        req.setTimeout(3000, () => { req.destroy(new Error('Timeout')); resolve(null); });
     });
 }
 
@@ -798,6 +842,7 @@ async function fetchTMDBMeta(imdbId, type, language) {
         const url = `https://api.themoviedb.org/3/find/${imdbId}?api_key=${apiKey}&external_source=imdb_id&language=${tmdbLang}`;
         
         const req = https.get(url, (res) => {
+            res.setEncoding('utf8');
             let body = '';
             res.on('data', chunk => body += chunk);
             res.on('end', () => {
@@ -815,6 +860,7 @@ async function fetchTMDBMeta(imdbId, type, language) {
                     // Fetch full details for runtime/genres/translations
                     const detailsUrl = `https://api.themoviedb.org/3/${tmdbType}/${result.id}?api_key=${apiKey}&language=${tmdbLang}&append_to_response=videos,translations,credits`;
                     https.get(detailsUrl, (res2) => {
+                        res2.setEncoding('utf8');
                         let body2 = '';
                         res2.on('data', c => body2 += c);
                         res2.on('end', () => {
@@ -848,7 +894,10 @@ async function fetchTMDBMeta(imdbId, type, language) {
                                     type: tmdbType,
                                     imdb_id: imdbId,
                                     tmdbId: details.id,
-                                    trailerYtId: trailerYtId
+                                    trailerYtId: trailerYtId,
+                                    total_seasons: details.number_of_seasons,
+                                    total_episodes: details.number_of_episodes,
+                                    seasons_data: details.seasons ? details.seasons.map(s => ({ season_number: s.season_number, episode_count: s.episode_count })) : null
                                 });
                             } catch(e) { resolve(null); }
                         });
@@ -861,7 +910,7 @@ async function fetchTMDBMeta(imdbId, type, language) {
         });
 
         req.on('error', () => resolve(null));
-        req.setTimeout(5000, () => { req.abort(); resolve(null); });
+        req.setTimeout(5000, () => { req.destroy(new Error('Timeout')); resolve(null); });
     });
 }
 
@@ -1035,7 +1084,7 @@ app.post('/api/recommend', async (req, res) => {
             return res.json({
                 cacheId: cacheResult.rows[0].id,
                 referenceMovie: mappedRef || cacheResult.rows[0].reference_movie,
-                recommendations: mappedRecs,
+                recommendations: mappedRecs.slice(0, limit),
                 hasMore: rawRecs.length > (req.body.limit || 5),
                 totalCached: rawRecs.length
             });
@@ -1081,9 +1130,9 @@ app.post('/api/recommend', async (req, res) => {
         filterConstraints += `\nCRITICAL RULE: Deliver a mix of highly acclaimed mainstream hits and strictly 2-3 extremely obscure, critically-acclaimed hidden indie gems or cult classics related to the search to surprise the user.`;
     }
 
-    const promptText = `User requested recommendations for the movie/series: "${movie}".
+    const promptText = `User requested recommendations based on the following prompt/context: "${movie}".
 ${filterConstraints ? `Additional filter constraints for the recommended items:${filterConstraints}` : ''}
-Provide recommendations similar to this movie/series (${limit} recs max). Output ONLY the exact IMDB ID (e.g. 'tt1375666') and type for the reference movie and each recommendation.`;
+Provide exactly 15 recommendations that perfectly match the user's intent (e.g., similar to the reference movie, or directed by the requested director, or featuring the requested actor, etc). Output BOTH the exact IMDB ID (e.g. 'tt1375666') and the numeric TMDB ID for the reference item (if applicable) and each recommendation. If an item lacks an IMDB ID, return an empty string "" for imdb_id, but the tmdb_id must always be correct.`;
 
     const responseSchema = {
         type: "OBJECT",
@@ -1091,21 +1140,23 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
             ref: {
                 type: "OBJECT",
                 properties: {
-                    imdb_id: { type: "STRING", description: "The exact IMDB ID (starting with 'tt')" },
+                    imdb_id: { type: "STRING", description: "The exact IMDB ID (starting with 'tt'). Empty string if none." },
+                    tmdb_id: { type: "INTEGER", description: "The exact numeric TMDB ID." },
                     type: { type: "STRING", description: "Either 'movie' or 'series'" }
                 },
-                required: ["imdb_id", "type"]
+                required: ["imdb_id", "tmdb_id", "type"]
             },
             recs: {
                 type: "ARRAY",
-                description: `${limit} recommendations max`,
+                description: "Exactly 15 recommendations",
                 items: {
                     type: "OBJECT",
                     properties: {
-                        imdb_id: { type: "STRING", description: "The exact IMDB ID (starting with 'tt')" },
+                        imdb_id: { type: "STRING", description: "The exact IMDB ID (starting with 'tt'). Empty string if none." },
+                        tmdb_id: { type: "INTEGER", description: "The exact numeric TMDB ID." },
                         type: { type: "STRING", description: "Either 'movie' or 'series'" }
                     },
-                    required: ["imdb_id", "type"]
+                    required: ["imdb_id", "tmdb_id", "type"]
                 }
             }
         },
@@ -1114,7 +1165,7 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
 
     const postData = JSON.stringify({
         systemInstruction: {
-            parts: [{ text: "You are a highly sophisticated movie recommendation engine. Analyze the user's reference title based on emotional tone, aesthetic style, thematic subtext, and pacing. Ensure all provided 'imdb_id' fields are absolutely correct by searching your knowledge base. Output ONLY IMDB IDs and types. Do not hallucinate IDs." }]
+            parts: [{ text: "You are a highly sophisticated movie recommendation engine. Analyze the user's prompt (which might be a reference title, an actor, a director, or a general vibe/mood) and return a list of recommended movies or series that perfectly match the intent. STRICT RULES TO ENFORCE: 1) NO short films (minimum duration 70 mins) unless explicitly requested. 2) HIGH-QUALITY only: Items must be well known with a minimum of 10,000 IMDb votes. 3) HIGHLY ACCURATE IMDb ratings: Double check the real rating before suggesting. Ensure all provided 'imdb_id' (must start with 'tt' or be empty) and 'tmdb_id' (numeric) fields are absolutely correct by searching your knowledge base. You MUST return both keys for every single recommendation to avoid ID logic breaking. Do not hallucinate IDs." }]
         },
         contents: [{ parts: [{ text: promptText }] }],
         generationConfig: { 
@@ -1137,6 +1188,7 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
         };
 
         const apiReq = https.request(options, (apiRes) => {
+            apiRes.setEncoding('utf8');
             let body = '';
             apiRes.on('data', (chunk) => body += chunk);
             apiRes.on('end', () => resolveGemini(body));
@@ -1188,7 +1240,7 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
                 if (data.error || !data.candidates || data.candidates.length === 0 || !data.candidates[0].content || !data.candidates[0].content.parts || data.candidates[0].content.parts.length === 0) {
                     console.warn('[GEMINI FAILED] Falling back to Groq...', data.error ? data.error.message : 'Invalid response');
                     try {
-                        reply = await fetchFromGroq(promptText, limit, surpriseMe);
+                        reply = await fetchFromGroq(promptText, 15, surpriseMe);
                     } catch (groqErr) {
                         console.error('[GROQ FALLBACK ERROR]', groqErr.message);
                         return res.status(500).json({ error: 'Both AI APIs failed.' });
@@ -1217,9 +1269,8 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
                     parsed = { ref: { imdb_id: verifiedImdbId, type: verifiedType }, recs: parsed };
                 }
 
-                // Make sure ref has an imdb_id
-                if (!parsed.ref) parsed.ref = { imdb_id: verifiedImdbId, type: verifiedType };
-                if (!parsed.ref.imdb_id) parsed.ref.imdb_id = verifiedImdbId;
+                // Override ref with the verified metadata to prevent AI hallucinations
+                parsed.ref = { imdb_id: verifiedImdbId, type: verifiedType };
 
                 const rawRecs = parsed.recs || [];
                 const updatedRecommendations = [];
@@ -1306,8 +1357,8 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
                 res.json({ 
                     cacheId,
                     referenceMovie: finalParsed.referenceMovie, 
-                    recommendations: updatedRecommendations,
-                    hasMore: finalParsed.recommendations.length >= limit,
+                    recommendations: updatedRecommendations.slice(0, limit),
+                    hasMore: finalParsed.recommendations.length > limit,
                     totalCached: finalParsed.recommendations.length
                 });
                 
@@ -1323,7 +1374,7 @@ Provide recommendations similar to this movie/series (${limit} recs max). Output
 
 app.post('/api/recommend/more', async (req, res) => {
     if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
-    const { cacheId, offset, language = 'en' } = req.body;
+    const { cacheId, offset } = req.body;
     if (!cacheId || offset === undefined) return res.status(400).json({ error: 'Missing cacheId or offset' });
 
     try {
@@ -1334,60 +1385,18 @@ app.post('/api/recommend/more', async (req, res) => {
         if (cacheResult.rows.length === 0) return res.status(404).json({ error: 'Cache not found' });
         
         const rawRecs = cacheResult.rows[0].raw_recommendations || [];
-        let processedRecs = cacheResult.rows[0].recommendations || [];
+        const processedRecs = cacheResult.rows[0].recommendations || [];
         
         if (offset >= rawRecs.length) {
             return res.json({ recommendations: [], hasMore: false });
         }
         
-        const recsToProcess = rawRecs.slice(offset, offset + 5);
-        const updatedRecommendations = [];
-
-        for (const r of recsToProcess) {
-            if (r.imdb_id || r.imdbId) {
-                const idToUse = r.imdb_id || r.imdbId;
-                const meta = await fetchAndCacheMetadata(idToUse, r.type || 'movie', language);
-                        if (meta && meta.tmdb) {
-                            const enriched = meta.tmdb;
-                            enriched.omdb = meta.omdb;
-                            updatedRecommendations.push(enriched);
-                        } else if (meta && meta.cinemeta) {
-                            updatedRecommendations.push({
-                                title: meta.cinemeta.name,
-                                originalTitle: meta.cinemeta.name,
-                                description: meta.cinemeta.description,
-                                year: meta.cinemeta.year || meta.cinemeta.releaseInfo,
-                                type: meta.cinemeta.type,
-                                imdbId: idToUse,
-                                poster: meta.cinemeta.poster,
-                                omdb: meta.omdb
-                            });
-                        } else {
-                    const cmMeta = await fetchCinemetaMeta(idToUse, r.type || 'movie');
-                    if (cmMeta) {
-                        updatedRecommendations.push({
-                            title: cmMeta.name,
-                            originalTitle: cmMeta.name,
-                            description: cmMeta.description,
-                            year: cmMeta.year || cmMeta.releaseInfo,
-                            poster: cmMeta.poster,
-                            rating: cmMeta.imdbRating,
-                            category: cmMeta.genre ? cmMeta.genre.join(', ') : '',
-                            duration: cmMeta.runtime,
-                            type: cmMeta.type || 'movie',
-                            imdb_id: idToUse
-                        });
-                    }
-                }
-            }
-        }
-
-        // Append to processed recs and update DB
-        processedRecs = [...processedRecs, ...updatedRecommendations];
-        await pool.query('UPDATE recommendation_cache SET recommendations = $1 WHERE id = $2', [JSON.stringify(processedRecs), cacheId]);
-
+        // Since all 15 recommendations are already resolved and cached in processedRecs on the initial call,
+        // we can simply return the sliced segment from the cache. This is fast and prevents duplicates.
+        const slicedRecs = processedRecs.slice(offset, offset + 5);
+        
         res.json({
-            recommendations: updatedRecommendations,
+            recommendations: slicedRecs,
             hasMore: offset + 5 < rawRecs.length,
             totalCached: rawRecs.length
         });
@@ -1441,7 +1450,7 @@ app.get('/api/watchlist', async (req, res) => {
     
     try {
         const result = await pool.query(
-            `SELECT * FROM user_watchlist WHERE user_id = $1 ORDER BY created_at DESC`,
+            `SELECT id, imdb_id, title, original_title, year, type, rating, duration, category, trailer_yt_id, poster, created_at FROM user_watchlist WHERE user_id = $1 ORDER BY created_at DESC LIMIT 50`,
             [req.session.userId]
         );
         console.log('[WATCHLIST API] Returning rows:', result.rows.length);
@@ -1459,6 +1468,12 @@ app.get('/api/details/:type/:id', async (req, res) => {
         const id = req.params.id; // IMDb ID
         const lang = req.query.lang || 'en';
 
+        // Verificação de Títulos Bloqueados por DMCA (Notice and Takedown)
+        const blacklistCheck = await pool.query('SELECT 1 FROM blacklisted_titles WHERE imdb_id = $1', [id]);
+        if (blacklistCheck.rows.length > 0) {
+            return res.status(403).json({ success: false, blacklisted: true, error: 'Este título foi removido a pedido dos detentores de direitos de autor.' });
+        }
+
         const meta = await fetchAndCacheMetadata(id, type, lang);
         if (!meta || (!meta.tmdb && !meta.cinemeta)) {
             return res.status(404).json({ error: 'Movie metadata not found' });
@@ -1469,6 +1484,7 @@ app.get('/api/details/:type/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 // SAME-ORIGIN CINEMETA PROXY ENDPOINTS
 app.get('/api/proxy/catalog/:type/:query', async (req, res) => {
@@ -1551,6 +1567,7 @@ app.get('/api/trending', async (req, res) => {
             return new Promise((resolve) => {
                 const url = `https://cinemeta-catalogs.strem.io/top/catalog/${type}/top.json`;
                 const reqHttps = https.get(url, (resHttps) => {
+                    resHttps.setEncoding('utf8');
                     let body = '';
                     resHttps.on('data', chunk => body += chunk);
                     resHttps.on('end', () => {
@@ -1573,7 +1590,7 @@ app.get('/api/trending', async (req, res) => {
                 });
                 reqHttps.on('error', () => resolve([]));
                 reqHttps.setTimeout(2500, () => {
-                    reqHttps.abort();
+                    reqHttps.destroy(new Error('Timeout'));
                     resolve([]);
                 });
             });
@@ -1637,6 +1654,7 @@ async function prewarmTrendingCache() {
     try {
         const res = await new Promise(resolve => {
             https.get('https://cinemeta-catalogs.strem.io/top/catalog/movie/top.json', (r) => {
+                r.setEncoding('utf8');
                 let body = '';
                 r.on('data', chunk => body += chunk);
                 r.on('end', () => resolve(JSON.parse(body)));
@@ -1679,12 +1697,329 @@ async function prewarmTrendingCache() {
     }
 }
 
+const activeStreamSessions = new Map();
+
+// Periodic GC to prevent memory leaks from abandoned stream sessions
+setInterval(() => {
+    const now = Date.now();
+    for (const [userId, sessions] of activeStreamSessions.entries()) {
+        const cleanSessions = sessions.filter(s => now - s.lastActive < 2 * 60 * 1000);
+        if (cleanSessions.length === 0) {
+            activeStreamSessions.delete(userId);
+        } else {
+            activeStreamSessions.set(userId, cleanSessions);
+        }
+    }
+}, 5 * 60 * 1000); // Sweep every 5 mins
+
+app.post('/api/stream/progress', async (req, res) => {
+    if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const { imdb_id, media_type, season, episode, progress_seconds, duration_seconds } = req.body;
+        
+        // Validação estrita
+        if (!imdb_id || typeof imdb_id !== 'string') {
+            return res.status(400).json({ error: 'IMDb ID inválido.' });
+        }
+        if (media_type !== 'movie' && media_type !== 'series') {
+            return res.status(400).json({ error: 'Tipo de média inválido.' });
+        }
+        
+        const prog = parseInt(progress_seconds, 10);
+        const dur = parseInt(duration_seconds, 10);
+        
+        if (isNaN(prog) || prog < 0 || isNaN(dur) || dur <= 0 || prog > dur) {
+            return res.status(400).json({ error: 'Valores de tempo/duração de progresso inválidos.' });
+        }
+
+        const seas = season !== undefined && season !== null ? parseInt(season, 10) : null;
+        const epis = episode !== undefined && episode !== null ? parseInt(episode, 10) : null;
+
+        if (media_type === 'series') {
+            if (seas === null || isNaN(seas) || seas < 0 || epis === null || isNaN(epis) || epis < 0) {
+                return res.status(400).json({ error: 'Temporada e episódio são obrigatórios para séries.' });
+            }
+        } else {
+            if (seas !== null || epis !== null) {
+                return res.status(400).json({ error: 'Temporada e episódio não devem ser enviados para filmes.' });
+            }
+        }
+
+        // Validação de Concorrência e Antipartilha de Contas (In-Memory IP Tracker)
+        const ip = req.ip || req.connection.remoteAddress;
+        const now = Date.now();
+        const userSessionKey = req.session.userId;
+        const sessionInfo = activeStreamSessions.get(userSessionKey) || [];
+        
+        // Limpar sessões com mais de 2 minutos de inatividade
+        const cleanSessions = sessionInfo.filter(s => now - s.lastActive < 2 * 60 * 1000);
+        const currentIpSession = cleanSessions.find(s => s.ip === ip);
+        if (currentIpSession) {
+            currentIpSession.lastActive = now;
+        } else {
+            cleanSessions.push({ ip, lastActive: now });
+        }
+        activeStreamSessions.set(userSessionKey, cleanSessions);
+
+        // Se houver mais de 2 IPs ativos simultaneamente na mesma conta
+        if (cleanSessions.length > 2) {
+            return res.status(403).json({ error: 'Partilha de conta ativa detetada. Acesso simultâneo limitado.' });
+        }
+
+        // Lógica de "Fim de Filme/Série" (marcar como completo a 60 segundos do fim)
+        let savedProgress = prog;
+        if (dur - prog < 60) {
+            savedProgress = dur;
+        }
+
+        // Upsert no DB
+        await pool.query(`
+            INSERT INTO user_history (user_id, imdb_id, media_type, season, episode, progress_seconds, duration_seconds, updated_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
+            ON CONFLICT (user_id, imdb_id, season, episode) DO UPDATE SET
+            progress_seconds = EXCLUDED.progress_seconds,
+            duration_seconds = EXCLUDED.duration_seconds,
+            updated_at = CURRENT_TIMESTAMP
+        `, [req.session.userId, imdb_id, media_type, seas, epis, savedProgress, dur]);
+
+        res.json({ success: true, progress_saved: savedProgress });
+    } catch(e) {
+        console.error("Error saving stream progress:", e);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// --- STREAM RESOLVER & PROXY ENDPOINTS (SOLUÇÃO A) ---
+const hmacKey = process.env.STREAM_HMAC_KEY || 'cinematch_stream_secret_2026';
+
+function decodeToUtf8(buffer) {
+    if (buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
+        return buffer.toString('utf8', 3);
+    }
+    const str = buffer.toString('utf8');
+    const hasInvalid = /[\ufffd]/.test(str);
+    if (hasInvalid) {
+        return decodeWindows1252(buffer);
+    }
+    return str;
+}
+
+function decodeWindows1252(buffer) {
+    let result = '';
+    for (let i = 0; i < buffer.length; i++) {
+        const charCode = buffer[i];
+        if (charCode < 0x80) {
+            result += String.fromCharCode(charCode);
+        } else {
+            const map = {
+                0xE1: 'á', 0xE9: 'é', 0xED: 'í', 0xF3: 'ó', 0xFA: 'ú',
+                0xE2: 'â', 0xEA: 'ê', 0xF4: 'ô',
+                0xE0: 'à', 0xE8: 'è',
+                0xE3: 'ã', 0xF5: 'õ',
+                0xE7: 'ç', 0xC7: 'Ç',
+                0xC1: 'Á', 0xC9: 'É', 0xCD: 'Í', 0xD3: 'Ó', 0xDA: 'Ú',
+                0xC2: 'Â', 0xCA: 'Ê', 0xD4: 'Ô',
+                0xC3: 'Ã', 0xD5: 'Õ'
+            };
+            result += map[charCode] || String.fromCharCode(charCode);
+        }
+    }
+    return result;
+}
+
+const tmdbToImdbCache = new Map();
+
+async function resolveImdbIdFromTmdb(tmdbId, type) {
+    if (!tmdbId) return null;
+    const apiKey = process.env.TMDB_API_KEY || 'a371649908276cdfd4448c0585638a77';
+    const tmdbType = (type === 'series' || type === 'tv') ? 'tv' : 'movie';
+    const url = `https://api.themoviedb.org/3/${tmdbType}/${tmdbId}/external_ids?api_key=${apiKey}`;
+
+    return new Promise((resolve) => {
+        const req = https.get(url, (res) => {
+            res.setEncoding('utf8');
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => {
+                try {
+                    const data = JSON.parse(body);
+                    resolve(data.imdb_id || null);
+                } catch(e) {
+                    resolve(null);
+                }
+            });
+        });
+        req.on('error', () => resolve(null));
+        req.setTimeout(3000, () => {
+            req.destroy();
+            resolve(null);
+        });
+    });
+}
+
+app.post('/api/stream/resolve', async (req, res) => {
+    if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const { imdbId, type, season, episode, tmdbId, serverProvider } = req.body;
+        if (!imdbId && !tmdbId) return res.status(400).json({ error: 'IMDb ID or TMDB ID is required' });
+
+        const mediaType = type === 'series' || type === 'tv' ? 'tv' : 'movie';
+        const clientIp = req.ip || req.connection.remoteAddress;
+
+        // Limite de ecrãs simultâneos de sessão VIP (2 ecrãs max)
+        const userSessionKey = req.session.userId;
+        const sessionInfo = activeStreamSessions.get(userSessionKey) || [];
+        const now = Date.now();
+        const cleanSessions = sessionInfo.filter(s => now - s.lastActive < 2 * 60 * 1000);
+        if (cleanSessions.length >= 2) {
+            const currentIpSession = cleanSessions.find(s => s.ip === clientIp);
+            if (!currentIpSession) {
+                return res.status(403).json({ error: 'Limite de ecrãs simultâneos atingido (máximo 2 dispositivos).' });
+            }
+        }
+
+        let resolvedImdbId = imdbId;
+        let resolvedTmdbId = tmdbId;
+
+        // Fallback resolution logic to convert TMDB to IMDB if necessary
+        if (!resolvedImdbId && resolvedTmdbId) {
+            if (tmdbToImdbCache.has(resolvedTmdbId)) {
+                resolvedImdbId = tmdbToImdbCache.get(resolvedTmdbId);
+            } else {
+                resolvedImdbId = await resolveImdbIdFromTmdb(resolvedTmdbId, mediaType);
+                if (resolvedImdbId) {
+                    tmdbToImdbCache.set(resolvedTmdbId, resolvedImdbId);
+                }
+            }
+        }
+
+        // Obter TMDB ID para o VidLink
+        if (!resolvedTmdbId && resolvedImdbId) {
+            const meta = await fetchAndCacheMetadata(resolvedImdbId, mediaType, 'en');
+            if (meta && meta.tmdb) {
+                resolvedTmdbId = meta.tmdb.id;
+            }
+        }
+
+        // Definir as cores do CineMatch (Sky-500 para primário, Slate-900 para secundário)
+        const primaryColor = '0ea5e9';
+        const secondaryColor = '0f172a';
+
+        let iframeUrl = '';
+        if (serverProvider === 'autoembed' || !resolvedTmdbId) {
+            const embedId = resolvedImdbId || resolvedTmdbId;
+            if (mediaType === 'tv') {
+                iframeUrl = `https://player.autoembed.co/embed/tv/${embedId}/${season || 1}/${episode || 1}`;
+            } else {
+                iframeUrl = `https://player.autoembed.co/embed/movie/${embedId}`;
+            }
+        } else {
+            if (mediaType === 'tv') {
+                iframeUrl = `https://vidlink.pro/tv/${resolvedTmdbId}?s=${season || 1}&e=${episode || 1}&primaryColor=${primaryColor}&secondaryColor=${secondaryColor}&icons=vid&autoplay=true`;
+            } else {
+                iframeUrl = `https://vidlink.pro/movie/${resolvedTmdbId}?primaryColor=${primaryColor}&secondaryColor=${secondaryColor}&icons=vid&autoplay=true`;
+            }
+        }
+
+        res.json({
+            success: true,
+            type: 'iframe',
+            url: iframeUrl,
+            fallbackUrl: iframeUrl
+        });
+    } catch (e) {
+        console.error("Error in stream resolver:", e);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.get('/api/proxy/subtitles', async (req, res) => {
+    const subUrl = req.query.url;
+    if (!subUrl) return res.status(400).send('No subtitle URL provided');
+    try {
+        const decodedUrl = Buffer.from(subUrl, 'base64').toString('utf-8');
+        https.get(decodedUrl, (subRes) => {
+            let chunks = [];
+            subRes.on('data', chunk => chunks.push(chunk));
+            subRes.on('end', () => {
+                const buffer = Buffer.concat(chunks);
+                const rawText = decodeToUtf8(buffer);
+                let vttText = rawText;
+                if (decodedUrl.endsWith('.srt') || !rawText.startsWith('WEBVTT')) {
+                    vttText = 'WEBVTT\n\n' + rawText
+                        .replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2')
+                        .replace(/^\d+$/gm, '');
+                }
+                res.setHeader('Content-Type', 'text/vtt; charset=utf-8');
+                res.send(vttText);
+            });
+        }).on('error', (e) => {
+            res.status(500).send('Error fetching subtitles');
+        });
+    } catch (e) {
+        res.status(500).send('Server error');
+    }
+});
+
+app.get('/api/stream/resume/:imdb_id', async (req, res) => {
+    if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const imdb_id = req.params.imdb_id;
+        const season = req.query.season !== undefined && req.query.season !== '' ? parseInt(req.query.season, 10) : null;
+        const episode = req.query.episode !== undefined && req.query.episode !== '' ? parseInt(req.query.episode, 10) : null;
+        
+        let query = 'SELECT progress_seconds, duration_seconds FROM user_history WHERE user_id = $1 AND imdb_id = $2';
+        let params = [req.session.userId, imdb_id];
+        
+        if (season !== null && !isNaN(season) && episode !== null && !isNaN(episode)) {
+            query += ' AND season = $3 AND episode = $4';
+            params.push(season, episode);
+        } else {
+            query += ' AND season IS NULL AND episode IS NULL';
+        }
+        
+        const result = await pool.query(query, params);
+        if (result.rows.length > 0) {
+            const row = result.rows[0];
+            // Se o progresso salvo estiver no fim do vídeo, iniciamos do zero
+            if (row.progress_seconds >= row.duration_seconds) {
+                return res.json({ success: true, progress_seconds: 0, duration_seconds: row.duration_seconds, watched: true });
+            }
+            return res.json({ success: true, progress_seconds: row.progress_seconds, duration_seconds: row.duration_seconds, watched: false });
+        }
+        
+        res.json({ success: true, progress_seconds: 0, duration_seconds: 0, watched: false });
+    } catch (e) {
+        console.error("Error checking resume progress:", e);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.get('/api/stream/continue-watching', async (req, res) => {
+    if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const result = await pool.query(`
+            SELECT imdb_id, media_type, season, episode, progress_seconds, duration_seconds, updated_at
+            FROM user_history
+            WHERE user_id = $1 AND progress_seconds < (duration_seconds - 60)
+            ORDER BY updated_at DESC
+            LIMIT 15
+        `, [req.session.userId]);
+        
+        res.json({ success: true, list: result.rows });
+    } catch (e) {
+        console.error("Continue watching list error:", e);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Call prewarm on startup
 prewarmTrendingCache();
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
 
 
 

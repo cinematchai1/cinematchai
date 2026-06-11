@@ -9,6 +9,27 @@
     <link rel="manifest" href="/manifest.json">
     <title>CineMatch AI | Premium Movie Recommendations</title>
     
+    <!-- SEO & Premium Social Sharing Meta Tags (OpenGraph & Twitter Cards) -->
+    <meta name="description" content="Descubra a sua próxima obsessão cinematográfica com o CineMatch AI. Recomendações ultra-personalizadas, watchlists privadas e partilha social elegante alimentada por inteligência artificial avançada.">
+    <meta name="keywords" content="cinematch, cinematch ai, recomendações de filmes, inteligência artificial, watchlist, partilha de filmes, cinema, séries">
+    <meta name="author" content="CineMatch AI Team">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://116.203.230.103/">
+    <meta property="og:title" content="CineMatch AI | Recomendações de Filmes de Alta Costura">
+    <meta property="og:description" content="Descubra filmes e séries com recomendações ultra-personalizadas por Inteligência Artificial. Crie e partilhe as suas watchlists privadas instantaneamente.">
+    <meta property="og:image" content="http://116.203.230.103/assets/og-image.png">
+    <meta property="og:locale" content="pt_PT">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="http://116.203.230.103/">
+    <meta name="twitter:title" content="CineMatch AI | Recomendações de Filmes de Alta Costura">
+    <meta name="twitter:description" content="Descubra filmes e séries com recomendações ultra-personalizadas por Inteligência Artificial. Crie e partilhe as suas watchlists privadas instantaneamente.">
+    <meta name="twitter:image" content="http://116.203.230.103/assets/og-image.png">
+    
     <!-- Network Handshakes & Preloads -->
     <link rel="preconnect" href="https://images.metahub.space" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +49,10 @@
       }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Plyr & Hls.js Assets for Custom Video Player -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root {
             --accent-rgb: 56, 189, 248; /* default sky-400 */
@@ -126,7 +151,40 @@
             overscroll-behavior: none;
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
+            letter-spacing: -0.011em;
         }
+
+        /* --- Alta Costura Typography --- */
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Outfit', sans-serif !important;
+            letter-spacing: -0.03em !important;
+            font-weight: 700;
+        }
+        
+        p, .font-sans {
+            font-family: 'Inter', sans-serif !important;
+            letter-spacing: -0.011em !important;
+            line-height: 1.625 !important;
+        }
+
+        /* --- Premium Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 9999px;
+            border: 2px solid #090a0f;
+            transition: all 0.2s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(var(--accent-rgb), 0.4);
+        }
+        /* ------------------------------- */
 
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
@@ -352,103 +410,26 @@
         
         <!-- Animated Cinematic Background -->
         <div id="dynamic-bg" class="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <!-- Infinity Poster Wall Background (High-Res) -->
-            <div class="absolute top-28 left-0 right-0 flex justify-center gap-4 animate-scroll-posters opacity-30 scale-125 transform -rotate-3">
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0068646/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-            </div>
+            <!-- Deep Cinematic Radial Gradients -->
+            <div class="absolute inset-0 bg-[#0f1115]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(14,165,233,0.12),_transparent_45%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,_rgba(99,102,241,0.12),_transparent_45%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,_rgba(168,85,247,0.1),_transparent_50%)]"></div>
             
-            <div class="absolute top-[22rem] left-0 right-0 flex justify-center gap-4 animate-scroll-posters opacity-30 scale-125 transform -rotate-3" style="animation-direction: reverse; animation-duration: 45s;">
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0068646/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0068646/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-            </div>
-
-            <!-- Additional Rows to Fill the Background -->
-            <div class="absolute top-[36rem] left-0 right-0 flex justify-center gap-4 animate-scroll-posters opacity-30 scale-125 transform -rotate-3" style="animation-duration: 35s;">
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-            </div>
-
-            <div class="absolute top-[50rem] left-0 right-0 flex justify-center gap-4 animate-scroll-posters opacity-30 scale-125 transform -rotate-3" style="animation-direction: reverse; animation-duration: 40s;">
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0068646/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0068646/img" class="w-full h-full object-cover"></div>
-            </div>
-
-            <div class="absolute top-[64rem] left-0 right-0 flex justify-center gap-4 animate-scroll-posters opacity-30 scale-125 transform -rotate-3" style="animation-duration: 55s;">
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0109830/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0068646/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0816692/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt1375666/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0133093/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0468569/img" class="w-full h-full object-cover"></div>
-                <div class="w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden "><img loading="lazy" decoding="async" src="https://images.metahub.space/poster/small/tt0111161/img" class="w-full h-full object-cover"></div>
-            </div>
-
-            <!-- Heavy cinematic overlays & Glassmorphism Blur -->
-            <div class="absolute inset-0 bg-[#0f1115]/30 backdrop-blur-md z-10"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-[#0f1115]/5 via-[#0f1115]/80 to-[#0f1115]/95 z-10"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#0f1115]/30 to-[#0f1115]/90 z-10"></div>
-
-            <!-- Animated Orbs for subtle color -->
-            <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-sky-500/15 rounded-full mix-blend-screen filter blur-3xl opacity-60 animate-blob z-20"></div>
-            <div class="absolute top-1/3 right-1/4 w-72 h-72 bg-indigo-500/15 rounded-full mix-blend-screen filter blur-3xl opacity-60 animate-blob animation-delay-2000 z-20"></div>
-            <div class="absolute -bottom-8 left-1/3 w-72 h-72 bg-purple-500/15 rounded-full mix-blend-screen filter blur-3xl opacity-60 animate-blob animation-delay-4000 z-20"></div>
+            <!-- Animated High-Performance Ambient Orbs -->
+            <div class="absolute top-1/4 left-1/4 w-[35rem] h-[35rem] bg-sky-500/10 rounded-full mix-blend-screen filter blur-[80px] opacity-70 animate-blob z-10 will-change-transform"></div>
+            <div class="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full mix-blend-screen filter blur-[90px] opacity-70 animate-blob animation-delay-2000 z-10 will-change-transform"></div>
+            <div class="absolute bottom-10 left-1/3 w-[35rem] h-[35rem] bg-purple-500/10 rounded-full mix-blend-screen filter blur-[80px] opacity-70 animate-blob animation-delay-4000 z-10 will-change-transform"></div>
+            
+            <!-- Cinematic Vignette -->
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0f1115]/5 via-[#0f1115]/75 to-[#0f1115] z-20"></div>
         </div>
 
         <!-- Hero Section -->
-        <div id="hero-header" class="text-center mb-8 mt-12 md:mt-24 w-full max-w-4xl animate-fade-in-up transition-all duration-500 relative z-10 flex flex-col items-center">
-            
-            <!-- Metallic/Brilliant gradient Title -->
-            <h1 id="hero-title" class="font-display text-5xl md:text-7xl font-extrabold mb-5 tracking-tight leading-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-slate-200 to-slate-500 drop-shadow-lg">
-                Your Personal AI Film Curator
-            </h1>
-            <p id="hero-subtitle" class="text-lg md:text-xl text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed drop-shadow">
-                Search for a movie or series to watch instantly, or let us find your next favorite.
+        <div id="hero-wrapper" class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center mt-12 md:mt-20 lg:mt-32 pb-24 fade-in transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]">
+            <h1 id="hero-title" class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-sky-400 mb-6 drop-shadow-lg leading-tight tracking-tight transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]">CineMatch <span class="text-sky-400">AI</span></h1>
+            <p id="hero-subtitle" class="text-lg md:text-xl text-slate-300 font-light max-w-2xl mx-auto tracking-wide drop-shadow-md transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden max-h-40">
+                Search by title, actor, director, or mood. Let us find your next favorite watch.
             </p>
         </div>
 
@@ -459,7 +440,7 @@
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
-                    <input type="text" id="movie-input" autocomplete="new-password" data-lpignore="true" name="search_query_new" placeholder="e.g. Inception, The Matrix..." required class="w-full bg-slate-900/40 border border-slate-700/50 rounded-lg pl-11 pr-4 py-3.5 text-base focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all placeholder-slate-500 text-white shadow-inner">
+                    <input type="text" id="movie-input" autocomplete="new-password" data-lpignore="true" name="search_query_new" placeholder="e.g. Inception, Christopher Nolan, Space Movies..." required class="w-full bg-slate-900/40 border border-slate-700/50 rounded-lg pl-11 pr-4 py-3.5 text-base focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-all placeholder-slate-500 text-white shadow-inner">
                 </div>
                 <div class="flex gap-2">
                     <button type="button" id="toggle-settings-btn" class="bg-slate-800/60 hover:bg-slate-700 border border-slate-700/60 text-slate-300 hover:text-white rounded-lg p-3.5 transition-all flex items-center justify-center shadow-md">
@@ -620,7 +601,7 @@
         <div id="reference-movie-container" class="w-full max-w-6xl mb-4 opacity-0 transition-opacity duration-700 hidden-section flex flex-col items-center"></div>
 
         <!-- Results Section -->
-        <div id="results-container" class="w-full max-w-6xl flex flex-wrap justify-center gap-5 opacity-0 transition-opacity duration-700 hidden-section"></div>
+        <div id="results-container" class="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 opacity-0 transition-opacity duration-700 hidden-section"></div>
         
         <!-- Load More Section -->
         <div id="load-more-container" class="w-full max-w-6xl flex justify-center mt-6 mb-12 hidden opacity-0 transition-opacity duration-500 hidden-section">
@@ -898,14 +879,10 @@
                     </div>
                     <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                         <div class="flex flex-col items-center gap-3">
-                            <div class="relative w-24 h-24 rounded-full border-2 border-slate-700 bg-slate-800 overflow-hidden flex items-center justify-center shadow-lg group">
+                            <div class="relative w-24 h-24 rounded-full border-2 border-slate-700 bg-slate-800 overflow-hidden flex items-center justify-center shadow-lg">
                                 <img loading="lazy" decoding="async" id="prof-avatar-preview" src="" class="w-full h-full object-cover hidden">
                                 <div id="prof-avatar-initials" class="w-full h-full flex items-center justify-center text-3xl font-bold text-white bg-gradient-to-br from-slate-700 to-slate-900 hidden"></div>
-                                <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" onclick="document.getElementById('prof-avatar-upload').click()">
-                                    <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                </div>
                             </div>
-                            <input type="file" id="prof-avatar-upload" accept="image/*" class="hidden" onchange="handleAvatarUpload(this.files)">
                         </div>
                         <div class="flex-1 flex flex-col gap-4 w-full">
                             <div>
@@ -1043,13 +1020,21 @@
             
             <div class="relative flex py-2 items-center mb-4">
                 <div class="flex-grow border-t border-slate-700/60"></div>
-                <span class="flex-shrink-0 mx-4 text-slate-500 text-[10px] uppercase tracking-widest font-bold" id="lbl-or">or</span>
+                <span class="flex-grow-0 mx-4 text-slate-500 text-[10px] uppercase tracking-widest font-bold" id="lbl-or">or</span>
                 <div class="flex-grow border-t border-slate-700/60"></div>
             </div>
             
             <form id="login-form" action="/api/login" method="POST" class="flex flex-col gap-3">
                 <input type="text" id="login-user" name="username" placeholder="Username" required autocomplete="username" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
-                <input type="password" id="login-pass" name="password" placeholder="Password" required autocomplete="current-password" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                <div class="relative w-full">
+                    <input type="password" id="login-pass" name="password" placeholder="Password" required autocomplete="current-password" class="bg-slate-900 border border-slate-700/60 rounded-lg pl-4 pr-10 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                    <button type="button" onclick="window.togglePasswordVisibility('login-pass', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white focus:outline-none">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
                 <div class="text-right mt-1 mb-2">
                     <button type="button" id="forgot-password-link" onclick="openForgotPasswordModal()" class="text-[11px] font-medium text-sky-400 hover:text-sky-300">Esqueceste-te da password?</button>
                 </div>
@@ -1059,7 +1044,15 @@
             </form>
             <form id="register-form" action="/api/register" method="POST" class="flex flex-col gap-3 hidden">
                 <input type="text" id="register-user" name="username" placeholder="Username" required autocomplete="username" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
-                <input type="password" id="register-pass" name="password" placeholder="Password" required autocomplete="new-password" class="bg-slate-900 border border-slate-700/60 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                <div class="relative w-full">
+                    <input type="password" id="register-pass" name="password" placeholder="Password" required autocomplete="new-password" class="bg-slate-900 border border-slate-700/60 rounded-lg pl-4 pr-10 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-sky-500 text-white w-full">
+                    <button type="button" onclick="window.togglePasswordVisibility('register-pass', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white focus:outline-none">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
                 <button type="submit" class="mt-2 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg px-4 py-2.5 text-sm transition-all shadow-md w-full">
                     <span id="register-btn-text">Register</span>
                 </button>
@@ -1070,7 +1063,7 @@
 
     <!-- Trailer Modal -->
     <div id="trailer-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay p-0 md:p-4">
-        <div class="glass-panel p-0 md:p-2 w-full max-w-4xl modal-content relative bg-black md:bg-[#0f1115]/95 border-none md:border md:border-slate-700 rounded-none md:rounded-2xl overflow-hidden aspect-video md:aspect-auto">
+        <div class="glass-panel p-0 md:p-2 w-full max-w-4xl modal-content relative bg-black md:bg-[#0f1115]/95 border-none md:border md:border-slate-700 rounded-none md:rounded-2xl overflow-hidden aspect-video">
             <button id="close-trailer-modal" onclick="closeTrailer()" class="absolute top-4 right-4 text-slate-300 hover:text-white text-3xl leading-none z-50 bg-black/60 hover:bg-black/80 rounded-full w-12 h-12 flex items-center justify-center transition-colors">&times;</button>
             <div class="w-full h-full relative z-10" id="trailer-player-container">
                 <div id="yt-player-placeholder" class="w-full h-full rounded-lg bg-slate-950"></div>
@@ -1078,8 +1071,70 @@
         </div>
     </div>
 
+    <!-- Embedded Player Modal -->
+    <div id="player-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden p-0 md:p-4 bg-black/95">
+        <div class="glass-panel p-0 w-full h-full md:max-w-5xl modal-content relative bg-black md:bg-[#0f1115]/95 border-none md:border md:border-slate-800 rounded-none md:rounded-2xl overflow-hidden flex flex-col">
+            <!-- Header bar with Title, Server selection, and Close button -->
+            <div class="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900/60 backdrop-blur z-20">
+                <div class="flex flex-col gap-1 max-w-[60%] md:max-w-[70%]">
+                    <h3 id="player-title" class="text-sm md:text-base font-bold text-white truncate">CineMatch Player</h3>
+                    <!-- Episode selector container for series -->
+                    <div id="player-episode-selector-container" class="hidden flex items-center gap-2 mt-1">
+                        <select id="player-season-select" class="bg-slate-800 border border-slate-700 text-white rounded px-2 py-0.5 text-xs focus:outline-none"></select>
+                        <select id="player-episode-select" class="bg-slate-800 border border-slate-700 text-white rounded px-2 py-0.5 text-xs focus:outline-none"></select>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Server selector -->
+                    <select id="player-server-select" class="bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-sky-500 font-medium">
+                        <option value="autoembed">Server 1 (AutoEmbed VIP)</option>
+                        <option value="vidsrcto">Server 2 (VidSrc TO)</option>
+                        <option value="vidsrcme">Server 3 (VidSrc ME)</option>
+                        <option value="embedsu">Server 4 (VidLink)</option>
+                        <option value="superembed">Server 5 (SuperEmbed Fallback)</option>
+                        <option value="smashy">Server 6 (SmashyStream)</option>
+                    </select>
+                    <!-- Close button -->
+                    <button onclick="closePlayerModal()" class="text-slate-400 hover:text-white text-2xl leading-none bg-slate-800 hover:bg-slate-750 rounded-full w-8 h-8 flex items-center justify-center transition-colors">&times;</button>
+                </div>
+            </div>
 
-    
+            <!-- Player Content Area -->
+            <div class="flex-grow relative bg-black w-full h-full flex items-center justify-center overflow-hidden">
+                <!-- Ambilight Canvas Background Glow -->
+                <canvas id="player-ambilight-canvas" class="absolute pointer-events-none opacity-25 filter blur-[100px] scale-110 z-0 w-full h-full transition-all duration-700"></canvas>
+
+                <!-- Dynamic Iframe (Sandbox restricted) -->
+                <iframe id="movie-player-iframe" class="w-full h-full border-none hidden z-10" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock" allowfullscreen referrerpolicy="no-referrer"></iframe>
+
+                <!-- Custom Native Video Element (Plyr) -->
+                <div id="movie-player-video-container" class="w-full h-full hidden z-10 relative">
+                    <video id="movie-player-video" class="w-full h-full" playsinline controls></video>
+                </div>
+
+                <!-- Loading Placeholder / Spinner ("Cold Start" & Telemetry feedback) -->
+                <div id="player-loading-placeholder" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-950 z-10 transition-opacity duration-300">
+                    <div class="relative w-16 h-16 mb-4">
+                        <!-- Dual spinner circles -->
+                        <div class="absolute inset-0 border-4 border-sky-500/20 rounded-full"></div>
+                        <div class="absolute inset-0 border-4 border-t-sky-500 rounded-full animate-spin"></div>
+                    </div>
+                    <h4 class="text-base font-bold text-white mb-2" id="player-loading-title">CineMatch AI Stream</h4>
+                    <p class="text-xs text-slate-400 max-w-xs transition-all duration-500" id="player-loading-status">A ligar ao servidor de vídeo...</p>
+                </div>
+
+                <!-- Subtitle sync overlay/slider control -->
+                <div id="player-subtitle-sync" class="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-slate-900/90 border border-slate-800 rounded-full text-white text-xs flex items-center gap-3 backdrop-blur z-20 shadow-xl opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity duration-300">
+                    <span class="font-medium text-slate-300">Legendas:</span>
+                    <button onclick="adjustSubtitleOffset(-0.5)" class="bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-bold">-0.5s</button>
+                    <span id="player-sub-offset-val" class="font-mono bg-slate-950 px-2 py-0.5 rounded border border-slate-850">0.0s</span>
+                    <button onclick="adjustSubtitleOffset(0.5)" class="bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-bold">+0.5s</button>
+                    <button onclick="resetSubtitleOffset()" class="text-slate-400 hover:text-white underline text-[10px]">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast-notification" class="fixed bottom-4 right-4 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-lg shadow-xl translate-y-[150%] transition-transform duration-300 z-50 flex items-center gap-3">
         <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -1087,6 +1142,737 @@
     </div>
 
     <script>
+        // Global Telemetry error reporting
+        window.addEventListener('error', (e) => {
+            alert("Erro Cliente: " + e.message + "\nEm: " + e.filename + ":" + e.lineno);
+            fetch('/api/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    event: 'UNCAUGHT_ERROR',
+                    message: e.message,
+                    stack: e.error ? e.error.stack : null,
+                    url: window.location.href
+                })
+            }).catch(() => {});
+        });
+
+        window.addEventListener('unhandledrejection', (e) => {
+            alert("Erro Promessa: " + e.reason);
+            fetch('/api/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    event: 'UNHANDLED_REJECTION',
+                    message: String(e.reason),
+                    stack: e.reason ? e.reason.stack : null,
+                    url: window.location.href
+                })
+            }).catch(() => {});
+        });
+
+        // Embedded Player State & Syncing
+        let activeMovieData = null;
+        let localPlaybackTime = 0;
+        let lastLoggedProgress = 0;
+        let playerTimer = null;
+        let statusCycleInterval = null;
+
+        // Message Listener for postMessage events from embeds (VidSrc/Embed.su)
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            if (data && typeof data === 'object') {
+                const time = data.time || data.currentTime || data.seconds || data.progress;
+                const duration = data.duration || data.totalTime;
+                if (time !== undefined && duration !== undefined && !isNaN(time) && !isNaN(duration)) {
+                    localPlaybackTime = parseFloat(time);
+                    if (activeMovieData) {
+                        activeMovieData.duration = parseFloat(duration);
+                    }
+                    saveLocalProgress(localPlaybackTime, activeMovieData.duration);
+                }
+            }
+        });
+
+        function saveLocalProgress(progress, duration) {
+            if (!activeMovieData) return;
+            const key = `progress_${activeMovieData.imdbId}_s${activeMovieData.season || 0}_e${activeMovieData.episode || 0}`;
+            localStorage.setItem(key, JSON.stringify({
+                progress: progress,
+                duration: duration,
+                timestamp: Date.now()
+            }));
+            
+            // Sync with server every 3 minutes
+            const now = Date.now();
+            if (now - lastLoggedProgress > 3 * 60 * 1000) {
+                syncProgressWithServer(progress, duration);
+            }
+        }
+
+        async function syncProgressWithServer(progress, duration) {
+            if (!activeMovieData) return;
+            lastLoggedProgress = Date.now();
+            
+            const payload = {
+                imdb_id: activeMovieData.imdbId,
+                media_type: activeMovieData.type,
+                season: activeMovieData.season,
+                episode: activeMovieData.episode,
+                progress_seconds: Math.round(progress),
+                duration_seconds: Math.round(duration || 3600)
+            };
+
+            try {
+                const res = await fetch('/api/stream/progress', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.status === 403) {
+                    const data = await res.json();
+                    showToast(data.error || 'Acesso simultâneo excedido.', true);
+                }
+            } catch (e) {
+                console.error("Failed to sync progress with database:", e);
+            }
+        }
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden' && activeMovieData && localPlaybackTime > 0) {
+                syncProgressWithServer(localPlaybackTime, activeMovieData.duration);
+            }
+        });
+
+        window.addEventListener('beforeunload', function() {
+            if (activeMovieData && localPlaybackTime > 0) {
+                const payload = JSON.stringify({
+                    imdb_id: activeMovieData.imdbId,
+                    media_type: activeMovieData.type,
+                    season: activeMovieData.season,
+                    episode: activeMovieData.episode,
+                    progress_seconds: Math.round(localPlaybackTime),
+                    duration_seconds: Math.round(activeMovieData.duration || 3600)
+                });
+                navigator.sendBeacon('/api/stream/progress', payload);
+            }
+        });
+
+        // Subtitle Sync Controls & Native Player Helpers (Solução A)
+        let plyrInstance = null;
+        let hlsInstance = null;
+        let ambilightInterval = null;
+        let subOffset = 0.0;
+
+        window.adjustSubtitleOffset = function(val) {
+            subOffset = parseFloat((subOffset + val).toFixed(1));
+            document.getElementById('player-sub-offset-val').textContent = (subOffset >= 0 ? '+' : '') + subOffset + 's';
+            
+            // Ajustar o tempo das legendas no player nativo
+            const videoEl = document.getElementById('movie-player-video');
+            if (videoEl && videoEl.textTracks) {
+                for (let i = 0; i < videoEl.textTracks.length; i++) {
+                    const track = videoEl.textTracks[i];
+                    if (track.cues) {
+                        for (let j = 0; j < track.cues.length; j++) {
+                            const cue = track.cues[j];
+                            cue.startTime += val;
+                            cue.endTime += val;
+                        }
+                    }
+                }
+            }
+
+            // Fallback para iframes externos
+            const iframe = document.getElementById('movie-player-iframe');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ event: 'adjustSubtitles', offset: subOffset }, '*');
+            }
+            showToast(`Desvio de legendas: ${subOffset}s`);
+        }
+
+        window.resetSubtitleOffset = function() {
+            subOffset = 0.0;
+            document.getElementById('player-sub-offset-val').textContent = '0.0s';
+            
+            // Repor tempos no player nativo
+            const videoEl = document.getElementById('movie-player-video');
+            if (videoEl && videoEl.textTracks && subOffset !== 0) {
+                for (let i = 0; i < videoEl.textTracks.length; i++) {
+                    const track = videoEl.textTracks[i];
+                    if (track.cues) {
+                        for (let j = 0; j < track.cues.length; j++) {
+                            const cue = track.cues[j];
+                            cue.startTime -= subOffset;
+                            cue.endTime -= subOffset;
+                        }
+                    }
+                }
+            }
+
+            const iframe = document.getElementById('movie-player-iframe');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ event: 'adjustSubtitles', offset: 0 }, '*');
+            }
+            showToast(`Desvio de legendas reposto.`);
+        }
+
+        function initializeNativePlayer(url, subtitles) {
+            const videoEl = document.getElementById('movie-player-video');
+            const videoContainer = document.getElementById('movie-player-video-container');
+            const iframe = document.getElementById('movie-player-iframe');
+            const placeholder = document.getElementById('player-loading-placeholder');
+
+            // Mostrar contentor de vídeo nativo, ocultar iframe
+            if (iframe) {
+                iframe.classList.add('hidden');
+                iframe.src = '';
+            }
+            if (videoContainer) videoContainer.classList.remove('hidden');
+
+            // Limpar legendas anteriores
+            if (videoEl) videoEl.innerHTML = '';
+
+            // Adicionar legendas dinâmicas
+            if (subtitles && subtitles.length > 0 && videoEl) {
+                subtitles.forEach((sub, i) => {
+                    const track = document.createElement('track');
+                    track.kind = 'subtitles';
+                    track.label = sub.label;
+                    track.srclang = sub.srclang || 'pt';
+                    track.src = sub.src;
+                    if (i === 0) track.default = true;
+                    videoEl.appendChild(track);
+                });
+            }
+
+            // Limpar instâncias antigas
+            if (plyrInstance) {
+                try { plyrInstance.destroy(); } catch(e) {}
+                plyrInstance = null;
+            }
+            if (hlsInstance) {
+                try { hlsInstance.destroy(); } catch(e) {}
+                hlsInstance = null;
+            }
+
+            const plyrControls = [
+                'play-large', 'play', 'progress', 'current-time', 'duration',
+                'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'
+            ];
+
+            if (Hls.isSupported() && videoEl) {
+                hlsInstance = new Hls();
+                hlsInstance.loadSource(url);
+                hlsInstance.attachMedia(videoEl);
+                hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+                    plyrInstance = new Plyr(videoEl, { controls: plyrControls });
+                    plyrInstance.play();
+                });
+            } else if (videoEl && videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+                videoEl.src = url;
+                plyrInstance = new Plyr(videoEl, { controls: plyrControls });
+                plyrInstance.play();
+            }
+
+            setupAmbilightGlow(videoEl);
+
+            if (placeholder) {
+                placeholder.style.opacity = '0';
+                setTimeout(() => {
+                    placeholder.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function setupAmbilightGlow(videoEl) {
+            const canvas = document.getElementById('player-ambilight-canvas');
+            if (!canvas || !videoEl) return;
+            const ctx = canvas.getContext('2d');
+            
+            if (ambilightInterval) clearInterval(ambilightInterval);
+            
+            ambilightInterval = setInterval(() => {
+                if (videoEl.paused || videoEl.ended) return;
+                try {
+                    ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+                } catch(e) {}
+            }, 200);
+        }
+
+
+        // Close Player Modal
+        window.closePlayerModal = function() {
+            if (activeMovieData && localPlaybackTime > 0) {
+                syncProgressWithServer(localPlaybackTime, activeMovieData.duration);
+            }
+
+            if (playerTimer) clearInterval(playerTimer);
+            if (statusCycleInterval) clearInterval(statusCycleInterval);
+            if (ambilightInterval) clearInterval(ambilightInterval);
+
+            // Destruir instâncias do Plyr e Hls
+            if (plyrInstance) {
+                try {
+                    plyrInstance.destroy();
+                } catch(e) {}
+                plyrInstance = null;
+            }
+            if (hlsInstance) {
+                try {
+                    hlsInstance.destroy();
+                } catch(e) {}
+                hlsInstance = null;
+            }
+
+            document.body.style.overflow = '';
+
+            const modal = document.getElementById('player-modal');
+            modal.classList.remove('active');
+            modal.classList.add('hidden');
+
+            const iframe = document.getElementById('movie-player-iframe');
+            iframe.src = '';
+            iframe.classList.add('hidden');
+
+            const videoContainer = document.getElementById('movie-player-video-container');
+            if (videoContainer) videoContainer.classList.add('hidden');
+            const videoEl = document.getElementById('movie-player-video');
+            if (videoEl) videoEl.src = '';
+
+            const placeholder = document.getElementById('player-loading-placeholder');
+            placeholder.classList.remove('hidden');
+            placeholder.style.opacity = '1';
+
+            // Clean watch params from URL search query
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.delete('watch');
+                urlParams.delete('season');
+                urlParams.delete('episode');
+                const newQuery = urlParams.toString();
+                window.history.replaceState({}, "", newQuery ? "?" + newQuery : window.location.pathname);
+            } catch(e) {
+                console.error("Error updating URL history on player close:", e);
+            }
+
+            activeMovieData = null;
+            localPlaybackTime = 0;
+        }
+
+        // Helper wrapper to open player from Base64 string (avoids quote clashes in inline onclick)
+        window.openEmbeddedPlayerFromB64 = function(b64) {
+            const allowedUsers = ['test', 'testvip', 'fjpp85@gmail.com'];
+            if (!allowedUsers.includes(currentUser)) {
+                showToast(currentLang === 'pt' ? "O leitor embutido ainda se encontra em construção. Utilize o botão 'Assistir no Flixmomo'." : "The embedded player is still under construction. Please use the 'Watch Now on Flixmomo' button.");
+                return;
+            }
+            try {
+                const movieObj = JSON.parse(decodeURIComponent(atob(b64)));
+                window.openEmbeddedPlayer(movieObj);
+            } catch(e) {
+                console.error("Error decoding base64 player payload:", e);
+                showToast("Erro ao iniciar o reprodutor.", true);
+            }
+        };
+
+        // Open Player Modal
+        window.openEmbeddedPlayer = async function(movieObj) {
+            try {
+                if (!movieObj) {
+                    throw new Error("Objeto de filme indefinido");
+                }
+                const meRes = await fetch('/api/me');
+                if (!meRes.ok) return showToast("Por favor, faça login para assistir.", true);
+                const meData = await meRes.json();
+                if (!meData.loggedIn) {
+                    showToast("Por favor, faça login para assistir.", true);
+                    if (typeof window.openAuthModal === 'function') window.openAuthModal();
+                    return;
+                }
+
+                document.body.style.overflow = 'hidden';
+                
+                // Map keys
+                let imdbId = null;
+                let tmdbId = null;
+
+                const possibleIds = [movieObj.imdbId, movieObj.imdb_id, movieObj.id, movieObj.tmdbId, movieObj.tmdb_id];
+                for (const id of possibleIds) {
+                    if (id) {
+                        const strId = String(id);
+                        if (strId.startsWith('tt')) {
+                            if (!imdbId) imdbId = strId;
+                        } else if (/^\d+$/.test(strId)) {
+                            if (!tmdbId) tmdbId = strId;
+                        }
+                    }
+                }
+
+                if (!imdbId && !tmdbId) {
+                    throw new Error("Nenhum ID (IMDb ou TMDb) fornecido no payload do filme");
+                }
+
+                const title = movieObj.title || movieObj.name || "Vídeo";
+                const type = movieObj.type || 'movie';
+                const season = movieObj.season !== undefined && movieObj.season !== null ? movieObj.season : null;
+                const episode = movieObj.episode !== undefined && movieObj.episode !== null ? movieObj.episode : null;
+
+                activeMovieData = {
+                    imdbId: imdbId,
+                    tmdbId: tmdbId,
+                    title: title,
+                    type: type,
+                    season: (type === 'series' || type === 'tv') ? (season !== null ? season : 1) : null,
+                    episode: (type === 'series' || type === 'tv') ? (episode !== null ? episode : 1) : null,
+                    duration: 3600,
+                    total_seasons: movieObj.total_seasons || null,
+                    total_episodes: movieObj.total_episodes || null,
+                    seasons_data: movieObj.seasons_data || null
+                };
+
+                // Fetch title asynchronously if missing from deep-link
+                if (!title && imdbId) {
+                    fetch(`https://v3-cinemeta.strem.io/meta/${type}/${imdbId}.json`)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data && data.meta && data.meta.name) {
+                                activeMovieData.title = data.meta.name;
+                                const titleEl = document.getElementById('player-title');
+                                if (titleEl) titleEl.textContent = data.meta.name;
+                            }
+                        }).catch(e => console.error(e));
+                }
+
+                const titleEl = document.getElementById('player-title');
+                if (titleEl) titleEl.textContent = activeMovieData.title || 'CineMatch Player';
+
+                const epContainer = document.getElementById('player-episode-selector-container');
+                if (epContainer) {
+                    if (activeMovieData.type === 'series' || activeMovieData.type === 'tv') {
+                        epContainer.classList.remove('hidden');
+                        populateSeriesSelectors(movieObj);
+                    } else {
+                        epContainer.classList.add('hidden');
+                    }
+                }
+
+                const modal = document.getElementById('player-modal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    setTimeout(() => {
+                        modal.classList.add('active');
+                    }, 10);
+                }
+
+                const statusEl = document.getElementById('player-loading-status');
+                if (statusEl) statusEl.textContent = "A ligar ao servidor de vídeo...";
+                
+                const loadingMessages = [
+                    "A ligar ao servidor de vídeo...",
+                    "A inicializar streams redundantes...",
+                    "A otimizar buffering de alta velocidade...",
+                    "Quase pronto, a preparar áudio e legendas..."
+                ];
+                let msgIndex = 0;
+                if (statusCycleInterval) clearInterval(statusCycleInterval);
+                statusCycleInterval = setInterval(() => {
+                    msgIndex = (msgIndex + 1) % loadingMessages.length;
+                    if (statusEl) statusEl.textContent = loadingMessages[msgIndex];
+                }, 2500);
+
+                let startSeconds = 0;
+                try {
+                    const watchId = activeMovieData.imdbId || activeMovieData.tmdbId;
+                    const url = `/api/stream/resume/${watchId}?season=${activeMovieData.season || ''}&episode=${activeMovieData.episode || ''}`;
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        const progressData = await res.json();
+                        if (progressData.success && progressData.progress_seconds > 0) {
+                            startSeconds = progressData.progress_seconds;
+                            showToast(`A retomar a partir de ${formatTime(startSeconds)}...`);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error fetching resume point:", e);
+                }
+
+                // Update URL search parameters to reflect player state
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set('watch', activeMovieData.imdbId || activeMovieData.tmdbId);
+                    if (activeMovieData.season) urlParams.set('season', activeMovieData.season);
+                    if (activeMovieData.episode) urlParams.set('episode', activeMovieData.episode);
+                    
+                    const currentServer = document.getElementById('player-server-select').value;
+                    if (currentServer) {
+                        const serverMapToNum = {'autoembed':'1', 'vidsrcto':'2', 'vidsrcme':'3', 'embedsu':'4', 'superembed':'5', 'smashy':'6'};
+                        urlParams.set('server', serverMapToNum[currentServer] || currentServer);
+                    }
+                    
+                    window.history.replaceState({}, "", "?" + urlParams.toString());
+                } catch(e) {
+                    console.error("Error updating URL history on player open:", e);
+                }
+
+                localPlaybackTime = startSeconds;
+                loadIframeStream();
+            } catch (err) {
+                console.error("Critical error in openEmbeddedPlayer:", err);
+                document.body.style.overflow = '';
+                showToast("Erro ao abrir o reprodutor de vídeo.", true);
+                
+                // Enviar erro de telemetria
+                fetch('/api/log', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        event: 'PLAYER_OPEN_ERROR',
+                        message: err.message,
+                        stack: err.stack,
+                        url: window.location.href
+                    })
+                }).catch(() => {});
+            }
+        }
+
+        function formatTime(secs) {
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            const s = Math.round(secs % 60);
+            return (h > 0 ? h + ':' : '') + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        function loadIframeStream() {
+            if (!activeMovieData) return;
+            const iframe = document.getElementById('movie-player-iframe');
+            const server = document.getElementById('player-server-select').value;
+            const type = activeMovieData.type === 'series' || activeMovieData.type === 'tv' ? 'tv' : 'movie';
+            const imdbId = activeMovieData.imdbId;
+            const tmdbId = activeMovieData.tmdbId;
+            const season = activeMovieData.season;
+            const episode = activeMovieData.episode;
+
+            let url = '';
+            if (server === 'embedsu') {
+                const id = tmdbId || imdbId;
+                url = type === 'tv' 
+                    ? `https://vidlink.pro/tv/${id}/${season}/${episode}`
+                    : `https://vidlink.pro/movie/${id}`;
+            } else if (server === 'vidsrcto') {
+                url = type === 'tv'
+                    ? (imdbId ? `https://vidsrc.to/embed/tv/${imdbId}/${season}/${episode}` : `https://vidsrc.to/embed/tv/${tmdbId}/${season}/${episode}`)
+                    : (imdbId ? `https://vidsrc.to/embed/movie/${imdbId}` : `https://vidsrc.to/embed/movie/${tmdbId}`);
+            } else if (server === 'vidsrcme') {
+                const id = imdbId || tmdbId;
+                url = type === 'tv'
+                    ? `https://vidsrc.pm/embed/tv/${id}/${season}/${episode}`
+                    : `https://vidsrc.pm/embed/movie/${id}`;
+            } else if (server === 'superembed') {
+                const id = imdbId || tmdbId;
+                const isTmdb = !imdbId && tmdbId ? '&tmdb=1' : '';
+                url = type === 'tv'
+                    ? `https://multiembed.mov/?video_id=${id}${isTmdb}&s=${season}&e=${episode}`
+                    : `https://multiembed.mov/?video_id=${id}${isTmdb}`;
+            } else if (server === 'smashy') {
+                if (imdbId) {
+                    url = type === 'tv'
+                        ? `https://embed.smashystream.com/playere.php?imdb=${imdbId}&season=${season}&episode=${episode}`
+                        : `https://embed.smashystream.com/playere.php?imdb=${imdbId}`;
+                } else {
+                    url = type === 'tv'
+                        ? `https://embed.smashystream.com/playere.php?tmdb=${tmdbId}&season=${season}&episode=${episode}`
+                        : `https://embed.smashystream.com/playere.php?tmdb=${tmdbId}`;
+                }
+            } else if (server === 'autoembed') {
+                iframe.classList.add('hidden');
+                const placeholder = document.getElementById('player-loading-placeholder');
+                placeholder.classList.remove('hidden');
+                placeholder.style.opacity = '1';
+
+                // Set security before fetch
+                iframe.removeAttribute('sandbox');
+                iframe.setAttribute('referrerpolicy', 'origin');
+
+                fetch('/api/stream/resolve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        imdbId: imdbId,
+                        tmdbId: tmdbId,
+                        type: activeMovieData.type,
+                        season: season,
+                        episode: episode,
+                        serverProvider: server
+                    })
+                })
+                .then(res => {
+                    if (res.status === 403) {
+                        return res.json().then(data => {
+                            showToast(data.error || 'Limite de ecrãs excedido.', true);
+                            closePlayerModal();
+                            throw new Error(data.error);
+                        });
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        iframe.src = data.url;
+                    } else {
+                        showToast("Erro ao carregar o servidor VIP.", true);
+                    }
+                })
+                .catch(e => console.error("Error resolving stream:", e));
+                return;
+            }
+
+            // Universal security bypass: remove sandbox completely to stop providers from blocking us
+            iframe.removeAttribute('sandbox');
+            iframe.setAttribute('referrerpolicy', 'origin');
+
+            iframe.src = url;
+            iframe.classList.add('hidden');
+            
+            const placeholder = document.getElementById('player-loading-placeholder');
+            placeholder.classList.remove('hidden');
+            placeholder.style.opacity = '1';
+
+            iframe.onload = () => {
+                setTimeout(() => {
+                    if (!activeMovieData) {
+                        if (statusCycleInterval) clearInterval(statusCycleInterval);
+                        if (playerTimer) clearInterval(playerTimer);
+                        return;
+                    }
+                    
+                    placeholder.style.opacity = '0';
+                    setTimeout(() => {
+                        if (!activeMovieData) return;
+                        placeholder.classList.add('hidden');
+                        iframe.classList.remove('hidden');
+                    }, 300);
+                    
+                    if (statusCycleInterval) clearInterval(statusCycleInterval);
+                    
+                    if (playerTimer) clearInterval(playerTimer);
+                    playerTimer = setInterval(() => {
+                        if (!activeMovieData) {
+                            clearInterval(playerTimer);
+                            return;
+                        }
+                        localPlaybackTime += 1;
+                        saveLocalProgress(localPlaybackTime, activeMovieData.duration);
+                    }, 1000);
+                }, 1500);
+            };
+        }
+
+        async function populateSeriesSelectors(movieObj) {
+            const seasonSelect = document.getElementById('player-season-select');
+            const episodeSelect = document.getElementById('player-episode-select');
+            
+            seasonSelect.innerHTML = '';
+            episodeSelect.innerHTML = '';
+
+            const currentSeason = activeMovieData.season !== null ? activeMovieData.season : 1;
+            const currentEpisode = activeMovieData.episode !== null ? activeMovieData.episode : 1;
+
+            let numSeasons = 15;
+            if (activeMovieData.seasons_data && activeMovieData.seasons_data.length > 0) {
+                numSeasons = Math.max(...activeMovieData.seasons_data.map(s => s.season_number));
+            } else if (activeMovieData.total_seasons) {
+                numSeasons = activeMovieData.total_seasons;
+            }
+
+            // Populate seasons
+            for (let s = 1; s <= numSeasons; s++) {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = `T${s}`;
+                if (s === currentSeason) opt.selected = true;
+                seasonSelect.appendChild(opt);
+            }
+
+            const populateEpisodesForSeason = (seasonNum) => {
+                episodeSelect.innerHTML = '';
+                let numEpisodes = 30;
+                if (activeMovieData.seasons_data) {
+                    const seasonInfo = activeMovieData.seasons_data.find(s => s.season_number == seasonNum);
+                    if (seasonInfo && seasonInfo.episode_count) {
+                        numEpisodes = seasonInfo.episode_count;
+                    }
+                }
+                if (numEpisodes === 0) numEpisodes = 1;
+                
+                for (let e = 1; e <= numEpisodes; e++) {
+                    const opt = document.createElement('option');
+                    opt.value = e;
+                    opt.textContent = `Ep. ${e}`;
+                    if (e === currentEpisode) opt.selected = true;
+                    episodeSelect.appendChild(opt);
+                }
+            };
+            
+            populateEpisodesForSeason(currentSeason);
+
+            seasonSelect.onchange = () => {
+                activeMovieData.season = parseInt(seasonSelect.value, 10);
+                activeMovieData.episode = 1;
+                populateEpisodesForSeason(activeMovieData.season);
+                loadIframeStream();
+            };
+
+            episodeSelect.onchange = () => {
+                activeMovieData.episode = parseInt(episodeSelect.value, 10);
+                localPlaybackTime = 0;
+                loadIframeStream();
+            };
+        }
+
+        // Listen to server changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const serverSelect = document.getElementById('player-server-select');
+            if (serverSelect) {
+                serverSelect.addEventListener('change', () => {
+                    if (activeMovieData) {
+                        showToast("A alterar servidor de streaming...");
+                        
+                        try {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const serverMapToNum = {'autoembed':'1', 'vidsrcto':'2', 'vidsrcme':'3', 'embedsu':'4', 'superembed':'5', 'smashy':'6'};
+                            urlParams.set('server', serverMapToNum[serverSelect.value] || serverSelect.value);
+                            window.history.replaceState({}, "", "?" + urlParams.toString());
+                        } catch(e) {}
+                        
+                        loadIframeStream();
+                    }
+                });
+            }
+        });
+
+        // Password Visibility Toggle helper
+        window.togglePasswordVisibility = function(inputId, buttonEl) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            
+            const svg = buttonEl.querySelector('svg');
+            if (isPassword) {
+                // Eye-slash icon path
+                svg.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                `;
+            } else {
+                // Regular eye icon path
+                svg.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                `;
+            }
+        };
+
         // Translations
         
         // Security: XSS Mitigation
@@ -1115,10 +1901,9 @@
                 supportDesc: "If you enjoy using CineMatch, consider supporting the project! Your donations help keep our servers running and APIs active.",
                 supportLeaderboard: "🏆 Top Supporters",
                 supportBtnPaypal: "Donate via PayPal",
-                supportBtnRevolut: "Donate via Revolut",
-                heroTitle: "Your Personal AI Film Curator",
-                heroSub: "Search for a movie or series to watch instantly, or let us find your next favorite.",
-                inputPlaceholder: "e.g. Inception, Breaking Bad, The Matrix...",
+                heroTitle: "CineMatch <span class='text-sky-400'>AI</span>",
+                heroSub: "Search by title, actor, director, or mood. Let us find your next favorite watch.",
+                inputPlaceholder: "e.g. Inception, Christopher Nolan, Space Movies...",
                 btnDiscover: "Discover",
                 feat1Title: "AI-Powered Discovery",
                 feat1Desc: "Describe the mood or plot you want, and let our AI curate the perfect cinematic experience for your movie night.",
@@ -1183,7 +1968,8 @@
                 shareCTA: "Create Your Own AI Curation",
                 watchlistEmpty: "Your watchlist is empty. Start discovering and add titles you love!",
                 navWatchlist: "My Watchlist",
-                playBtn: "Watch Now",
+                playBtn: "Watch Now Soon",
+                flixBtn: "Watch Now on Flixmomo",
                 ytErrorTitle: "Trailer Unavailable",
                 ytErrorMsg: "This specific trailer has geographic restrictions or embedding is disabled in your country.",
                 ytErrorBtn: "Search on YouTube",
@@ -1218,16 +2004,16 @@
                 footerDesc: "Your personal AI-powered movie assistant. Discover your next favorite movie.",
                 
                 termsTitle: "Terms of Service",
-                termsContent: "<h4>1. Nature of Service</h4><p class='mb-4'>CineMatch AI is an AI-powered movie recommendation platform. We do not host, stream, or distribute full movies.</p><h4>2. AI Disclaimer</h4><p class='mb-4'>Recommendations are generated by external algorithms (Google Gemini). We are not responsible for inaccurate, offensive, or incorrect responses generated by the AI.</p><h4>3. Age Restriction</h4><p class='mb-4'>The platform is intended for users aged 16 or older. AI recommendations may include R-rated or mature content.</p><h4>4. Platform Usage & Termination</h4><p class='mb-4'>You agree to use the platform lawfully. We reserve the right to terminate or suspend accounts at any time, without prior notice, for abuse or security reasons.</p><h4>5. Limitation of Liability</h4><p>The service is provided \"as is\". We do not guarantee 100% uptime, nor do we accept liability for any data loss, service interruptions, or errors.</p>",
+                termsContent: "<h4>1. Acceptance of Terms</h4><p class='mb-4'>By accessing and using CineMatch AI, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by these terms, please do not use this service.</p><h4>2. Nature of Service and Content Disclaimer</h4><p class='mb-4'>CineMatch AI is an AI-powered metadata search engine and recommendation platform. <strong>We do not host, store, stream, or distribute any copyrighted video content, movies, or TV shows on our servers.</strong> The platform acts purely as an indexing tool, providing links and embedding third-party players (iframes) hosted on external servers over which CineMatch AI has no control or affiliation. We are not responsible for the content, legality, accuracy, or availability of any third-party streams.</p><h4>3. AI Generation Disclaimer</h4><p class='mb-4'>Recommendations and metadata may be generated by external Artificial Intelligence algorithms (such as Google Gemini). We accept no liability for any inaccurate, misleading, or offensive AI-generated content.</p><h4>4. Age Restriction</h4><p class='mb-4'>This platform is intended for users who are at least 16 years old. Content discovered through our platform may include R-rated or mature material.</p><h4>5. Limitation of Liability</h4><p>The service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. CineMatch AI, its developers, and affiliates shall not be held liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use the service, or resulting from any third-party content accessed through the service.</p>",
                 
                 privacyTitle: "Privacy Policy",
-                privacyContent: "<h4>1. Data Collection</h4><p class='mb-4'>We only collect essential information for your account (Username/Email and encrypted password). We do not track your browsing outside our platform.</p><h4>2. Data Security</h4><p class='mb-4'>Your passwords are securely encrypted using Bcrypt. We cannot access your real password.</p><h4>3. Data Sharing</h4><p class='mb-4'>CineMatch AI <b>does not sell</b> your data to third parties, marketing firms, or advertisers.</p><h4>4. Account Deletion</h4><p>You can request full deletion of your data and history by contacting our support.</p>",
+                privacyContent: "<h4>1. Information Collection</h4><p class='mb-4'>We collect essential information required for account functionality (Username, Email, and encrypted passwords) and your interaction with the platform (search queries, watchlist). We do not track your browsing activity outside of CineMatch AI.</p><h4>2. Third-Party Iframes and Tracking</h4><p class='mb-4'><strong>Important:</strong> Because CineMatch AI embeds third-party video players, those external services may collect your IP address, use cookies, and track your interaction with their player according to their own privacy policies. CineMatch AI has no control over the data collected by these third-party streams.</p><h4>3. Data Security</h4><p class='mb-4'>Your passwords are securely hashed using Bcrypt. We cannot access your plaintext password. While we implement reasonable security measures, we cannot guarantee absolute data security.</p><h4>4. Data Sharing</h4><p class='mb-4'>CineMatch AI will never sell your personal data to third parties, marketing firms, or advertisers.</p><h4>5. Data Retention and Deletion</h4><p>You reserve the right to request the complete deletion of your account, data, and history at any time by contacting our support team.</p>",
                 
                 dmcaTitle: "Copyright Notice (DMCA)",
-                dmcaContent: "<h4>Copyright and Intellectual Property Protection</h4><p class='mb-4'>CineMatch AI is <b>strictly a recommendation and cataloging service</b>. Our servers <b>do not host, upload, or transmit</b> video files, movies, TV shows, or any copyrighted media.</p><h4>Data Source</h4><p class='mb-4'>Images (posters), synopses, and metadata displayed on this platform are fetched via public databases and third-party APIs (such as TMDB - The Movie Database). These contents remain the intellectual property of their respective studios and production companies. CineMatch AI displays them under <i>Fair Use</i> strictly for informational and recommendation purposes.</p><h4>Content Removal (DMCA)</h4><p>If you are the copyright holder of any content displayed incorrectly and wish to have it removed from our visual catalog, please email info@cinematchai.com and we will remove the references immediately.</p>",
+                dmcaContent: "<h4>Copyright and Intellectual Property Policy</h4><p class='mb-4'>CineMatch AI operates strictly as a <strong>search engine, recommendation tool, and indexer</strong>. <strong>NO video files, movies, TV shows, or copyrighted media are hosted, stored, or uploaded on our servers.</strong></p><h4>Third-Party Content</h4><p class='mb-4'>Any video playback functionality on this site is provided via embedded iframes linking to third-party file hosts and streaming providers. CineMatch AI does not control, endorse, or affiliate with these external sources. All visual metadata (posters, synopses) is fetched via public APIs (e.g., TMDB) and displayed under the <em>Fair Use</em> doctrine for informational purposes.</p><h4>DMCA Takedown Procedure</h4><p>CineMatch AI complies with the Digital Millennium Copyright Act (DMCA). However, because we do not host the infringing content, we can only remove the link/embed from our index. To completely remove a video from the internet, you must contact the third-party server hosting the actual file.<br><br>If you are a copyright owner and believe a link on our platform infringes your rights, please send a formal DMCA notice to <strong>info@cinematchai.com</strong> including the exact URL on our site. We will promptly remove the reference from our catalog within 48-72 hours.</p>",
                 
                 faqTitle: "Frequently Asked Questions (FAQ)",
-                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Is CineMatch AI free?</summary><p class='mt-2 text-slate-400 text-sm'>Yes! Basic platform usage is 100% free. We rely on donations to keep our servers running.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Can I watch movies here?</summary><p class='mt-2 text-slate-400 text-sm'>No. CineMatch AI is an engine to discover new movies. We are not a streaming platform.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>How does the AI work?</summary><p class='mt-2 text-slate-400 text-sm'>We use Google Gemini. Our system analyzes your prompt and history to instruct the AI to find the perfect movies for your taste.</p></details>",
+                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Is CineMatch AI free?</summary><p class='mt-2 text-slate-400 text-sm'>Yes! Basic platform usage is 100% free. We rely on donations to keep our servers running.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Can I watch movies here?</summary><p class='mt-2 text-slate-400 text-sm'>No. CineMatch AI is an engine to discover new movies. We are not a streaming platform.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>How does the AI work?</summary><p class='mt-2 text-slate-400 text-sm'>We use Google Gemini. Our system analyzes your prompt and history to instruct the AI to find the perfect movies for your taste.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>What is the IMDb rating?</summary><p class='mt-2 text-slate-400 text-sm'>IMDb (Internet Movie Database) is one of the most popular and authoritative sources for movie and TV content. The rating is based on votes from millions of users worldwide on a scale of 1 to 10.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>What is the Rotten Tomatoes rating?</summary><p class='mt-2 text-slate-400 text-sm'>Rotten Tomatoes aggregates reviews from professional critics. A percentage (the Tomatometer) represents the proportion of positive reviews. A score of 60% or higher means the movie is 'Fresh' (🍅), while a score below 60% means it's 'Rotten' (🟢).</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Do I need an account to use the site?</summary><p class='mt-2 text-slate-400 text-sm'>No, you can search and discover movies without an account. However, creating an account allows you to save movies to your personal watchlist.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Can I share my watchlist?</summary><p class='mt-2 text-slate-400 text-sm'>Yes! Once you create an account and add movies to your watchlist, you can generate a public link to share your favorites with friends.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>How do I save a movie?</summary><p class='mt-2 text-slate-400 text-sm'>Simply click on any movie card to open its details, then click the 'Add to Watchlist' button.</p></details>",
                 
                 cookieText: "CineMatch AI uses local storage to save your preferences and keep your session active. By continuing to use the site, you agree to our Privacy Policy.",
                 cookieBtn: "I Understand"
@@ -1242,10 +2028,9 @@
                 supportDesc: "Se gostas do CineMatch, considera apoiar o projeto! Os teus donativos ajudam a manter os nossos servidores e APIs ativos.",
                 supportLeaderboard: "🏆 Maiores Apoiantes",
                 supportBtnPaypal: "Doar via PayPal",
-                supportBtnRevolut: "Doar via Revolut",
-                heroTitle: "O Teu Curador Pessoal de Cinema por IA",
-                heroSub: "Pesquisa um filme ou série para assistir de imediato, ou deixa-nos encontrar o teu próximo favorito.",
-                inputPlaceholder: "ex: O Padrinho, Breaking Bad, A Origem...",
+                heroTitle: "CineMatch <span class='text-sky-400'>AI</span>",
+                heroSub: "Pesquisa por título, ator, realizador ou mood. Deixa-nos encontrar o teu próximo favorito.",
+                inputPlaceholder: "ex: O Padrinho, Christopher Nolan, Filmes no espaço...",
                 btnDiscover: "Descobrir",
                 feat1Title: "Descoberta Inteligente",
                 feat1Desc: "Descreve o teu estado de espírito ou enredo, e deixa a nossa IA encontrar o filme perfeito para a tua sessão de cinema.",
@@ -1310,7 +2095,8 @@
                 shareHeading: "Lista Curada",
                 shareCTA: "Cria a Tua Própria Lista por IA",
                 watchlistEmpty: "A tua lista de favoritos está vazia. Começa a descobrir e adiciona títulos que adores!",
-                playBtn: "Assistir Agora",
+                playBtn: "Assistir em Breve",
+                flixBtn: "Assistir no Flixmomo",
                 ytErrorTitle: "Trailer Indisponível",
                 ytErrorMsg: "Este trailer específico tem restrições geográficas ou a incorporação foi desativada no seu país.",
                 ytErrorBtn: "Pesquisar no YouTube",
@@ -1345,16 +2131,16 @@
                 footerDesc: "O teu assistente pessoal de cinema impulsionado por Inteligência Artificial. Descobre o teu próximo filme favorito.",
                 
                 termsTitle: "Termos de Serviço",
-                termsContent: "<h4>1. Natureza do Serviço</h4><p class='mb-4'>O CineMatch AI é uma plataforma de recomendação de filmes baseada em Inteligência Artificial. Não alojamos, transmitimos ou distribuímos filmes completos.</p><h4>2. Isenção de Responsabilidade (IA)</h4><p class='mb-4'>As recomendações são geradas por algoritmos externos (Google Gemini). Não nos responsabilizamos por respostas imprecisas, ofensivas ou incorretas geradas pela IA.</p><h4>3. Limite de Idade</h4><p class='mb-4'>A plataforma destina-se a utilizadores com 16 anos ou mais. A IA pode gerar recomendações de filmes para adultos (Rated R).</p><h4>4. Utilização e Suspensão</h4><p class='mb-4'>O utilizador concorda em usar a plataforma de forma lícita. Reservamo-nos o direito de suspender contas a qualquer momento, sem aviso prévio, por abuso ou segurança.</p><h4>5. Limitação de Responsabilidade</h4><p>O serviço é fornecido \"tal como está\". Não garantimos 100% de disponibilidade dos servidores nem assumimos responsabilidade por perda de dados, interrupções ou erros.</p><h4>6. Atribuição (APIs)</h4><p>Este produto utiliza a API do TMDB mas não é endossado nem certificado pelo TMDB. Dados adicionais fornecidos pela OMDb API (CC BY-NC 4.0) e Cinemeta.</p>",
+                termsContent: "<h4>1. Aceita&ccedil;&atilde;o dos Termos</h4><p class='mb-4'>Ao aceder e utilizar o CineMatch AI, concorda em ficar vinculado aos presentes termos. Se n&atilde;o concordar com estes termos, por favor n&atilde;o utilize este servi&ccedil;o.</p><h4>2. Natureza do Servi&ccedil;o e Isen&ccedil;&atilde;o de Conte&uacute;do</h4><p class='mb-4'>O CineMatch AI &eacute; um motor de busca de metadados e plataforma de recomenda&ccedil;&atilde;o baseada em IA. <strong>N&atilde;o alojamos, armazenamos, transmitimos ou distribu&iacute;mos qualquer conte&uacute;do de v&iacute;deo, filmes ou s&eacute;ries protegidos por direitos de autor nos nossos servidores.</strong> A plataforma atua puramente como um indexador, fornecendo links e incorporando reprodutores de terceiros (iframes) alojados em servidores externos sobre os quais n&atilde;o temos qualquer controlo ou afilia&ccedil;&atilde;o. N&atilde;o nos responsabilizamos pela legalidade, precis&atilde;o ou disponibilidade de streams de terceiros.</p><h4>3. Isen&ccedil;&atilde;o de Responsabilidade de IA</h4><p class='mb-4'>As recomenda&ccedil;&otilde;es s&atilde;o geradas por algoritmos externos. N&atilde;o assumimos responsabilidade por respostas imprecisas, enganosas ou ofensivas geradas pela IA.</p><h4>4. Restri&ccedil;&atilde;o de Idade</h4><p class='mb-4'>Esta plataforma destina-se a utilizadores com 16 anos ou mais. O conte&uacute;do descoberto pode incluir material para adultos.</p><h4>5. Limita&ccedil;&atilde;o de Responsabilidade</h4><p>O servi&ccedil;o &eacute; fornecido &quot;TAL COMO EST&Aacute;&quot;. O CineMatch AI e os seus criadores n&atilde;o ser&atilde;o responsabilizados por quaisquer danos diretos, indiretos ou incidentais resultantes da utiliza&ccedil;&atilde;o do servi&ccedil;o, ou de conte&uacute;dos de terceiros acedidos atrav&eacute;s da plataforma.</p>",
                 
-                privacyTitle: "Política de Privacidade",
-                privacyContent: "<h4>1. Recolha de Dados</h4><p class='mb-4'>Apenas recolhemos as informações essenciais para o funcionamento da tua conta (Nome de Utilizador/Email e Password encriptada). Não monitorizamos a tua navegação fora da plataforma.</p><h4>2. Segurança dos Dados</h4><p class='mb-4'>As tuas passwords são guardadas usando encriptação (Bcrypt). Nós não temos acesso à tua password real.</p><h4>3. Partilha de Dados</h4><p class='mb-4'>O CineMatch AI <b>não vende</b> os teus dados a terceiros, empresas de marketing ou anunciantes.</p><h4>4. Eliminação de Conta</h4><p>Podes solicitar a eliminação total dos teus dados e histórico contactando o nosso suporte.</p>",
+                privacyTitle: "Poltica de Privacidade",
+                privacyContent: "<h4>1. Recolha de Informa&ccedil;&atilde;o</h4><p class='mb-4'>Recolhemos informa&ccedil;&otilde;es essenciais para o funcionamento da conta (Nome de Utilizador, Email e passwords encriptadas) e intera&ccedil;&otilde;es (pesquisas, lista de favoritos). N&atilde;o rastreamos a sua navega&ccedil;&atilde;o fora do CineMatch AI.</p><h4>2. Iframes de Terceiros e Rastreamento</h4><p class='mb-4'><strong>Importante:</strong> Como o CineMatch AI incorpora reprodutores de v&iacute;deo de terceiros, esses servi&ccedil;os externos podem recolher o seu endere&ccedil;o IP, usar cookies e rastrear a sua intera&ccedil;&atilde;o com o reprodutor segundo as suas pr&oacute;prias pol&iacute;ticas de privacidade. N&atilde;o temos controlo sobre os dados recolhidos por estas streams externas.</p><h4>3. Seguran&ccedil;a dos Dados</h4><p class='mb-4'>As suas passwords s&atilde;o encriptadas usando Bcrypt. N&atilde;o temos acesso &agrave; sua password real. Apesar de aplicarmos medidas de seguran&ccedil;a razo&aacute;veis, a seguran&ccedil;a absoluta na internet n&atilde;o pode ser garantida.</p><h4>4. Partilha de Dados</h4><p class='mb-4'>O CineMatch AI nunca vender&aacute; os seus dados pessoais a terceiros, empresas de marketing ou anunciantes.</p><h4>5. Reten&ccedil;&atilde;o e Elimina&ccedil;&atilde;o de Dados</h4><p>Reserva o direito de solicitar a elimina&ccedil;&atilde;o total da sua conta, dados e hist&oacute;rico a qualquer momento, contactando o nosso suporte.</p>",
                 
                 dmcaTitle: "Aviso de Direitos (DMCA)",
-                dmcaContent: "<h4>Aviso de Direitos de Autor e Proteção de Propriedade Intelectual</h4><p class='mb-4'>O CineMatch AI é <b>estritamente um serviço de recomendação e catalogação</b>. O nosso servidor <b>não aloja, não faz upload e não transmite</b> ficheiros de vídeo, filmes, séries ou material protegido por direitos de autor.</p><h4>Origem dos Dados</h4><p class='mb-4'>As imagens (posters), sinopses e metadados exibidos nesta plataforma são obtidos através de bases de dados públicas e APIs de terceiros (como o TMDB - The Movie Database). Estes conteúdos são propriedade intelectual dos respetivos estúdios e produtoras de cinema. O CineMatch AI utiliza-os ao abrigo do princípio de <i>Fair Use</i> (Uso Justo) estritamente para fins informativos e de recomendação.</p><h4>Remoção de Conteúdo (DMCA)</h4><p>Se és o detentor dos direitos de autor de qualquer conteúdo exibido incorretamente e desejas que seja removido do nosso catálogo visual, por favor envia um email para info@cinematchai.com e removeremos as referências de imediato.</p>",
+                dmcaContent: "<h4>Pol&iacute;tica de Direitos de Autor e Propriedade Intelectual</h4><p class='mb-4'>O CineMatch AI opera estritamente como um <strong>motor de busca, ferramenta de recomenda&ccedil;&atilde;o e indexador</strong>. <strong>NENHUM ficheiro de v&iacute;deo, filme, s&eacute;rie ou material protegido por direitos de autor &eacute; alojado, armazenado ou feito upload nos nossos servidores.</strong></p><h4>Conte&uacute;do de Terceiros</h4><p class='mb-4'>Qualquer funcionalidade de reprodu&ccedil;&atilde;o de v&iacute;deo neste site &eacute; fornecida atrav&eacute;s de iframes incorporados que ligam a servidores e fornecedores de streaming de terceiros. O CineMatch AI n&atilde;o controla nem tem afilia&ccedil;&atilde;o com essas fontes externas. Todos os metadados visuais (posters, sinopses) s&atilde;o obtidos atrav&eacute;s de APIs p&uacute;blicas (ex: TMDB) e exibidos ao abrigo da doutrina de <em>Fair Use</em> para fins informativos.</p><h4>Procedimento de Remo&ccedil;&atilde;o (DMCA)</h4><p>O CineMatch AI cumpre a legisla&ccedil;&atilde;o de direitos de autor (DMCA). No entanto, como n&atilde;o alojamos o conte&uacute;do infrator, s&oacute; podemos remover o link/iframe do nosso index. Para remover completamente um v&iacute;deo da internet, deve contactar o servidor de terceiros que aloja o ficheiro real.<br><br>Se &eacute; propriet&aacute;rio de direitos de autor e acredita que um link na nossa plataforma infringe os seus direitos, envie um aviso DMCA formal para <strong>info@cinematchai.com</strong> incluindo o URL exato no nosso site. Removeremos prontamente a refer&ecirc;ncia do nosso cat&aacute;logo num prazo de 48-72 horas.</p>",
                 
                 faqTitle: "Perguntas Frequentes (FAQ)",
-                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O CineMatch AI é gratuito?</summary><p class='mt-2 text-slate-400 text-sm'>Sim! O uso básico da plataforma é 100% gratuito. Dependemos de doações para manter os servidores online.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Posso ver filmes aqui?</summary><p class='mt-2 text-slate-400 text-sm'>Não. O CineMatch AI é uma ferramenta para descobrir filmes novos. Não somos uma plataforma de streaming.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Como funciona a IA?</summary><p class='mt-2 text-slate-400 text-sm'>Usamos o Google Gemini. O nosso sistema analisa o teu pedido e o teu histórico para instruir a IA a encontrar os filmes perfeitos para o teu gosto.</p></details>",
+                faqContent: "<details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O CineMatch AI é gratuito?</summary><p class='mt-2 text-slate-400 text-sm'>Sim! O uso básico da plataforma é 100% gratuito. Dependemos de doações para manter os servidores online.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Posso ver filmes aqui?</summary><p class='mt-2 text-slate-400 text-sm'>Não. O CineMatch AI é uma ferramenta para descobrir filmes novos. Não somos uma plataforma de streaming.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Como funciona a IA?</summary><p class='mt-2 text-slate-400 text-sm'>Usamos o Google Gemini. O nosso sistema analisa o teu pedido e o teu histórico para instruir a IA a encontrar os filmes perfeitos para o teu gosto.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O que é a classificação IMDb?</summary><p class='mt-2 text-slate-400 text-sm'>IMDb (Internet Movie Database) é uma das fontes mais populares e autorizadas sobre filmes e séries. A classificação é baseada nos votos de milhões de utilizadores em todo o mundo numa escala de 1 a 10.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>O que é a classificação Rotten Tomatoes?</summary><p class='mt-2 text-slate-400 text-sm'>O Rotten Tomatoes agrega as críticas de profissionais especializados. A percentagem (Tomatometer) representa a proporção de críticas positivas. Uma pontuação de 60% ou superior significa que o filme é 'Fresco' (🍅), enquanto uma pontuação abaixo de 60% significa que é 'Podre' (🟢).</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Preciso de uma conta para usar o site?</summary><p class='mt-2 text-slate-400 text-sm'>Não, podes pesquisar e descobrir filmes sem uma conta. No entanto, criar uma conta permite-te guardar filmes na tua watchlist pessoal.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Posso partilhar a minha watchlist?</summary><p class='mt-2 text-slate-400 text-sm'>Sim! Assim que criares uma conta e adicionares filmes à tua watchlist, podes gerar um link público para partilhar os teus favoritos com amigos.</p></details><details class='mb-2 bg-slate-800 rounded p-3 cursor-pointer group'><summary class='font-semibold text-white group-hover:text-sky-400'>Como guardo um filme?</summary><p class='mt-2 text-slate-400 text-sm'>Basta clicares em qualquer cartão de filme para abrir os seus detalhes e, de seguida, clicar no botão 'Adicionar à Watchlist'.</p></details>",
                 
                 cookieText: "O CineMatch AI utiliza armazenamento local para guardar as tuas preferências e manter a tua sessão ativa. Ao continuares a utilizar o site, concordas com a nossa Política de Privacidade.",
                 cookieBtn: "Compreendi"
@@ -1440,7 +2226,7 @@
         const currentLangDisplay = document.getElementById('current-lang-display');
         const langOptions = document.querySelectorAll('.lang-option');
         const navActions = document.getElementById('nav-actions');
-        const heroHeader = document.getElementById('hero-header');
+        const heroWrapper = document.getElementById('hero-wrapper');
         const searchContainer = document.getElementById('search-container');
         const featuresSection = document.getElementById('features-section');
         const resultsContainer = document.getElementById('results-container');
@@ -1467,10 +2253,15 @@
         const autocompleteDropdown = document.getElementById('autocomplete-dropdown');
         const autocompleteList = document.getElementById('autocomplete-list');
         let autocompleteTimer;
+        let autocompleteController = null;
 
         movieInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             clearTimeout(autocompleteTimer);
+            if (autocompleteController) {
+                autocompleteController.abort();
+                autocompleteController = null;
+            }
             
             if (query.length < 3) {
                 autocompleteDropdown.classList.add('hidden');
@@ -1478,20 +2269,22 @@
             }
 
             autocompleteTimer = setTimeout(async () => {
+                autocompleteController = new AbortController();
+                const signal = autocompleteController.signal;
                 try {
                     const [resMovies, resSeries] = await Promise.all([
-                        fetch(`/api/proxy/catalog/movie/search=${encodeURIComponent(query)}`).catch(() => null),
-                        fetch(`/api/proxy/catalog/series/search=${encodeURIComponent(query)}`).catch(() => null)
+                        fetch(`/api/proxy/catalog/movie/search=${encodeURIComponent(query)}`, { signal }).catch(() => null),
+                        fetch(`/api/proxy/catalog/series/search=${encodeURIComponent(query)}`, { signal }).catch(() => null)
                     ]);
                     
                     let metas = [];
                     if (resMovies && resMovies.ok) {
                         const dataM = await resMovies.json();
-                        if (dataM.metas) metas = metas.concat(dataM.metas);
+                        if (dataM.metas) metas = metas.concat(dataM.metas.map((m, i) => ({...m, _rank: i})));
                     }
                     if (resSeries && resSeries.ok) {
                         const dataS = await resSeries.json();
-                        if (dataS.metas) metas = metas.concat(dataS.metas);
+                        if (dataS.metas) metas = metas.concat(dataS.metas.map((m, i) => ({...m, _rank: i})));
                     }
 
                     if (metas.length > 0) {
@@ -1502,7 +2295,23 @@
                             return true;
                         });
                         
-                        metas.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+                        metas.sort((a, b) => {
+                            const q = query.toLowerCase();
+                            const aName = (a.name || '').toLowerCase();
+                            const bName = (b.name || '').toLowerCase();
+                            
+                            const aExact = aName === q;
+                            const bExact = bName === q;
+                            if (aExact && !bExact) return -1;
+                            if (!aExact && bExact) return 1;
+                            
+                            const aStarts = aName.startsWith(q);
+                            const bStarts = bName.startsWith(q);
+                            if (aStarts && !bStarts) return -1;
+                            if (!aStarts && bStarts) return 1;
+
+                            return (a._rank || 0) - (b._rank || 0);
+                        });
 
                         autocompleteList.innerHTML = '';
                         metas.slice(0, 6).forEach(meta => {
@@ -1511,7 +2320,7 @@
                             
                             const imgHtml = meta.poster 
                                 ? `<img loading="lazy" decoding="async" src="${meta.poster}" class="w-10 h-14 object-cover rounded shadow-sm flex-shrink-0" onerror="this.src='https://via.placeholder.com/40x56/0f1115/ffffff?text=?'">` 
-                                : `<div class="w-10 h-14 bg-slate-800 rounded flex items-center justify-center text-slate-500 flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg></div>`;
+                                : `<div class="w-10 h-14 bg-slate-800 rounded flex items-center justify-center text-slate-500 flex-shrink-0"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 00-1 1z"></path></svg></div>`;
                                 
                             const typeLabel = meta.type === 'series' ? (currentLang === 'pt' ? 'Série' : 'Series') : (currentLang === 'pt' ? 'Filme' : 'Movie');
                             
@@ -1525,6 +2334,9 @@
                             
                             li.addEventListener('click', () => {
                                 movieInput.value = meta.name;
+                                movieInput.dataset.imdbId = meta.id || '';
+                                movieInput.dataset.contentType = meta.type || '';
+                                movieInput.dataset.lastTitle = meta.name;
                                 autocompleteDropdown.classList.add('hidden');
                                 searchForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
                             });
@@ -1536,6 +2348,7 @@
                         autocompleteDropdown.classList.add('hidden');
                     }
                 } catch (err) {
+                    if (err.name === 'AbortError') return;
                     console.error('Autocomplete error:', err);
                 }
             }, 300);
@@ -1548,9 +2361,26 @@
             }
         });
 
+        // Handle search form submission
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearTimeout(autocompleteTimer);
+            if (autocompleteController) {
+                autocompleteController.abort();
+                autocompleteController = null;
+            }
+            autocompleteDropdown.classList.add('hidden');
+            performSearch();
+        });
+
         movieInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
+                clearTimeout(autocompleteTimer);
+                if (autocompleteController) {
+                    autocompleteController.abort();
+                    autocompleteController = null;
+                }
                 autocompleteDropdown.classList.add('hidden');
                 searchForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
             }
@@ -1567,7 +2397,7 @@
             currentLangDisplay.textContent = currentLang === 'en' ? 'ENG' : 'PT';
             document.getElementById('current-lang-flag').src = currentLang === 'en' ? 'https://flagcdn.com/w20/gb.png' : 'https://flagcdn.com/w20/pt.png';
             
-            document.getElementById('hero-title').textContent = t.heroTitle;
+            document.getElementById('hero-title').innerHTML = t.heroTitle;
             document.getElementById('hero-subtitle').textContent = t.heroSub;
             movieInput.placeholder = t.inputPlaceholder;
             btnText.textContent = t.btnDiscover;
@@ -1741,11 +2571,16 @@
 
 
         
+        let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast-notification');
+            if (!toast) return;
             document.getElementById('toast-message').textContent = message;
             toast.classList.remove('translate-y-[150%]');
-            setTimeout(() => {
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+            toastTimeout = setTimeout(() => {
                 toast.classList.add('translate-y-[150%]');
             }, 3000);
         }
@@ -1763,7 +2598,7 @@
                         const escapedName = item.name.replace(/'/g, "\\'");
                         const escapedId = item.imdbId ? item.imdbId.replace(/'/g, "\\'") : '';
                         const escapedType = item.type ? item.type.replace(/'/g, "\\'") : '';
-                        return `<button onclick="const input = document.getElementById('movie-input'); input.value='${escapedName}'; input.dataset.imdbId='${escapedId}'; input.dataset.contentType='${escapedType}'; input.dataset.lastTitle='${escapedName}'; document.getElementById('search-form').dispatchEvent(new Event('submit'))" class="px-3 py-1 rounded-full bg-slate-800/40 hover:bg-slate-700/80 text-slate-300 transition-colors border border-slate-700/50 text-xs">${item.name}</button>`;
+                        return `<button onclick="const input = document.getElementById('movie-input'); input.value='${escapedName}'; input.dataset.imdbId='${escapedId}'; input.dataset.contentType='${escapedType}'; input.dataset.lastTitle='${escapedName}'; performSearch();" class="px-3 py-1 rounded-full bg-slate-800/40 hover:bg-slate-700/80 text-slate-300 transition-colors border border-slate-700/50 text-xs">${item.name}</button>`;
                     }).join('');
                 } else {
                     throw new Error("Invalid trending data");
@@ -1791,7 +2626,7 @@
                     const escapedName = item.name.replace(/'/g, "\\'");
                     const escapedId = item.imdbId ? item.imdbId.replace(/'/g, "\\'") : '';
                     const escapedType = item.type ? item.type.replace(/'/g, "\\'") : '';
-                    return `<button onclick="const input = document.getElementById('movie-input'); input.value='${escapedName}'; input.dataset.imdbId='${escapedId}'; input.dataset.contentType='${escapedType}'; input.dataset.lastTitle='${escapedName}'; document.getElementById('search-form').dispatchEvent(new Event('submit'))" class="px-3 py-1 rounded-full bg-slate-800/40 hover:bg-slate-700/80 text-slate-300 transition-colors border border-slate-700/50 text-xs">${item.name}</button>`;
+                    return `<button onclick="const input = document.getElementById('movie-input'); input.value='${escapedName}'; input.dataset.imdbId='${escapedId}'; input.dataset.contentType='${escapedType}'; input.dataset.lastTitle='${escapedName}'; performSearch();" class="px-3 py-1 rounded-full bg-slate-800/40 hover:bg-slate-700/80 text-slate-300 transition-colors border border-slate-700/50 text-xs">${item.name}</button>`;
                 }).join('');
             }
         }
@@ -1871,6 +2706,7 @@
             let hoverTimeout;
             
             document.addEventListener('mousemove', (e) => {
+                if (!e.target || typeof e.target.closest !== 'function') return;
                 const card = e.target.closest('.movie-card');
                 if (!card) return;
 
@@ -1892,6 +2728,7 @@
             }, { passive: true });
 
             document.addEventListener('mouseout', (e) => {
+                if (!e.target || typeof e.target.closest !== 'function') return;
                 const card = e.target.closest('.movie-card');
                 if (card) {
                     card.style.transform = '';
@@ -1899,7 +2736,8 @@
             });
 
             // Pre-fetching (Previsão de clique de 300ms com latência 0)
-            document.addEventListener('mouseenter', (e) => {
+            document.addEventListener('mouseover', (e) => {
+                if (!e.target || typeof e.target.closest !== 'function') return;
                 const card = e.target.closest('.movie-card');
                 if (!card) return;
                 
@@ -2004,8 +2842,20 @@
                     currentUserAvatar = data.avatar_url || '';
                     await loadUserWatchlist();
                     setLoginState(true, data.username);
-                    if (!isShared && activeTab === 'watchlist') {
-                        showWatchlistTab();
+                    if (window.history.state && window.history.state.view) {
+                        switchView(window.history.state.view, false);
+                    }
+            
+                    // Update Server dropdown visibility based on user role
+                    const serverSelect = document.getElementById('player-server-select');
+                    if (serverSelect) {
+                        const isVip = (currentUser === 'test' || currentUser === 'test vip');
+                        serverSelect.options[0].text = isVip ? "Server 1 (AutoEmbed VIP)" : "Server 1";
+                        serverSelect.options[1].text = isVip ? "Server 2 (VidSrc TO)" : "Server 2";
+                        serverSelect.options[2].text = isVip ? "Server 3 (VidSrc PM)" : "Server 3";
+                        serverSelect.options[3].text = isVip ? "Server 4 (VidLink)" : "Server 4";
+                        serverSelect.options[4].text = isVip ? "Server 5 (SuperEmbed Fallback)" : "Server 5";
+                        serverSelect.options[5].text = isVip ? "Server 6 (SmashyStream)" : "Server 6";
                     }
                 } else {
                     setLoginState(false);
@@ -2068,7 +2918,7 @@
         function goHome(pushState = true) {
             activeTab = 'home';
             const hideIds = ['watchlist-header-container', 'reference-movie-container', 'results-container'];
-            const showIds = ['hero-header', 'features-section', 'dynamic-bg', 'search-container'];
+            const showIds = ['hero-wrapper', 'features-section', 'dynamic-bg', 'search-container'];
             if (isLoggedIn) showIds.push('frontpage-watchlist-section');
             else hideIds.push('frontpage-watchlist-section');
             
@@ -2253,34 +3103,6 @@
             }
         });
 
-        async function handleAvatarUpload(files) {
-            if (!files || files.length === 0) return;
-            const file = files[0];
-            const formData = new FormData();
-            formData.append('avatar', file);
-
-            try {
-                const res = await fetch('/api/profile/upload-avatar', {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'include'
-                });
-                const data = await res.json();
-                if (data.success) {
-                    currentUserAvatar = data.avatar_url;
-                    document.getElementById('prof-avatar-preview').src = data.avatar_url;
-                    document.getElementById('prof-avatar-preview').classList.remove('hidden');
-                    document.getElementById('prof-avatar-initials').classList.add('hidden');
-                    setLoginState(true, currentUser); // Refresh nav text and avatar
-                    showToast("Avatar uploaded successfully!");
-                } else {
-                    showToast(data.error || "Upload failed");
-                }
-            } catch (err) {
-                console.error("Upload error", err);
-                showToast("Server error during upload");
-            }
-        }
 
         function selectPresetAvatar(path) {
             document.getElementById('prof-avatar-preview').src = path;
@@ -2296,6 +3118,10 @@
                 tabRegister.click();
             }
         }
+        window.openModal = openModal;
+        window.openAuthModal = function(mode = 'login') {
+            openModal(mode);
+        };
         
         async function fetchLeaderboard() {
             const list = document.getElementById('leaderboard-list');
@@ -2340,24 +3166,32 @@
             supportModal.classList.remove('active');
         }
 
-        supportModal.addEventListener('click', (e) => {
-            if (e.target === supportModal) supportModal.classList.remove('active');
-        });
+        // Setup robust backdrop close listeners that prevent accidental close during text selection drag
+        function setupBackdropClose(modalElement, closeCallback) {
+            if (!modalElement) return;
+            let mouseDownTarget = null;
+            modalElement.addEventListener('mousedown', (e) => {
+                mouseDownTarget = e.target;
+            });
+            modalElement.addEventListener('mouseup', (e) => {
+                if (e.target === modalElement && mouseDownTarget === modalElement) {
+                    closeCallback();
+                }
+            });
+        }
+
+        setupBackdropClose(supportModal, () => supportModal.classList.remove('active'));
 
         closeModalBtn.addEventListener('click', () => {
             authModal.classList.remove('active');
         });
 
-        authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) authModal.classList.remove('active');
-        });
+        setupBackdropClose(authModal, () => authModal.classList.remove('active'));
 
         // Close trailer modal on backdrop click
         const trailerModal = document.getElementById('trailer-modal');
         if (trailerModal) {
-            trailerModal.addEventListener('click', (e) => {
-                if (e.target === trailerModal) closeTrailer();
-            });
+            setupBackdropClose(trailerModal, () => closeTrailer());
         }
 
         tabLogin.addEventListener('click', () => {
@@ -2483,16 +3317,11 @@
             clearInterval(loadingInterval);
         }
 
-        searchForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await performSearch();
-        });
-
         const movieTrivia = {
             pt: [
-                "Sabias que o Arnold Schwarzenegger só disse 74 palavras no primeiro Exterminador Implacável?",
-                "O código verde em The Matrix é feito de receitas de sushi digitalizadas.",
-                "O Senhor dos Anéis e Matrix usaram a mesma cidade para filmagens no mesmo dia.",
+                "Sabias que Arnold Schwarzenegger apenas disse 74 palavras no primeiro Exterminador Implacável?",
+                "O código verde no filme The Matrix é na verdade composto por receitas de sushi digitalizadas.",
+                "O Senhor dos Anéis e The Matrix usaram a mesma cidade para gravações no mesmo dia.",
                 "A respiração do Darth Vader foi gravada a partir de um aparelho de mergulho.",
                 "Hitchcock usou xarope de chocolate Bosco como sangue no filme Psicose.",
                 "Os dinossauros aparecem apenas durante 15 minutos em Jurassic Park (1993).",
@@ -2501,10 +3330,17 @@
                 "A máscara de Michael Myers no Halloween é uma máscara do Capitão Kirk pintada de branco.",
                 "O gato de Don Corleone em O Padrinho era um gato vadio encontrado no estúdio de gravação.",
                 "O verdadeiro nome do R2-D2 provém de 'Reel 2, Dialog 2' durante as gravações.",
-                "O orçamento de Blair Witch Project foi de apenas 60.000$, mas rendeu 248 milhões."
+                "O orçamento de Blair Witch Project foi de apenas 60.000$, mas rendeu 248 milhões.",
+                "O filme Titanic (1997) custou mais a produzir do que o próprio navio verdadeiro.",
+                "Em Django Libertado, Leonardo DiCaprio cortou mesmo a mão na cena do copo e continuou a atuar.",
+                "No Senhor dos Anéis, Viggo Mortensen partiu dois dedos do pé quando pontapeou o capacete.",
+                "O tapete de O Iluminado (The Shining) foi desenhado de propósito para desorientar o cérebro.",
+                "Keanu Reeves aprendeu e executou a maior parte das artes marciais no filme John Wick.",
+                "A série Breaking Bad foi recusada pela HBO, Showtime e FX antes de chegar à AMC.",
+                "Em O Cavaleiro das Trevas, Heath Ledger fechou-se num quarto de hotel por um mês para criar o Joker."
             ],
             en: [
-                "Did you know Arnold Schwarzenegger only said 74 words in the first Terminator?",
+                "Arnold Schwarzenegger only said 74 words in the first Terminator.",
                 "The green code in The Matrix is actually digitized sushi recipes.",
                 "The Lord of the Rings and The Matrix used the same city for filming on the same day.",
                 "Darth Vader's suit used the breathing sound from a scuba regulator.",
@@ -2515,12 +3351,57 @@
                 "Michael Myers' mask in Halloween is just a Captain Kirk mask painted white.",
                 "Don Corleone's cat in The Godfather was a stray found roaming the studio lot.",
                 "R2-D2's name comes from 'Reel 2, Dialog 2' during filming.",
-                "The Blair Witch Project budget was only $60,000, but it grossed $248 million."
+                "The Blair Witch Project budget was only $60,000, but it grossed $248 million.",
+                "The movie Titanic (1997) cost more to make than the actual ship itself.",
+                "In Django Unchained, Leonardo DiCaprio really cut his hand on a glass and kept acting.",
+                "In Lord of the Rings, Viggo Mortensen broke two toes kicking a helmet.",
+                "The carpet in The Shining was specifically designed to be psychologically disorienting.",
+                "Keanu Reeves learned and performed most of the martial arts himself in John Wick.",
+                "Breaking Bad was rejected by HBO, Showtime, and FX before landing at AMC.",
+                "In The Dark Knight, Heath Ledger locked himself in a hotel room for a month to create the Joker."
             ]
+        };
+
+        function toggleCompactMode(isActive) {
+            const heroWrapper = document.getElementById('hero-wrapper');
+            const heroTitle = document.getElementById('hero-title');
+            const heroSubtitle = document.getElementById('hero-subtitle');
+            
+            if (isActive) {
+                heroWrapper.classList.remove('mt-12', 'md:mt-20', 'lg:mt-32', 'pb-24');
+                heroWrapper.classList.add('mt-4', 'pb-4');
+                heroTitle.classList.remove('text-5xl', 'md:text-7xl', 'mb-6');
+                heroTitle.classList.add('text-3xl', 'md:text-4xl', 'mb-2');
+                heroSubtitle.classList.add('opacity-0', 'max-h-0');
+                heroSubtitle.classList.remove('max-h-40');
+            } else {
+                heroWrapper.classList.add('mt-12', 'md:mt-20', 'lg:mt-32', 'pb-24');
+                heroWrapper.classList.remove('mt-4', 'pb-4');
+                heroTitle.classList.add('text-5xl', 'md:text-7xl', 'mb-6');
+                heroTitle.classList.remove('text-3xl', 'md:text-4xl', 'mb-2');
+                heroSubtitle.classList.remove('opacity-0', 'max-h-0');
+                heroSubtitle.classList.add('max-h-40');
+            }
+        }
+
+                window.searchMovie = function(query, isId = false) {
+            const input = document.getElementById('movie-input');
+            if(input) {
+                input.value = query;
+                input.dataset.lastTitle = query;
+                if(isId) {
+                    input.dataset.imdbId = query;
+                } else {
+                    delete input.dataset.imdbId;
+                }
+                performSearch();
+            }
         };
 
         async function performSearch(isLoadMore = false) {
             const t = dict[currentLang];
+            
+            toggleCompactMode(true);
             
             if (!isLoggedIn) {
                 document.getElementById('modal-subtitle').textContent = t.errLoginReq;
@@ -2561,7 +3442,7 @@
             const defaultType = document.getElementById('filter-content-type').value || 'any';
             const surpriseMe = document.getElementById('filter-surprise-me').checked || false;
 
-            const hideIds = ['hero-header', 'features-section', 'dynamic-bg', 'watchlist-header-container', 'frontpage-watchlist-section'];
+            const hideIds = ['hero-wrapper', 'features-section', 'dynamic-bg', 'watchlist-header-container', 'frontpage-watchlist-section'];
             const showIds = ['results-container', 'reference-movie-container'];
 
             transitionTo(hideIds, showIds, () => {
@@ -2593,7 +3474,7 @@
                             <div class="mt-8 w-64 h-1.5 bg-slate-800 rounded-full overflow-hidden relative shadow-inner">
                                 <div class="absolute top-0 bottom-0 left-0 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-full animate-loading-bar"></div>
                             </div>
-                            <p id="dynamic-trivia-text" class="text-sky-400 italic text-sm mt-6 transition-opacity duration-500 min-h-[40px] px-2 font-medium max-w-sm mx-auto"></p>
+                            <p id="dynamic-trivia-text" class="text-sky-400 italic text-sm mt-12 transition-opacity duration-500 min-h-[40px] px-2 font-medium max-w-sm mx-auto"></p>
                         </div>
                         
                         <!-- Background ghost skeleton hint -->
@@ -2615,7 +3496,8 @@
                     const triviaList = movieTrivia[currentLang] || movieTrivia['en'];
                     
                     if (triviaText) {
-                        triviaText.innerText = triviaList[Math.floor(Math.random() * triviaList.length)];
+                        const triviaTitle = currentLang === 'pt' ? '<b>Curiosidade:</b> ' : '<b>Did you know:</b> ';
+                        triviaText.innerHTML = triviaTitle + triviaList[Math.floor(Math.random() * triviaList.length)];
                     }
 
                     let tickCount = 0;
@@ -2634,7 +3516,8 @@
                         if (tickCount % 2 === 0 && triviaText) {
                             triviaText.style.opacity = '0';
                             setTimeout(() => {
-                                triviaText.innerText = triviaList[Math.floor(Math.random() * triviaList.length)];
+                                const triviaTitle = currentLang === 'pt' ? '<b>Curiosidade:</b> ' : '<b>Did you know:</b> ';
+                                triviaText.innerHTML = triviaTitle + triviaList[Math.floor(Math.random() * triviaList.length)];
                                 triviaText.style.opacity = '1';
                             }, 500);
                         }
@@ -2647,14 +3530,14 @@
             searchBtn.disabled = true;
 
             // Local cache key using query filters to prevent collisions
-            const cacheKey = `cinematch_cache_${movie.toLowerCase()}_${currentLang}_y:${afterYear}_r:${minRating}_e:${excludeGenres.toLowerCase().trim()}_t:${defaultType}_s:${surpriseMe}${imdbId ? '_id:' + imdbId : ''}`;
+            const cacheKey = `cinematch_cache_v4_${movie.toLowerCase()}_${currentLang}_y:${afterYear}_r:${minRating}_e:${excludeGenres.toLowerCase().trim()}_t:${defaultType}_s:${surpriseMe}${imdbId ? '_id:' + imdbId : ''}`;
             const localCache = localStorage.getItem(cacheKey);
             
             if (localCache) {
                 try {
                     const data = JSON.parse(localCache);
-                    // Ensure the cache is not legacy (must contain the trailerYtId property check)
-                    if (data && data.referenceMovie && data.referenceMovie.hasOwnProperty('trailerYtId')) {
+                    // Ensure the cache is not legacy (must contain a valid cacheId)
+                    if (data && data.referenceMovie && data.cacheId) {
                         setTimeout(() => {
                             resultsContainer.style.opacity = '0';
                             setTimeout(() => {
@@ -2743,8 +3626,29 @@
             errorMsg.textContent = message;
             errorMsg.classList.remove('hidden');
             if (window.loadingInterval) clearInterval(window.loadingInterval);
-            resultsContainer.innerHTML = '';
-            resultsContainer.style.opacity = '0';
+            
+            const isPt = currentLang === 'pt';
+            const retryLabel = isPt ? "Tentar Novamente" : "Retry Search";
+            const errTitle = isPt ? "Oops! Algo correu mal" : "Oops! Something went wrong";
+            
+            resultsContainer.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-16 px-4 animate-fade-in-up">
+                    <div class="bg-red-500/10 p-4 rounded-full mb-4 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.15)]">
+                        <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-white text-lg font-bold mb-2 tracking-tight">${errTitle}</h3>
+                    <p class="text-slate-400 text-sm text-center max-w-sm mb-6">${message}</p>
+                    <button onclick="performSearch()" class="px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold rounded-lg transition-all shadow-md shadow-red-950/40 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>${retryLabel}</span>
+                    </button>
+                </div>
+            `;
+            resultsContainer.style.opacity = '1';
         }
 
         const loadMoreContainer = document.getElementById('load-more-container');
@@ -2827,6 +3731,12 @@
                 const refTypeBadgeClass = isRefSeries
                     ? 'bg-purple-500/20 text-purple-400 border-purple-500/30'
                     : 'bg-sky-500/20 text-sky-400 border-sky-500/30';
+                    
+                let isRefFuture = false;
+                const refYearMatch = (refMovie.year || '').toString().match(/\d{4}/);
+                if (refYearMatch && parseInt(refYearMatch[0]) > new Date().getFullYear()) {
+                    isRefFuture = true;
+                }
 
                 referenceMovieContainer.innerHTML = `
                     <div class="flex flex-col sm:flex-row items-center gap-4 bg-slate-800/60 border border-slate-700/50 px-5 py-3 rounded-xl mb-4 animate-fade-in-up w-full md:w-auto glass-panel">
@@ -2856,10 +3766,21 @@
                                 <svg class="w-3.5 h-3.5 text-sky-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>
                                 IMDB
                             </a>
+                            ${isRefFuture ? `
+                            <button disabled class="flex-1 sm:flex-initial text-[11px] bg-slate-800 text-slate-500 font-bold py-1.5 px-4 rounded-lg text-center flex items-center justify-center gap-1.5 border border-slate-700 cursor-not-allowed">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                <span>Estreia em ${refYearMatch[0]}</span>
+                            </button>
+                            ` : `
                             <button onclick="event.stopPropagation(); window.playMovieDirectly('${btoa(encodeURIComponent(JSON.stringify(refMovie)))}', this);" class="flex-1 sm:flex-initial text-[11px] bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-1.5 px-4 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/30 hover:shadow-indigo-500/10">
                                 <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
                                 <span>${t.playBtn}</span>
                             </button>
+                            <button onclick="event.stopPropagation(); window.playOnFlixmomo('${btoa(encodeURIComponent(JSON.stringify(refMovie)))}', this);" class="flex-1 sm:flex-initial text-[11px] bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-1.5 px-4 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30 hover:shadow-emerald-500/10">
+                                <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                <span>${t.flixBtn}</span>
+                            </button>
+                            `}
                         </div>
                     </div>
                 `;
@@ -2868,12 +3789,8 @@
             // Render Recommendations
             const slicedMovies = movies;
             
-            // Auto-detect Display Sizing
-            if (slicedMovies.length >= 8) {
-                applyDisplayStyle('compact');
-            } else {
-                applyDisplayStyle('standard');
-            }
+            // Always keep standard layout (5 columns with descriptions) to prevent layout reflow and text hiding
+            applyDisplayStyle('standard');
 
             slicedMovies.forEach((m, index) => {
                 const fallbackArtwork = `https://ui-avatars.com/api/?name=${encodeURIComponent(m.title)}&background=1e293b&color=fff&size=500`;
@@ -2887,7 +3804,22 @@
                 }
                 let rtBadgeHTML = '';
                 if (rtRating !== 'N/A') {
-                    rtBadgeHTML = `<div class="bg-rose-900/80 backdrop-blur-md text-rose-400 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center justify-end gap-1 border border-rose-500/50 shadow-md">🍅 ${rtRating}</div>`;
+                    const freshSvg = `<svg viewBox="0 0 32 32" class="w-3 h-3 inline-block drop-shadow-md"><path fill="#FA320A" d="M16,29 C6,29 2,23 2,16 C2,9 6,5 16,5 C26,5 30,9 30,16 C30,23 26,29 16,29 Z" /><path fill="#00A05A" d="M16,5 C15,2 13,0 11,0 C12,1 14,3 15,5 C12,5 9,4 7,6 C11,5 14,6 15,6 C14,8 13,10 14,11 C15,9 16,7 17,6 C19,7 22,9 23,7 C20,7 18,6 17,5 C20,5 23,3 22,1 C20,2 18,4 16,5 Z" /></svg>`;
+                    const rottenSvg = `<svg viewBox="0 0 32 32" class="w-3 h-3 inline-block drop-shadow-md"><path fill="#8BC34A" d="M15,28 C8,29 3,24 2,17 C1,10 6,4 13,3 C20,2 26,5 29,12 C31,18 27,26 21,28 C19,29 17,28 15,28 Z" /><circle fill="#8BC34A" cx="4" cy="9" r="2" /><circle fill="#8BC34A" cx="29" cy="19" r="2.5" /><circle fill="#8BC34A" cx="24" cy="3" r="1.5" /><circle fill="#8BC34A" cx="10" cy="30" r="2" /><path fill="#8BC34A" d="M25,29 C27,27 29,29 27,31 C25,33 23,31 25,29 Z" /></svg>`;
+                    let rtIcon = freshSvg;
+                    let rtStatus = 'Pontuação Rotten Tomatoes';
+                    const rNum = parseInt(rtRating);
+                    if (!isNaN(rNum)) {
+                        rtStatus = rNum >= 60 ? 'Fresh (Rotten Tomatoes)' : 'Rotten (Rotten Tomatoes)';
+                        rtIcon = rNum >= 60 ? freshSvg : rottenSvg;
+                    }
+                    rtBadgeHTML = `
+                    <div class="relative group/tooltip pointer-events-auto cursor-help">
+                        <div class="bg-rose-900/80 backdrop-blur-md text-rose-400 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center justify-end gap-1 border border-rose-500/50 shadow-md">${rtIcon} ${rtRating}</div>
+                        <div class="absolute right-0 top-full mt-1 bg-slate-950/95 border border-slate-800 text-[10px] text-slate-200 px-2 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none hidden group-hover/tooltip:block backdrop-blur-md animate-fade-in">
+                            ${rtStatus}
+                        </div>
+                    </div>`;
                 }
                 
                 const imgId = `poster-${index}-${Date.now()}`;
@@ -2911,7 +3843,7 @@
                 } catch(e) {}
                 
                 const card = document.createElement('div');
-                card.className = 'movie-card overflow-hidden flex flex-col group h-full bg-slate-800/80 border border-slate-700/50 rounded-2xl w-full sm:w-[calc(50%-1.25rem)] md:w-[calc(33.333%-1.25rem)] lg:w-[calc(20%-1.25rem)] max-w-sm mx-auto';
+                card.className = 'movie-card overflow-hidden flex flex-col group h-full bg-slate-800/80 border border-slate-700/50 rounded-2xl w-full max-w-sm mx-auto';
                 card.style.animation = `fadeInUp 0.5s ease forwards ${delay}ms`;
                 card.style.opacity = '0';
                 
@@ -2922,9 +3854,14 @@
                         <div class="absolute top-2 left-2 backdrop-blur-md text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${typeBadgeClass}">
                             ${typeLabel}
                         </div>
-                        <div class="absolute top-2 right-2 flex flex-col items-end gap-1 z-10">
-                            <div class="bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
-                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${m.rating || m.imdbRating || 'N/A'}
+                        <div class="absolute top-2 right-2 flex flex-col items-end gap-1.5 z-20">
+                            <div class="relative group/tooltip pointer-events-auto cursor-help">
+                                <div class="bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${m.rating || m.imdbRating || 'N/A'}
+                                </div>
+                                <div class="absolute right-0 top-full mt-1 bg-slate-950/95 border border-slate-800 text-[10px] text-slate-200 px-2 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none hidden group-hover/tooltip:block backdrop-blur-md animate-fade-in">
+                                    Classificação IMDb
+                                </div>
                             </div>
                             ${rtBadgeHTML}
                         </div>
@@ -2939,10 +3876,18 @@
                         </div>
                         <p class="text-xs text-slate-300 leading-relaxed flex-1 line-clamp-4">${escapeHTML(m.description)}</p>
                         <div class="mt-auto pt-3 flex flex-col gap-2">
-                            <button onclick="event.stopPropagation(); window.playMovieDirectly('${b64Obj}', this);" class="w-full text-xs bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/10">
-                                <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                                <span>${t.playBtn}</span>
-                            </button>
+                            ${(() => {
+                                let isMFuture = false;
+                                const mYearMatch = (m.year || '').toString().match(/\d{4}/);
+                                if (mYearMatch && parseInt(mYearMatch[0]) > new Date().getFullYear()) {
+                                    isMFuture = true;
+                                }
+                                if (isMFuture) {
+                                    return '<button disabled class="w-full text-xs bg-slate-800 text-slate-500 font-bold py-2 px-3 rounded-lg text-center flex items-center justify-center gap-1.5 border border-slate-700 cursor-not-allowed"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span>Estreia em ' + mYearMatch[0] + '</span></button>';
+                                } else {
+                                    return '<button onclick="event.stopPropagation(); window.playMovieDirectly(\'' + b64Obj + '\', this);" class="w-full text-xs bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/10 mb-2"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg><span>' + t.playBtn + '</span></button><button onclick="event.stopPropagation(); window.playOnFlixmomo(\'' + b64Obj + '\', this);" class="w-full text-xs bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/50 hover:shadow-emerald-500/10"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg><span>' + t.flixBtn + '</span></button>';
+                                }
+                            })()}
                             <div class="flex gap-2">
                                 <a id="${imdbLinkId}" href="${refImdbId ? `https://www.imdb.com/title/${refImdbId}/` : `https://www.imdb.com/find?q=${encodeURIComponent(m.originalTitle || m.title)}`}" target="_blank" class="flex-1 text-[10px] bg-slate-800/80 hover:bg-slate-700 text-sky-400 font-semibold py-1.5 px-1.5 rounded-lg text-center transition-colors border border-slate-700/60 flex items-center justify-center gap-1">IMDB</a>
                                 ${m.trailerYtId ? `
@@ -3044,30 +3989,64 @@
             }
         }
 
+        let isFetchingWatchlist = false;
+        let lastWatchlistFetchTime = 0;
+
         async function loadUserWatchlist() {
             if (!isLoggedIn) return;
+            if (isFetchingWatchlist) return;
+            if (Date.now() - lastWatchlistFetchTime < 3000) return; // limit to once every 3s
+            
+            isFetchingWatchlist = true;
             try {
                 const res = await fetch('/api/watchlist', { credentials: 'include' });
                 const data = await res.json();
                 if (data.success && Array.isArray(data.watchlist)) {
                     userWatchlist = data.watchlist;
+                    localStorage.setItem('cinematch_watchlist', JSON.stringify(userWatchlist));
                 }
+                lastWatchlistFetchTime = Date.now();
             } catch (e) {
-                console.error("Failed to load watchlist", e);
+                console.error("Failed to load watchlist, checking offline local cache", e);
+                const localData = localStorage.getItem('cinematch_watchlist');
+                if (localData) {
+                    try {
+                        userWatchlist = JSON.parse(localData);
+                        console.log("Offline fallback loaded: ", userWatchlist.length, "items.");
+                    } catch (err) {}
+                }
+            } finally {
+                isFetchingWatchlist = false;
             }
         }
 
         async function forceRefreshWatchlist() {
             if (!isLoggedIn) return;
+            if (isFetchingWatchlist) return;
+            if (Date.now() - lastWatchlistFetchTime < 3000) return; // limit to once every 3s
+            
+            isFetchingWatchlist = true;
             try {
                 const res = await fetch('/api/watchlist', { credentials: 'include' });
                 const data = await res.json();
                 if (data.success && Array.isArray(data.watchlist)) {
                     userWatchlist = data.watchlist;
+                    localStorage.setItem('cinematch_watchlist', JSON.stringify(userWatchlist));
                     loadFrontpageWatchlist(); // Update frontpage if visible
                 }
+                lastWatchlistFetchTime = Date.now();
             } catch (e) {
-                console.error("Failed to load watchlist", e);
+                console.error("Failed to load watchlist, checking offline local cache", e);
+                const localData = localStorage.getItem('cinematch_watchlist');
+                if (localData) {
+                    try {
+                        userWatchlist = JSON.parse(localData);
+                        loadFrontpageWatchlist(); // Update frontpage offline
+                        showToast(currentLang === 'pt' ? "Modo offline ativo. Watchlist carregada localmente." : "Offline mode active. Watchlist loaded locally.");
+                    } catch (err) {}
+                }
+            } finally {
+                isFetchingWatchlist = false;
             }
         }
 
@@ -3135,7 +4114,7 @@
                 }
                 window.history.pushState({ view: 'watchlist' }, '', '/?tab=watchlist');
             }
-            const hideIds = ['hero-header', 'features-section', 'dynamic-bg', 'search-container', 'reference-movie-container', 'frontpage-watchlist-section'];
+            const hideIds = ['hero-wrapper', 'features-section', 'dynamic-bg', 'search-container', 'reference-movie-container', 'frontpage-watchlist-section'];
             const showIds = ['watchlist-header-container', 'results-container'];
             
             transitionTo(hideIds, showIds, async () => {
@@ -3192,11 +4171,26 @@
                     }
                     let rtBadgeHTML = '';
                     if (rtRating !== 'N/A') {
-                        rtBadgeHTML = `<div class="bg-rose-900/80 backdrop-blur-md text-rose-400 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center justify-end gap-1 border border-rose-500/50 shadow-md">🍅 ${rtRating}</div>`;
+                        const freshSvg = `<svg viewBox="0 0 32 32" class="w-3 h-3 inline-block drop-shadow-md"><path fill="#FA320A" d="M16,29 C6,29 2,23 2,16 C2,9 6,5 16,5 C26,5 30,9 30,16 C30,23 26,29 16,29 Z" /><path fill="#00A05A" d="M16,5 C15,2 13,0 11,0 C12,1 14,3 15,5 C12,5 9,4 7,6 C11,5 14,6 15,6 C14,8 13,10 14,11 C15,9 16,7 17,6 C19,7 22,9 23,7 C20,7 18,6 17,5 C20,5 23,3 22,1 C20,2 18,4 16,5 Z" /></svg>`;
+                        const rottenSvg = `<svg viewBox="0 0 32 32" class="w-3 h-3 inline-block drop-shadow-md"><path fill="#8BC34A" d="M15,28 C8,29 3,24 2,17 C1,10 6,4 13,3 C20,2 26,5 29,12 C31,18 27,26 21,28 C19,29 17,28 15,28 Z" /><circle fill="#8BC34A" cx="4" cy="9" r="2" /><circle fill="#8BC34A" cx="29" cy="19" r="2.5" /><circle fill="#8BC34A" cx="24" cy="3" r="1.5" /><circle fill="#8BC34A" cx="10" cy="30" r="2" /><path fill="#8BC34A" d="M25,29 C27,27 29,29 27,31 C25,33 23,31 25,29 Z" /></svg>`;
+                        let rtIcon = freshSvg;
+                        let rtStatus = 'Pontuação Rotten Tomatoes';
+                        const rNum = parseInt(rtRating);
+                        if (!isNaN(rNum)) {
+                            rtStatus = rNum >= 60 ? 'Fresh (Rotten Tomatoes)' : 'Rotten (Rotten Tomatoes)';
+                            rtIcon = rNum >= 60 ? freshSvg : rottenSvg;
+                        }
+                        rtBadgeHTML = `
+                        <div class="relative group/tooltip pointer-events-auto cursor-help">
+                            <div class="bg-rose-900/80 backdrop-blur-md text-rose-400 text-[10px] font-semibold px-1.5 py-0.5 rounded flex items-center justify-end gap-1 border border-rose-500/50 shadow-md">${rtIcon} ${rtRating}</div>
+                            <div class="absolute right-0 top-full mt-1 bg-slate-950/95 border border-slate-800 text-[10px] text-slate-200 px-2 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none hidden group-hover/tooltip:block backdrop-blur-md animate-fade-in">
+                                ${rtStatus}
+                            </div>
+                        </div>`;
                     }
                     
                     const card = document.createElement('div');
-                    card.className = 'movie-card overflow-hidden flex flex-col group h-full bg-slate-800/80 border border-slate-700/50 rounded-2xl w-full sm:w-[calc(50%-1.25rem)] md:w-[calc(33.333%-1.25rem)] lg:w-[calc(20%-1.25rem)] max-w-sm mx-auto';
+                    card.className = 'movie-card overflow-hidden flex flex-col group h-full bg-slate-800/80 border border-slate-700/50 rounded-2xl w-full max-w-sm mx-auto';
                     card.style.animation = `fadeInUp 0.5s ease forwards ${index * 60}ms`;
                     card.style.opacity = '0';
                     
@@ -3224,9 +4218,14 @@
                             <div class="absolute top-2 left-2 backdrop-blur-md text-[9px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded border ${typeBadgeClass}">
                                 ${typeLabel}
                             </div>
-                            <div class="absolute top-2 right-2 flex flex-col items-end gap-1 z-10">
-                                <div class="bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${rating}
+                            <div class="absolute top-2 right-2 flex flex-col items-end gap-1.5 z-20">
+                                <div class="relative group/tooltip pointer-events-auto cursor-help">
+                                    <div class="bg-slate-900/80 backdrop-blur-md text-amber-400 text-xs font-semibold px-2 py-1 rounded flex items-center gap-1 border border-slate-700/50">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> ${rating}
+                                    </div>
+                                    <div class="absolute right-0 top-full mt-1 bg-slate-950/95 border border-slate-800 text-[10px] text-slate-200 px-2 py-1 rounded-md shadow-xl whitespace-nowrap z-50 pointer-events-none hidden group-hover/tooltip:block backdrop-blur-md animate-fade-in">
+                                        Classificação IMDb
+                                    </div>
                                 </div>
                                 ${rtBadgeHTML}
                             </div>
@@ -3241,10 +4240,18 @@
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed flex-1 line-clamp-4">${safeDescription}</p>
                             <div class="mt-auto pt-3 flex flex-col gap-2">
-                                <button onclick="event.stopPropagation(); window.playMovieDirectly('${b64Obj}', this);" class="w-full text-xs bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/10">
-                                    <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                                    <span>${t.playBtn}</span>
-                                </button>
+                                ${(() => {
+                                    let isMFuture = false;
+                                    const mYearMatch = (m.year || '').toString().match(/\d{4}/);
+                                    if (mYearMatch && parseInt(mYearMatch[0]) > new Date().getFullYear()) {
+                                        isMFuture = true;
+                                    }
+                                    if (isMFuture) {
+                                        return '<button disabled class="w-full text-xs bg-slate-800 text-slate-500 font-bold py-2 px-3 rounded-lg text-center flex items-center justify-center gap-1.5 border border-slate-700 cursor-not-allowed"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span>Estreia em ' + mYearMatch[0] + '</span></button>';
+                                    } else {
+                                        return '<button onclick="event.stopPropagation(); window.playMovieDirectly(\'' + b64Obj + '\', this);" class="w-full text-xs bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/10 mb-2"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg><span>' + t.playBtn + '</span></button><button onclick="event.stopPropagation(); window.playOnFlixmomo(\'' + b64Obj + '\', this);" class="w-full text-xs bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2 px-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/50 hover:shadow-emerald-500/10"><svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg><span>' + t.flixBtn + '</span></button>';
+                                    }
+                                })()}
                                 <div class="flex gap-2">
                                     <a href="${imdbId ? `https://www.imdb.com/title/${imdbId}/` : `https://www.imdb.com/find?q=${encodeURIComponent(originalTitle)}`}" target="_blank" class="flex-1 text-[10px] bg-slate-800/80 hover:bg-slate-700 text-sky-400 font-semibold py-1.5 px-1.5 rounded-lg text-center transition-colors border border-slate-700/60 flex items-center justify-center gap-1">IMDB</a>
                                     ${trailerYtId ? `
@@ -3273,7 +4280,7 @@
         }
 
         // Movie Details Modal Functions
-        window.playMovieDirectly = async function(b64, btnElement) {
+        window.playOnFlixmomo = async function(b64, btnElement) {
             if (!b64) return;
             if (btnElement) {
                 btnElement.dataset.originalHtml = btnElement.innerHTML;
@@ -3330,6 +4337,70 @@
                 : `https://flixmomo.app/search?q=${encodeURIComponent(originalTitle || title)}`;
             
             window.open(watchUrl, '_blank');
+        };
+
+        window.playMovieDirectly = async function(b64, btnElement) {
+            const allowedUsers = ['test', 'testvip', 'fjpp85@gmail.com'];
+            if (!allowedUsers.includes(currentUser)) {
+                showToast(currentLang === 'pt' ? "O leitor embutido ainda se encontra em construção. Utilize o botão 'Assistir no Flixmomo'." : "The embedded player is still under construction. Please use the 'Watch Now on Flixmomo' button.");
+                return;
+            }
+            if (!b64) return;
+            if (btnElement) {
+                btnElement.dataset.originalHtml = btnElement.innerHTML;
+                btnElement.innerHTML = `<svg class="animate-spin h-3.5 w-3.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>Loading...</span>`;
+                btnElement.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+            
+            const m = JSON.parse(decodeURIComponent(atob(b64)));
+            const title = m.title || '';
+            const originalTitle = m.originalTitle || m.original_title || title;
+            const year = m.year || '';
+            const type = m.type || 'movie';
+            let imdbId = m.imdbId || m.imdb_id;
+            let tmdbId = m.tmdbId || null;
+            
+            if (!imdbId) {
+                try {
+                    const searchRes = await fetch(`/api/proxy/catalog/${type === 'series' || type === 'tv' ? 'series' : 'movie'}/search=${encodeURIComponent(originalTitle || title)}`);
+                    if (searchRes.ok) {
+                        const searchData = await searchRes.json();
+                        if (searchData.metas && searchData.metas.length > 0) {
+                            const match = searchData.metas.find(meta => meta.year == year) || searchData.metas[0];
+                            imdbId = match.imdb_id || match.id;
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error finding imdbId for play:", e);
+                }
+            }
+            
+            if (!tmdbId && imdbId) {
+                try {
+                    const metaRes = await fetch(`/api/proxy/meta/${type === 'series' || type === 'tv' ? 'series' : 'movie'}/${imdbId}`);
+                    if (metaRes.ok) {
+                        const metaData = await metaRes.json();
+                        if (metaData && metaData.meta && metaData.meta.moviedb_id) {
+                            tmdbId = metaData.meta.moviedb_id;
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error fetching tmdbid:", e);
+                }
+            }
+            
+            if (btnElement && btnElement.dataset.originalHtml) {
+                btnElement.innerHTML = btnElement.dataset.originalHtml;
+                btnElement.classList.remove('opacity-75', 'cursor-not-allowed');
+            }
+            
+            // Abrir o Player incorporado com os IDs resolvidos
+            window.openEmbeddedPlayer({
+                imdb_id: imdbId,
+                title: originalTitle || title,
+                type: type,
+                tmdbId: tmdbId
+            });
         };
 
         window.openDetailsModal = async function(b64) {
@@ -3463,20 +4534,30 @@
                 });
 
                 const badgesContainer = document.getElementById('details-badges');
-                badgesContainer.innerHTML = '';
+                let badgesHtml = '';
                 
                 if (rtRating !== 'N/A') {
-                    badgesContainer.innerHTML += `<div title="Rotten Tomatoes" class="flex items-center gap-1 bg-rose-500/20 px-2 py-1 rounded text-rose-400 font-bold text-sm border border-rose-500/30"><span class="text-xl leading-none">🍅</span> ${rtRating}</div>`;
+                    const freshSvg = `<svg viewBox="0 0 32 32" class="w-4 h-4 inline-block drop-shadow-md"><path fill="#FA320A" d="M16,29 C6,29 2,23 2,16 C2,9 6,5 16,5 C26,5 30,9 30,16 C30,23 26,29 16,29 Z" /><path fill="#00A05A" d="M16,5 C15,2 13,0 11,0 C12,1 14,3 15,5 C12,5 9,4 7,6 C11,5 14,6 15,6 C14,8 13,10 14,11 C15,9 16,7 17,6 C19,7 22,9 23,7 C20,7 18,6 17,5 C20,5 23,3 22,1 C20,2 18,4 16,5 Z" /></svg>`;
+                    const rottenSvg = `<svg viewBox="0 0 32 32" class="w-4 h-4 inline-block drop-shadow-md"><path fill="#8BC34A" d="M15,28 C8,29 3,24 2,17 C1,10 6,4 13,3 C20,2 26,5 29,12 C31,18 27,26 21,28 C19,29 17,28 15,28 Z" /><circle fill="#8BC34A" cx="4" cy="9" r="2" /><circle fill="#8BC34A" cx="29" cy="19" r="2.5" /><circle fill="#8BC34A" cx="24" cy="3" r="1.5" /><circle fill="#8BC34A" cx="10" cy="30" r="2" /><path fill="#8BC34A" d="M25,29 C27,27 29,29 27,31 C25,33 23,31 25,29 Z" /></svg>`;
+                    let rtIcon = freshSvg;
+                    let rtStatus = 'Rotten Tomatoes';
+                    const rNum = parseInt(rtRating);
+                    if (!isNaN(rNum)) {
+                        rtStatus = rNum >= 60 ? 'Fresh (Rotten Tomatoes)' : 'Rotten (Rotten Tomatoes)';
+                        rtIcon = rNum >= 60 ? freshSvg : rottenSvg;
+                    }
+                    badgesHtml += `<div title="${rtStatus}" class="flex items-center gap-1 bg-rose-500/20 px-2 py-1 rounded text-rose-400 font-bold text-sm border border-rose-500/30"><span class="flex items-center justify-center">${rtIcon}</span> ${rtRating}</div>`;
                 }
                 if (mcRating !== 'N/A') {
-                    badgesContainer.innerHTML += `<div title="Metacritic" class="flex items-center gap-1 bg-green-500/20 px-2 py-1 rounded text-green-400 font-bold text-sm border border-green-500/30"><span class="text-xl leading-none font-black tracking-tighter">M</span> ${mcRating}</div>`;
+                    badgesHtml += `<div title="Metacritic" class="flex items-center gap-1 bg-green-500/20 px-2 py-1 rounded text-green-400 font-bold text-sm border border-green-500/30"><span class="text-xl leading-none font-black tracking-tighter">M</span> ${mcRating}</div>`;
                 }
                 if (imdbRating !== 'N/A') {
-                    badgesContainer.innerHTML += `<div title="IMDb Rating" class="flex items-center gap-1 bg-amber-500/20 px-2 py-1 rounded text-amber-400 font-bold text-sm border border-amber-500/30"><span class="text-xl leading-none font-black tracking-tighter">IMDb</span> ${imdbRating}</div>`;
+                    badgesHtml += `<div title="IMDb Rating" class="flex items-center gap-1 bg-amber-500/20 px-2 py-1 rounded text-amber-400 font-bold text-sm border border-amber-500/30"><span class="text-xl leading-none font-black tracking-tighter">IMDb</span> ${imdbRating}</div>`;
                 }
+                badgesContainer.innerHTML = badgesHtml;
 
                 const btnsContainer = document.getElementById('details-buttons');
-                btnsContainer.innerHTML = '';
+                let btnsHtml = '';
                 
                 let ytTrailer = null;
                 if (tmdb && tmdb.videos && tmdb.videos.results) {
@@ -3487,25 +4568,48 @@
                 }
                 
                 if (ytTrailer) {
-                    btnsContainer.innerHTML += `
+                    btnsHtml += `
                         <button onclick="openTrailer('${ytTrailer}', '${displayTitle.replace(/'/g, "\'")}')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-amber-500/20">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Trailer
                         </button>
                     `;
                 }
                 
-                const resolvedTmdbId = tmdb ? tmdb.id : (cinemeta ? cinemeta.moviedb_id : m.tmdbId);
-                const urlType = (type === 'series' || type === 'tv') ? 'tv' : 'movie';
-                const slug = displayTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-                const watchUrl = resolvedTmdbId 
-                    ? `https://flixmomo.app/${urlType}/${resolvedTmdbId}/${slug}` 
-                    : `https://flixmomo.app/search?q=${encodeURIComponent(displayTitle)}`;
+                const b64MovieData = btoa(encodeURIComponent(JSON.stringify({
+                    imdbId: imdbId,
+                    title: displayTitle,
+                    type: type,
+                    tmdbId: tmdb ? tmdb.id : null
+                })));
                 
-                btnsContainer.innerHTML += `
-                    <a href="${watchUrl}" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-sky-600/20">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg> Watch Now
-                    </a>
-                `;
+                let isReleased = true;
+                let releaseDateFormatted = '';
+                
+                if (cinemeta && cinemeta.released) {
+                    const rDate = new Date(cinemeta.released);
+                    if (rDate > new Date()) {
+                        isReleased = false;
+                        releaseDateFormatted = rDate.toLocaleDateString('pt-PT');
+                    }
+                }
+                
+                if (isReleased) {
+                    btnsHtml += `
+                        <button onclick="window.closeDetailsModal(); window.openEmbeddedPlayerFromB64('${b64MovieData}')" class="bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-sky-600/20">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg> ${dict[currentLang].playBtn}
+                        </button>
+                        <button onclick="window.playOnFlixmomo('${b64MovieData}', this)" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg> ${dict[currentLang].flixBtn}
+                        </button>
+                    `;
+                } else {
+                    btnsHtml += `
+                        <button disabled class="bg-slate-700 text-slate-400 font-bold py-2.5 px-6 rounded-lg flex items-center gap-2 cursor-not-allowed border border-slate-600">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> Estreia a ${releaseDateFormatted}
+                        </button>
+                    `;
+                }
+                btnsContainer.innerHTML = btnsHtml;
 
             } catch (err) {
                 console.error("Details Modal Error:", err);
@@ -3530,12 +4634,16 @@
 
             trailerModal.classList.add('active');
             
-            // Clean player container and set placeholder loading state
-            container.innerHTML = `<div id="yt-player-placeholder" class="w-full h-full rounded-lg bg-slate-950 flex items-center justify-center"><div class="loader"></div></div>`;
+            // Clean player container and set placeholder loading state dynamically
+            const placeholder = document.createElement('div');
+            placeholder.className = "w-full h-full rounded-lg bg-slate-950 flex items-center justify-center";
+            placeholder.innerHTML = `<div class="loader"></div>`;
+            container.innerHTML = '';
+            container.appendChild(placeholder);
 
             function initPlayer() {
                 try {
-                    ytPlayer = new YT.Player('yt-player-placeholder', {
+                    ytPlayer = new YT.Player(placeholder, {
                         height: '100%',
                         width: '100%',
                         videoId: ytId,
@@ -3657,23 +4765,6 @@
             }
         }
         
-        function showToast(message) {
-            let toast = document.getElementById('share-toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'share-toast';
-                toast.className = 'fixed bottom-5 right-5 z-50 glass-panel bg-emerald-950/90 border-emerald-500/40 text-emerald-300 text-xs font-semibold px-4 py-3 rounded-lg shadow-xl pointer-events-none transition-all duration-300 opacity-0 transform translate-y-2';
-                document.body.appendChild(toast);
-            }
-            toast.textContent = message;
-            toast.style.opacity = '1';
-            toast.style.transform = 'translateY(0)';
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(8px)';
-            }, 3000);
-        }
 
         async function handleSharedList() {
             const params = new URLSearchParams(window.location.search);
@@ -3687,7 +4778,7 @@
             
             isPublicShareMode = true;
             
-            heroHeader.classList.add('hidden-section');
+            heroWrapper.classList.add('hidden-section');
             featuresSection.classList.add('hidden-section');
             document.getElementById('dynamic-bg').classList.add('hidden-section');
             searchContainer.classList.add('hidden-section');
@@ -3705,7 +4796,7 @@
             }
             
             
-            heroHeader.innerHTML = `
+            heroWrapper.innerHTML = `
                 <h2 class="text-3xl font-extrabold text-white flex items-center gap-2.5">
                     <svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
                     <span>${t.shareHeading}</span>
@@ -3805,6 +4896,28 @@
             if (resetToken) {
                 window.history.replaceState({}, document.title, "/");
                 openResetPasswordModal(resetToken);
+            }
+
+            // Check for watch parameter for deep-linking
+            const watchId = urlParams.get('watch');
+            if (watchId) {
+                const season = urlParams.get('season') ? parseInt(urlParams.get('season'), 10) : null;
+                const episode = urlParams.get('episode') ? parseInt(urlParams.get('episode'), 10) : null;
+                
+                const serverPref = urlParams.get('server');
+                if (serverPref && document.getElementById('player-server-select')) {
+                    const serverMapToVal = {'1':'autoembed', '2':'vidsrcto', '3':'vidsrcme', '4':'embedsu', '5':'superembed', '6':'smashy'};
+                    document.getElementById('player-server-select').value = serverMapToVal[serverPref] || serverPref;
+                }
+                
+                setTimeout(() => {
+                    window.openEmbeddedPlayer({
+                        imdbId: watchId,
+                        type: (season || episode) ? 'series' : 'movie',
+                        season: season,
+                        episode: episode
+                    });
+                }, 500);
             }
         });
 
@@ -3923,6 +5036,7 @@
     
 </body>
 </html>
+
 
 
 
