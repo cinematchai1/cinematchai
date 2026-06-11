@@ -821,9 +821,9 @@
 
     <!-- Unified Settings & Profile Modal -->
     </div>
-    <div id="settings-view" class="fixed inset-0 z-50 bg-[#0f1115] hidden overflow-y-auto custom-scrollbar">
+    <div id="settings-view" class="fixed inset-0 z-50 hidden bg-[#0f1115] overflow-y-auto custom-scrollbar flex flex-col items-center py-0 md:py-10">
         <div class="absolute inset-0 bg-slate-950/95" onclick="window.location.hash='#/discover'"></div>
-        <div class="relative w-full mx-auto my-0 md:my-10 h-full md:h-auto md:max-h-[95vh] max-w-4xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 transform transition-all flex flex-col">
+        <div class="relative w-full max-w-4xl bg-slate-900 border-none md:border md:border-slate-700/50 rounded-none md:rounded-2xl p-6 md:p-8 flex flex-col min-h-screen md:min-h-0">
             <button onclick="window.location.hash='#/discover'" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors bg-black/40 md:bg-transparent rounded-full md:rounded-none z-10">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
